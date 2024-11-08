@@ -1,10 +1,14 @@
-import styles from './page.module.css';
+import NavButton from '@/components/Navigation/navButton.component';
+import SearchBar from '@/components/searchBar';
+import { apiGet } from '@/utils/fetchHelpers';
 
-export default function Home() {
+export default async function Home() {
+    const cardsList = await (await apiGet('search/recipes/something')).json(); // Make a Default Search EndPoint!
+
     return (
-        <div className={styles.page}>
-            <main className={styles.main}></main>
-            <footer className={styles.footer}></footer>
+        <div className="grow">
+            <SearchBar />
+            <NavButton buttonText="Close Nav" />
         </div>
     );
 }

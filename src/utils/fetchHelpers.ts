@@ -29,6 +29,24 @@ export async function apiPost(
     });
 }
 
+export async function apiPut(
+    url: string,
+    bodyContent: any,
+    authToken?: string
+) {
+    const headers = { 'Content-Type': 'application/json' };
+
+    if (authToken) {
+        Object.assign(headers, { Authorization: `Bearer ${authToken}` });
+    }
+
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${url}`, {
+        method: 'PUT',
+        body: JSON.stringify(bodyContent),
+        headers: headers,
+    });
+}
+
 export async function apiRefreshToken(refreshToken: string) {
     return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
         headers: {
