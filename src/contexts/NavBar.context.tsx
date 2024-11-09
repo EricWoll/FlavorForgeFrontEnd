@@ -1,17 +1,6 @@
 'use client';
-import React, {
-    createContext,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-    useState,
-} from 'react';
-
-interface INavBarContext {
-    isNavOpen: boolean;
-    setIsNavOpen: Dispatch<SetStateAction<boolean>>;
-    isWindowLarge: boolean;
-}
+import { INavBarContext } from '@/types/iNavBarContext';
+import React, { createContext, useEffect, useState } from 'react';
 
 export const NavBarContext = createContext<INavBarContext>({
     isNavOpen: true,

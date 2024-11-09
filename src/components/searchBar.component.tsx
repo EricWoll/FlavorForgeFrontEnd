@@ -4,12 +4,12 @@ export default function SearchBar() {
             <div className="relative w-full">
                 <input
                     type="text"
-                    className="w-full backdrop-blur-sm placeholder-orange-600/50 text-orange-600 bg-orange-100/20 py-2 pl-10 pr-4 rounded-full focus:outline-none border-2 border-orange-100 focus:border-orange-400 transition-colors duration-300"
+                    className="w-full backdrop-blur-sm placeholder-grayscale-500 text-grayscale-500 bg-grayscale-900 py-2 pl-10 pr-4 rounded-full focus:outline-none border-2 border-grayscale-900 focus:border-grayscale-500 transition-colors duration-300"
                     placeholder="Search..."
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
-                        className="w-4 h-4 text-orange-500"
+                        className="w-4 h-4 text-grayscale-500"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

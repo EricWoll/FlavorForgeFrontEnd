@@ -5,6 +5,8 @@ import { getServerSession } from 'next-auth';
 import ClientSessionProvider from '@/contexts/Providers';
 import { NavBarProvider } from '@/contexts/NavBar.context';
 import NavBar from '@/components/Navigation/navBar.component';
+import Header from '@/components/header.component';
+import Footer from '@/components/footer.component';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -25,17 +27,13 @@ export default async function RootLayout({
         <ClientSessionProvider session={session}>
             <NavBarProvider>
                 <html lang="en">
-                    <body className="min-h-screen flex flex-col">
-                        <header>
-                            <p>Header</p>
-                        </header>
+                    <body className="min-h-screen flex flex-col mx-4 bg-grayscale-1_000 gap-x-2">
+                        <Header />
                         <main className="flex flex-nowrap grow">
                             <NavBar />
                             {children}
                         </main>
-                        <footer>
-                            <p>Footer</p>
-                        </footer>
+                        <Footer />
                     </body>
                 </html>
             </NavBarProvider>

@@ -1,5 +1,5 @@
 import NavButton from '@/components/Navigation/navButton.component';
-import SearchBar from '@/components/searchBar';
+import SearchBar from '@/components/searchBar.component';
 import { apiGet } from '@/utils/fetchHelpers';
 
 export default async function Home() {
@@ -8,7 +8,6 @@ export default async function Home() {
     return (
         <div className="grow">
             <SearchBar />
-            <NavButton buttonText="Close Nav" />
         </div>
     );
 }
