@@ -1,5 +1,4 @@
-import CardGrid from '@/components/Cards/cardGrid.component';
-import RecipeCard from '@/components/Cards/recipeCard.component';
+import RecipeCard from '@/components/Cards/recipe.Card.component';
 import SearchBar from '@/components/searchBar.component';
 import { apiGet } from '@/utils/fetchHelpers';
 

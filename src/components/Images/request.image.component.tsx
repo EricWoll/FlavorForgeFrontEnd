@@ -2,7 +2,7 @@
 
 import { apiGet } from '@/utils/fetchHelpers';
 import { useEffect, useState } from 'react';
-import LoadingCircle from './loadingCircle.component';
+import LoadingCircle from './loadingCircle.image.component';
 import Image from 'next/image';
 
 interface imageRequest {

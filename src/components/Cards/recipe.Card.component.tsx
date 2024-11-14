@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import ImageRequest from '../imageRequest.component';
+import ImageRequest from '../Images/request.image.component';
 import { apiPut } from '@/utils/fetchHelpers';
 import { useSession } from 'next-auth/react';
 
