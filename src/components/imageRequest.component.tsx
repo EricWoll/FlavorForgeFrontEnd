@@ -25,7 +25,7 @@ export default function ImageRequest({
         const fetchImage = async () => {
             setLoading(true);
             try {
-                setImage(await apiGet(`images/${filename}`));
+                setImage(await apiGet(`images`, `filename=${filename}`));
             } catch (e) {
                 console.log(e);
             }

@@ -1,13 +1,23 @@
-import NavButton from '@/components/Navigation/navButton.component';
+import CardGrid from '@/components/Cards/cardGrid.component';
+import RecipeCard from '@/components/Cards/recipeCard.component';
 import SearchBar from '@/components/searchBar.component';
 import { apiGet } from '@/utils/fetchHelpers';
 
 export default async function Home() {
-    const cardsList = await (await apiGet('search/recipes/something')).json(); // Make a Default Search EndPoint!
+    const cardsList = await apiGet('search/recipes', 'pageAmount=1').then(
+        (res) => res.json()
+    );
 
     return (
         <div className="grow">
             <SearchBar />
+            <div className="m-2 flex flex-wrap gap-4 justify-center">
+                {cardsList.map((cardInfo: RecipeCard) => {
+                    return (
+                        <RecipeCard key={cardInfo.recipeId} card={cardInfo} />
+                    );
+                })}
+            </div>
         </div>
     );
 }

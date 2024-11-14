@@ -1,7 +1,10 @@
 interface RecipeCard {
     recipeId: string;
-    imageId: string;
+    userId: string;
     recipeName: string;
     recipeDescription: string;
-    recipeLikes: number;
+    ingredients: Array<Object>;
+    steps: Array<String>;
+    imageId: string;
+    likesCount: number;
 }
