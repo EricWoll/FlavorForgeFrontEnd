@@ -1,4 +1,6 @@
-export default function LoadingCircle() {
+import { ReactNode } from 'react';
+
+export default function LoadingCircle(): ReactNode {
     return (
         <div role="status">
             <svg

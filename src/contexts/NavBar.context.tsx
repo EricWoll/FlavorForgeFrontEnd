@@ -8,7 +8,11 @@ export const NavBarContext = createContext<INavBarContext>({
     isWindowLarge: true,
 });
 
-export const NavBarProvider = ({ children }: { children: React.ReactNode }) => {
+export const NavBarProvider = ({
+    children,
+}: {
+    children: React.ReactNode;
+}): React.JSX.Element => {
     const MaxSmallWindowWidth = 640;
     const MaxMediumWindowWidth = 1000;
 

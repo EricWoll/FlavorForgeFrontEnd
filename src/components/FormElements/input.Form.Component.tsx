@@ -11,12 +11,12 @@ export function FormInput({
 }: {
     label: string;
     type: string;
-    placeholder: string;
+    placeholder?: string;
     value: string;
     onChange: ChangeEventHandler<HTMLInputElement>;
     svgIcon?: ReactNode;
     disabled?: boolean;
-}) {
+}): ReactNode {
     return (
         <div className="mb-4 mt-2">
             <label className="mb-1 block text-base font-medium text-dark">
@@ -26,7 +26,7 @@ export function FormInput({
                 <input
                     disabled={disabled}
                     type={type}
-                    placeholder={placeholder}
+                    placeholder={placeholder ? placeholder : ''}
                     onChange={onChange}
                     value={value}
                     className={`w-full bg-transparent rounded-md border border-stroke py-[10px] pr-3 ${

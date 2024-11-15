@@ -4,8 +4,9 @@ import Link from 'next/link';
 import ImageRequest from '../Images/request.image.component';
 import { apiPut } from '@/utils/fetchHelpers';
 import { useSession } from 'next-auth/react';
+import { ReactNode } from 'react';
 
-export default function RecipeCard({ card }: { card: RecipeCard }) {
+export default function RecipeCard({ card }: { card: RecipeCard }): ReactNode {
     const { data: session } = useSession();
 
     const handleLikeClick = () => {

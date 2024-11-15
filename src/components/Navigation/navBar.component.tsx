@@ -1,12 +1,12 @@
 'use client';
 import { NavBarContext } from '@/contexts/NavBar.context';
-import { useContext } from 'react';
+import { ReactNode, useContext } from 'react';
 import NavItem from './navItem.component';
 import { INavBarContext } from '@/types/iNavBarContext';
+import { signOut, useSession } from 'next-auth/react';
 
-export default function NavBar() {
+export default function NavBar(): ReactNode {
     const NavBar = useContext(NavBarContext);
-
     return (
         <>
             {!NavBar.isWindowLarge ? (
@@ -18,7 +18,8 @@ export default function NavBar() {
     );
 }
 
-function SmallNav({ NavBar }: { NavBar: INavBarContext }) {
+function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
+    const { data: session } = useSession();
     const handleNavItemClick = () => {
         NavBar.setIsNavOpen(false);
     };
@@ -32,19 +33,32 @@ function SmallNav({ NavBar }: { NavBar: INavBarContext }) {
                         itemName="Home"
                         onClick={handleNavItemClick}
                     />
-                    <NavItem
-                        navLink="/auth"
-                        icon={<p className="text-xl">SI</p>}
-                        itemName="Sign In"
-                        onClick={handleNavItemClick}
-                    />
+                    {!session?.user ? (
+                        <NavItem
+                            navLink="/auth"
+                            icon={<p className="text-xl">SI</p>}
+                            itemName="Sign In"
+                            onClick={handleNavItemClick}
+                        />
+                    ) : (
+                        <NavItem
+                            navLink="/"
+                            icon={<p className="text-xl">SO</p>}
+                            itemName="Sign Out"
+                            onClick={() => {
+                                handleNavItemClick();
+                                signOut();
+                            }}
+                        />
+                    )}
                 </nav>
             )}
         </>
     );
 }
 
-function MediumNav({ NavBar }: { NavBar: INavBarContext }) {
+function MediumNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
+    const { data: session } = useSession();
     return (
         <nav className="list-none bg-grayscale-900 rounded-xl px-2">
             <NavItem
@@ -53,12 +67,22 @@ function MediumNav({ NavBar }: { NavBar: INavBarContext }) {
                 itemName="Home"
                 showFullView={NavBar.isNavOpen}
             />
-            <NavItem
-                navLink="/auth"
-                icon={<p className="text-xl">SI</p>}
-                itemName="Sign In"
-                showFullView={NavBar.isNavOpen}
-            />
+            {!session?.user ? (
+                <NavItem
+                    navLink="/auth"
+                    icon={<p className="text-xl">SI</p>}
+                    itemName="Sign In"
+                    showFullView={NavBar.isNavOpen}
+                />
+            ) : (
+                <NavItem
+                    navLink="/"
+                    icon={<p className="text-xl">SO</p>}
+                    itemName="Sign Out"
+                    showFullView={NavBar.isNavOpen}
+                    onClick={() => signOut()}
+                />
+            )}
         </nav>
     );
 }

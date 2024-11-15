@@ -2,7 +2,7 @@ export async function apiGet(
     url: string,
     bodyContent: string,
     authToken?: string
-) {
+): Promise<Response> {
     const headers = { 'Content-Type': 'application/json' };
 
     if (authToken) {
@@ -20,10 +20,12 @@ export async function apiGet(
 
 export async function apiPost(
     url: string,
-    bodyContent: Object,
+    bodyContent: any,
     authToken?: string
-) {
-    const headers = { 'Content-Type': 'application/json' };
+): Promise<Response> {
+    const headers = {
+        'Content-Type': 'application/json',
+    };
 
     if (authToken) {
         Object.assign(headers, { Authorization: `Bearer ${authToken}` });
@@ -38,9 +40,9 @@ export async function apiPost(
 
 export async function apiPut(
     url: string,
-    bodyContent: Object,
+    bodyContent: any,
     authToken?: string
-) {
+): Promise<Response> {
     const headers = { 'Content-Type': 'application/json' };
 
     if (authToken) {

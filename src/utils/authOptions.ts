@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { apiPost, apiRefreshToken } from './fetchHelpers';
 import { NextAuthOptions } from 'next-auth';
 
-async function refreshAccessToken(token: any) {
+async function refreshAccessToken(token: any): Promise<any> {
     try {
         const res = await apiRefreshToken(token?.refreshToken);
         const newTokens = await JSON.parse(await res.text());
@@ -26,7 +26,8 @@ async function refreshAccessToken(token: any) {
 
 export const authOptions: NextAuthOptions = {
     pages: {
-        signIn: '/login',
+        signIn: '/auth',
+        error: '/auth',
     },
     providers: [
         CredentialsProvider({

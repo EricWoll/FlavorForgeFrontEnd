@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, ReactNode } from 'react';
 
 export default function NavItem({
     navLink,
@@ -13,7 +13,7 @@ export default function NavItem({
     itemName: string;
     showFullView?: boolean;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
-}) {
+}): ReactNode {
     return (
         <li className="px-4 my-2 rounded-lg hover:bg-grayscale-1_000">
             <Link

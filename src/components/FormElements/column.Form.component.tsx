@@ -2,7 +2,7 @@
 import { NavBarContext } from '@/contexts/NavBar.context';
 import { ReactNode, useContext, useEffect } from 'react';
 
-export function FormColumn({ children }: { children: ReactNode }) {
+export function FormColumn({ children }: { children: ReactNode }): ReactNode {
     const NavBar = useContext(NavBarContext);
 
     return (

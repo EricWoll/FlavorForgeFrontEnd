@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { FormInput } from './input.Form.Component';
 
 export function FormUsernameInput({
@@ -6,7 +7,7 @@ export function FormUsernameInput({
 }: {
     value: string;
     onChange: Function;
-}) {
+}): ReactNode {
     const handleInputChange = (e: any) => {
         e.preventDefault();
         onChange(e.target.value);

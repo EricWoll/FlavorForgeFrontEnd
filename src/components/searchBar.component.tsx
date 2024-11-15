@@ -1,4 +1,6 @@
-export default function SearchBar() {
+import { ReactNode } from 'react';
+
+export default function SearchBar(): ReactNode {
     return (
         <div className="w-full flex justify-center p-1 mb-4">
             <div className="relative w-full">

@@ -1,7 +1,7 @@
 'use client';
 
 import { apiGet } from '@/utils/fetchHelpers';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import LoadingCircle from './loadingCircle.image.component';
 import Image from 'next/image';
 
@@ -17,7 +17,7 @@ export default function ImageRequest({
     imageWidth,
     imageHeight,
     priority = false,
-}: imageRequest) {
+}: imageRequest): ReactNode {
     const [image, setImage] = useState<Response>(new Response());
     const [loading, setLoading] = useState<boolean>(true);
 
