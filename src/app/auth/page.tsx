@@ -9,7 +9,7 @@ import { FormUsernameInput } from '@/components/FormElements/usernameInput.Form.
 import { apiPost } from '@/utils/fetchHelpers';
 import { signIn, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
-import { FormEvent, ReactNode, useState } from 'react';
+import { ChangeEvent, FormEvent, ReactNode, useState } from 'react';
 
 export default function Page(): ReactNode {
     const { data: session } = useSession();
@@ -62,11 +62,15 @@ export default function Page(): ReactNode {
                     <FormColumn>
                         <FormUsernameInput
                             value={userameInput}
-                            onChange={setUserameInput}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                                setUserameInput(event.target.value)
+                            }
                         />
                         <FormPassword
                             value={passwordInput}
-                            onChange={setPasswordInput}
+                            onChange={(event) =>
+                                setPasswordInput(event.target.value)
+                            }
                         />
                         <FormButton buttonText="Submit" type="submit" />
                     </FormColumn>
@@ -76,15 +80,21 @@ export default function Page(): ReactNode {
                     <FormColumn>
                         <FormEmailInput
                             value={emailInput}
-                            onChange={setEmailInput}
+                            onChange={(event) =>
+                                setEmailInput(event.target.value)
+                            }
                         />
                         <FormUsernameInput
                             value={userameInput}
-                            onChange={setUserameInput}
+                            onChange={(event) =>
+                                setUserameInput(event.target.value)
+                            }
                         />
                         <FormPassword
                             value={passwordInput}
-                            onChange={setPasswordInput}
+                            onChange={(event) =>
+                                setPasswordInput(event.target.value)
+                            }
                         />
                         <FormButton buttonText="Submit" type="submit" />
                     </FormColumn>

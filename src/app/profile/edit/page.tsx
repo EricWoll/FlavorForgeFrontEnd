@@ -1,4 +1,4 @@
-import UserProfile from '@/components/userProfile/userProfile.component';
+import EditUserProfile from '@/components/userProfile/editUserProfile.component';
 import { authOptions } from '@/utils/authOptions';
 import { apiGet } from '@/utils/fetchHelpers';
 import serverAuthRedirect from '@/utils/serverAuthRedirect';
@@ -10,9 +10,9 @@ export default async function Page() {
     const session = await getServerSession(authOptions);
 
     const userProfile = await apiGet(
-        `users/${session?.user.username}`,
+        `users/edit/${session?.user.username}`,
         ''
     ).then((res) => res.json());
 
-    return <UserProfile userProfile={userProfile} />;
+    return <EditUserProfile userProfile={userProfile} />;
 }

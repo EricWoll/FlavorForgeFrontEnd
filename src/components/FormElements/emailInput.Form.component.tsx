@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ChangeEventHandler, ReactNode } from 'react';
 import { FormInput } from './input.Form.Component';
 
 export function FormEmailInput({
@@ -6,19 +6,14 @@ export function FormEmailInput({
     onChange,
 }: {
     value: string;
-    onChange: Function;
+    onChange: ChangeEventHandler<HTMLInputElement>;
 }): ReactNode {
-    const handleInputChange = (e: any) => {
-        e.preventDefault();
-        onChange(e.target.value);
-    };
-
     return (
         <FormInput
             label="Email"
             type="email"
             placeholder="JohnDevin@yourmail.com"
-            onChange={handleInputChange}
+            onChange={onChange}
             value={value}
             svgIcon={
                 <svg

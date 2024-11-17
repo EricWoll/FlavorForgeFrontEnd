@@ -1,6 +1,6 @@
 export async function apiGet(
     url: string,
-    bodyContent: string,
+    bodyContent?: string,
     authToken?: string
 ): Promise<Response> {
     const headers = { 'Content-Type': 'application/json' };
@@ -10,7 +10,9 @@ export async function apiGet(
     }
 
     return await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/${url}?${bodyContent}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/${url}${
+            bodyContent ? '?' + bodyContent : ''
+        }`,
         {
             method: 'GET',
             headers: headers,

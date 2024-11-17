@@ -41,15 +41,23 @@ function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                             onClick={handleNavItemClick}
                         />
                     ) : (
-                        <NavItem
-                            navLink="/"
-                            icon={<p className="text-xl">SO</p>}
-                            itemName="Sign Out"
-                            onClick={() => {
-                                handleNavItemClick();
-                                signOut();
-                            }}
-                        />
+                        <>
+                            <NavItem
+                                navLink="/"
+                                icon={<p className="text-xl">SO</p>}
+                                itemName="Sign Out"
+                                onClick={() => {
+                                    handleNavItemClick();
+                                    signOut();
+                                }}
+                            />
+                            <NavItem
+                                navLink="/profile"
+                                icon={<p className="text-xl">P</p>}
+                                itemName="Profile"
+                                onClick={handleNavItemClick}
+                            />
+                        </>
                     )}
                 </nav>
             )}
@@ -75,13 +83,21 @@ function MediumNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                     showFullView={NavBar.isNavOpen}
                 />
             ) : (
-                <NavItem
-                    navLink="/"
-                    icon={<p className="text-xl">SO</p>}
-                    itemName="Sign Out"
-                    showFullView={NavBar.isNavOpen}
-                    onClick={() => signOut()}
-                />
+                <>
+                    <NavItem
+                        navLink="/"
+                        icon={<p className="text-xl">SO</p>}
+                        itemName="Sign Out"
+                        showFullView={NavBar.isNavOpen}
+                        onClick={() => signOut()}
+                    />
+                    <NavItem
+                        navLink="/profile"
+                        icon={<p className="text-xl">P</p>}
+                        itemName="Profile"
+                        showFullView={NavBar.isNavOpen}
+                    />
+                </>
             )}
         </nav>
     );

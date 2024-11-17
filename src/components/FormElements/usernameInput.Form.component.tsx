@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ChangeEventHandler, ReactNode } from 'react';
 import { FormInput } from './input.Form.Component';
 
 export function FormUsernameInput({
@@ -6,19 +6,14 @@ export function FormUsernameInput({
     onChange,
 }: {
     value: string;
-    onChange: Function;
+    onChange: ChangeEventHandler<HTMLInputElement>;
 }): ReactNode {
-    const handleInputChange = (e: any) => {
-        e.preventDefault();
-        onChange(e.target.value);
-    };
-
     return (
         <FormInput
             label="Username"
             type="text"
             placeholder="JohnDevin"
-            onChange={handleInputChange}
+            onChange={onChange}
             value={value}
             svgIcon={
                 <svg

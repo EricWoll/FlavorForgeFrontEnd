@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ChangeEventHandler, ReactNode } from 'react';
 import { FormInput } from './input.Form.Component';
 
 export default function FormPassword({
@@ -6,19 +6,14 @@ export default function FormPassword({
     onChange,
 }: {
     value: string;
-    onChange: Function;
+    onChange: ChangeEventHandler<HTMLInputElement>;
 }): ReactNode {
-    const handleInputChange = (e: any) => {
-        e.preventDefault();
-        onChange(e.target.value);
-    };
-
     return (
         <FormInput
             label="Password"
             type="password"
             placeholder="*********"
-            onChange={handleInputChange}
+            onChange={onChange}
             value={value}
         />
     );

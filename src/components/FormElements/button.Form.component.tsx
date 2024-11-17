@@ -18,7 +18,7 @@ export default function FormButton({
     return (
         <button
             disabled={disabled}
-            onClick={onClick && onClick}
+            onClick={onClick}
             type={type}
             className={`w-full bg-transparent rounded-md border border-stroke py-1 text-dark-6 transition disabled:cursor-default disabled:bg-slate-800`}
         >
