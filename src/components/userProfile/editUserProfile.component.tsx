@@ -7,11 +7,11 @@ import FormContainer from '../FormElements/container.Form.component';
 import { FormColumn } from '../FormElements/column.Form.component';
 import { FormEmailInput } from '../FormElements/emailInput.Form.component';
 import { FormUsernameInput } from '../FormElements/usernameInput.Form.component';
-import FormPassword from '../FormElements/passwordInput.Form.component';
 import FormTextArea from '../FormElements/textArea.Form.component';
 import { apiPut } from '@/utils/fetchHelpers';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function EditUserProfile({
     userProfile,
@@ -19,34 +19,33 @@ export default function EditUserProfile({
     userProfile: EditUser;
 }) {
     const { data: session } = useSession();
+    const router = useRouter();
 
     const [username, setUsername] = useState<string>(userProfile.username);
     const [email, setEmail] = useState<string>(userProfile.email);
-    const [password, setPassword] = useState<string>(userProfile.password);
     const [aboutText, setAboutText] = useState<string>(userProfile.aboutText);
 
     const handleClear = () => {
         setUsername('');
         setEmail('');
-        setPassword('');
         setAboutText('');
     };
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (username != '' && password != '' && email != '') {
+        if (username != '' && email != '') {
             await apiPut(
                 `users/${userProfile.username}`,
                 {
                     username: username,
                     email: email,
-                    password: password,
                     aboutText: aboutText,
                     imageId: 'null',
                 },
                 session?.user.accessToken
             );
             handleClear();
+            router.push('/profile');
         }
     };
 
@@ -83,12 +82,6 @@ export default function EditUserProfile({
                         <FormEmailInput
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
-                        />
-                        <FormPassword
-                            value={password}
-                            onChange={(event) =>
-                                setPassword(event.target.value)
-                            }
                         />
                         <FormButton type="submit" buttonText="update" />
                         <Link className="flex w-full" href="/profile">

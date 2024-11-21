@@ -2,24 +2,24 @@
 
 import Link from 'next/link';
 import ImageRequest from '../Images/request.image.component';
-import { apiPut } from '@/utils/fetchHelpers';
-import { useSession } from 'next-auth/react';
 import { ReactNode } from 'react';
 
-export default function RecipeCard({ card }: { card: RecipeCard }): ReactNode {
-    const { data: session } = useSession();
-
-    const handleLikeClick = () => {
-        const newLikesCount = card.likesCount + 1;
-        apiPut(
-            'recipes/update/' + card.recipeId,
-            { ...card, recipeLikes: newLikesCount },
-            session?.user.accessToken
-        );
-    };
-
+export default function EditRecipeCard({
+    card,
+}: {
+    card: RecipeCard;
+}): ReactNode {
     return (
         <div className="flex flex-col justify-center items-center my-4 relative rounded-md border border-stroke overflow-hidden">
+            <Link
+                href={{
+                    pathname: '/recipe/edit',
+                    query: { id: card.recipeId },
+                }}
+                className="absolute right-4 top-3 rounded-md bg-slate-400 text-slate-900 px-3 hover:bg-slate-600 hover:text-slate-200"
+            >
+                Edit
+            </Link>
             {card.imageId != 'null' ? (
                 <ImageRequest
                     filename={card.imageId}

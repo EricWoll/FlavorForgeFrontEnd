@@ -3,7 +3,7 @@ interface RecipeCard {
     userId: string;
     recipeName: string;
     recipeDescription: string;
-    ingredients: Array<object>;
+    ingredients: Array<IIngredients>;
     steps: Array<string>;
     imageId: string;
     likesCount: number;

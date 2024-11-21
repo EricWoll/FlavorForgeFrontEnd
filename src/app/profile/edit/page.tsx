@@ -11,7 +11,8 @@ export default async function Page() {
 
     const userProfile = await apiGet(
         `users/edit/${session?.user.username}`,
-        ''
+        '',
+        session?.user.accessToken
     ).then((res) => res.json());
 
     return <EditUserProfile userProfile={userProfile} />;
