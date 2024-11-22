@@ -1,24 +1,29 @@
 'use client';
 
 import { Key, MouseEventHandler, ReactNode, useState } from 'react';
-import FormButton from './FormElements/button.Form.component';
-import { FormInput } from './FormElements/input.Form.Component';
-import FormTextArea from './FormElements/textArea.Form.component';
-import ImageRequest from './Images/request.image.component';
+import FormButton from '../FormElements/button.Form.component';
+import { FormInput } from '../FormElements/input.Form.Component';
+import FormTextArea from '../FormElements/textArea.Form.component';
+import ImageRequest from '../Images/request.image.component';
 import Link from 'next/link';
+import ListItemEditor from './recipeItemEditor.component';
 
-export default function EditRecipe({ recipeInfo }: { recipeInfo: RecipeCard }) {
+export default function EditRecipe({
+    recipeInfo,
+}: {
+    recipeInfo: RecipeCard | undefined;
+}) {
     const [recipeTitle, setRecipeTitle] = useState<string>(
-        recipeInfo.recipeName
+        recipeInfo?.recipeName || ''
     );
     const [recipeDescription, setRecipeDescription] = useState<string>(
-        recipeInfo.recipeDescription
+        recipeInfo?.recipeDescription || ''
     );
     const [recipeIngredients, setRecipeIngredients] = useState<
         Array<IIngredients>
-    >(recipeInfo.ingredients);
+    >(recipeInfo?.ingredients || []);
     const [recipeSteps, setRecipeSteps] = useState<Array<string>>(
-        recipeInfo.steps
+        recipeInfo?.steps || []
     );
 
     const handleRemoveStep = (stepToRemove: string) => {
@@ -35,12 +40,15 @@ export default function EditRecipe({ recipeInfo }: { recipeInfo: RecipeCard }) {
 
     const handleRecipeSubmit = () => {
         // handle the submiting of the recipe!
+        if (recipeInfo?.recipeId) {
+        } else {
+        }
     };
 
     return (
         <>
             <section className="flex flex-row flex-wrap w-full justify-center">
-                {recipeInfo?.imageId != 'null' ? (
+                {recipeInfo?.imageId != 'null' && recipeInfo != undefined ? (
                     /* Swap ImageRequest out for Input for images! */
                     <ImageRequest
                         filename={recipeInfo.imageId}
@@ -141,27 +149,5 @@ export default function EditRecipe({ recipeInfo }: { recipeInfo: RecipeCard }) {
                 </Link>
             </div>
         </>
-    );
-}
-
-function ListItemEditor({
-    children,
-    key,
-    onClick,
-}: {
-    children: ReactNode;
-    key: Key;
-    onClick: MouseEventHandler<HTMLSpanElement>;
-}) {
-    return (
-        <li className="flex flex-nowrap" key={key}>
-            {children}
-            <span
-                onClick={onClick}
-                className="ml-auto mr-0 text-red-700 cursor-pointer"
-            >
-                X
-            </span>
-        </li>
     );
 }

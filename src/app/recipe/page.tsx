@@ -1,5 +1,6 @@
 'use client';
 
+import CommentContainer from '@/components/comments/container.Comment.component';
 import ImageRequest from '@/components/Images/request.image.component';
 import { apiGet } from '@/utils/fetchHelpers';
 import { useSearchParams } from 'next/navigation';
@@ -55,17 +56,18 @@ export default function Page() {
                         </section>
                         <section>
                             <h3 className="text-2xl">Directions</h3>
-                            <ul className="rounded-md border-4 border-stroke p-2 w-full list-disc list-inside">
+                            <ol className="rounded-md border-4 border-stroke p-2 w-full list-decimal list-inside">
                                 {recipeCard?.steps.map((step) => (
                                     <li key={recipeCard.steps.indexOf(step)}>
                                         {step}
                                     </li>
                                 ))}
-                            </ul>
+                            </ol>
                         </section>
                     </section>
                 </>
             )}
+            <CommentContainer />
         </div>
     );
 }

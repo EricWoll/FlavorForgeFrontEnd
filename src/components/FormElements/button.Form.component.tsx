@@ -20,7 +20,7 @@ export default function FormButton({
             disabled={disabled}
             onClick={onClick}
             type={type}
-            className={`w-full bg-transparent rounded-md border border-stroke py-1 text-dark-6 transition disabled:cursor-default disabled:bg-slate-800`}
+            className={`select-none w-full bg-transparent rounded-md border border-stroke py-1 text-dark-6 transition disabled:cursor-default disabled:bg-slate-800`}
         >
             {leftIcon && leftIcon}
             {buttonText}

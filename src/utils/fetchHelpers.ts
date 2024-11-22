@@ -65,3 +65,19 @@ export async function apiRefreshToken(refreshToken: string) {
         },
     });
 }
+
+export async function apiDelete(
+    url: string,
+    authToken: string | undefined
+): Promise<Response> {
+    const headers = { 'Content-Type': 'application/json' };
+
+    if (authToken) {
+        Object.assign(headers, { Authorization: `Bearer ${authToken}` });
+    }
+
+    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${url}`, {
+        method: 'DELETE',
+        headers: headers,
+    });
+}

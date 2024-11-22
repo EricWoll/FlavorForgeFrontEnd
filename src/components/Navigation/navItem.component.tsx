@@ -15,14 +15,14 @@ export default function NavItem({
     onClick?: MouseEventHandler<HTMLAnchorElement>;
 }): ReactNode {
     return (
-        <li className="px-4 my-2 rounded-lg hover:bg-grayscale-1_000">
+        <li className="px-1 my-2 rounded-lg hover:bg-grayscale-1_000 w-full">
             <Link
                 href={navLink}
-                className="flex space-x-2 items-center select-none"
+                className="flex flex-col space-x-2 items-center select-none flex-wrap justify-center text-nowrap"
                 onClick={onClick}
             >
                 {icon}
-                {showFullView && <p>{itemName}</p>}
+                {showFullView && <p className="text-xs">{itemName}</p>}
             </Link>
         </li>
     );

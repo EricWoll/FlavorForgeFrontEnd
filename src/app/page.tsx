@@ -3,7 +3,7 @@ import SearchBar from '@/components/searchBar.component';
 import { apiGet } from '@/utils/fetchHelpers';
 
 export default async function Home() {
-    const cardsList = await apiGet('search/recipes', 'pageAmount=1').then(
+    const cardsList = await apiGet('search/recipes', 'pageAmount=10').then(
         (res) => res.json()
     );
 

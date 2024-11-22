@@ -1,6 +1,6 @@
 'use client';
 
-import EditRecipe from '@/components/recipeEdit.component';
+import EditRecipe from '@/components/recipe/recipeEdit.component';
 import { apiGet } from '@/utils/fetchHelpers';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -19,12 +19,14 @@ export default function Page() {
                 )
             );
         };
-        getRecipe();
+        if (recipeId != null) {
+            getRecipe();
+        }
     }, []);
 
     return (
         <div className="grow flex flex-col items-center">
-            {recipeCard && <EditRecipe recipeInfo={recipeCard} />}
+            {<EditRecipe recipeInfo={recipeCard} />}
         </div>
     );
 }
