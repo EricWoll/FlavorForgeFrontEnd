@@ -2,14 +2,29 @@
 
 import EditRecipe from '@/components/recipe/recipeEdit.component';
 import { apiGet } from '@/utils/fetchHelpers';
-import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
     const searchParams = useSearchParams();
     const recipeId = searchParams.get('id');
+    const { data: session } = useSession();
+    const Router = useRouter();
+    if (!session?.user) {
+        Router.push('/');
+    }
 
-    const [recipeCard, setRecipeCard] = useState<RecipeCard>();
+    const [recipeCard, setRecipeCard] = useState<RecipeCard>({
+        recipeId: null,
+        userId: session?.user.userId,
+        recipeName: '',
+        recipeDescription: '',
+        ingredients: [],
+        steps: [],
+        imageId: 'null',
+        likesCount: 0,
+    });
 
     useEffect(() => {
         const getRecipe = async () => {
@@ -26,7 +41,7 @@ export default function Page() {
 
     return (
         <div className="grow flex flex-col items-center">
-            {<EditRecipe recipeInfo={recipeCard} />}
+            <EditRecipe recipe={recipeCard} setRecipeCard={setRecipeCard} />
         </div>
     );
 }

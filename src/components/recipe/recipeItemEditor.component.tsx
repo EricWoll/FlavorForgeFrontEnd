@@ -1,16 +1,15 @@
+'use client';
 import { Key, MouseEventHandler, ReactNode } from 'react';
 
 export default function ListItemEditor({
     children,
-    key,
     onClick,
 }: {
     children: ReactNode;
-    key: Key;
     onClick: MouseEventHandler<HTMLSpanElement>;
 }) {
     return (
-        <li className="flex flex-nowrap" key={key}>
+        <li className="flex flex-nowrap">
             {children}
             <span
                 onClick={onClick}

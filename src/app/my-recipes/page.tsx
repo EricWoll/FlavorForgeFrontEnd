@@ -1,4 +1,4 @@
-import EditRecipeCard from '@/components/Cards/editRecipe.Card.component';
+import RecipeCardContainer from '@/components/Cards/recipeContainer.Card.component';
 import SearchBar from '@/components/searchBar.component';
 import { authOptions } from '@/utils/authOptions';
 import { apiGet } from '@/utils/fetchHelpers';
@@ -21,20 +21,7 @@ export default async function Page() {
                 Add Recipe
             </Link>
             <SearchBar />
-            <div className="m-2 flex flex-wrap gap-4 justify-center">
-                {cardsList.length > 0 ? (
-                    cardsList.map((cardInfo: RecipeCard) => {
-                        return (
-                            <EditRecipeCard
-                                key={cardInfo.recipeId}
-                                card={cardInfo}
-                            />
-                        );
-                    })
-                ) : (
-                    <p>You have no Recipes!</p>
-                )}
-            </div>
+            {cardsList && <RecipeCardContainer cardsList={cardsList} />}
         </div>
     );
 }

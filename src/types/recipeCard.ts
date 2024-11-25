@@ -1,6 +1,6 @@
 interface RecipeCard {
-    recipeId: string;
-    userId: string;
+    recipeId: string | null;
+    userId: string | undefined;
     recipeName: string;
     recipeDescription: string;
     ingredients: Array<IIngredients>;

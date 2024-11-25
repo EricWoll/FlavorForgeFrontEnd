@@ -1,57 +1,83 @@
 'use client';
 
-import { Key, MouseEventHandler, ReactNode, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import FormButton from '../FormElements/button.Form.component';
 import { FormInput } from '../FormElements/input.Form.Component';
 import FormTextArea from '../FormElements/textArea.Form.component';
 import ImageRequest from '../Images/request.image.component';
 import Link from 'next/link';
 import ListItemEditor from './recipeItemEditor.component';
+import { apiDelete, apiPost, apiPut } from '@/utils/fetchHelpers';
+import { useSession } from 'next-auth/react';
+import AddIngredientsForm from './addIngredientsForm.component';
+import AddStepsForm from './addStepsForm.components';
+import { useRouter } from 'next/navigation';
 
 export default function EditRecipe({
-    recipeInfo,
+    recipe,
+    setRecipeCard,
 }: {
-    recipeInfo: RecipeCard | undefined;
+    recipe: RecipeCard;
+    setRecipeCard: Dispatch<SetStateAction<RecipeCard>>;
 }) {
-    const [recipeTitle, setRecipeTitle] = useState<string>(
-        recipeInfo?.recipeName || ''
-    );
-    const [recipeDescription, setRecipeDescription] = useState<string>(
-        recipeInfo?.recipeDescription || ''
-    );
-    const [recipeIngredients, setRecipeIngredients] = useState<
-        Array<IIngredients>
-    >(recipeInfo?.ingredients || []);
-    const [recipeSteps, setRecipeSteps] = useState<Array<string>>(
-        recipeInfo?.steps || []
-    );
+    const { data: session } = useSession();
+    const Router = useRouter();
 
     const handleRemoveStep = (stepToRemove: string) => {
-        setRecipeSteps((prevItems) =>
-            prevItems.filter((item) => item !== stepToRemove)
-        );
+        setRecipeCard({
+            ...recipe,
+            steps: recipe.steps.filter((item) => item !== stepToRemove),
+        });
     };
 
     const handleRemoveIngredient = (ingredientToRemove: IIngredients) => {
-        setRecipeIngredients((prevItems) =>
-            prevItems.filter((item) => item != ingredientToRemove)
-        );
+        setRecipeCard({
+            ...recipe,
+            ingredients: recipe.ingredients.filter(
+                (item) => item != ingredientToRemove
+            ),
+        });
     };
 
-    const handleRecipeSubmit = () => {
-        // handle the submiting of the recipe!
-        if (recipeInfo?.recipeId) {
-        } else {
+    const handleSubmit = async () => {
+        /* information check. Needed info filled. */
+        if (
+            recipe.recipeName == '' &&
+            recipe.ingredients.length <= 0 &&
+            recipe.steps.length <= 0
+        ) {
+            return;
+        }
+
+        if (recipe.recipeId != null) {
+            await apiPut(
+                `recipes/${recipe.recipeId}`,
+                recipe,
+                session?.user.accessToken
+            );
+            Router.push('/my-recipes');
+        } else if (recipe.recipeId == null) {
+            await apiPost('recipes', recipe, session?.user.accessToken);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (recipe.recipeId != null) {
+            await apiDelete(
+                `recipes/${recipe.recipeId}`,
+                session?.user.accessToken
+            );
+            Router.push('/my-recipes');
         }
     };
 
     return (
         <>
             <section className="flex flex-row flex-wrap w-full justify-center">
-                {recipeInfo?.imageId != 'null' && recipeInfo != undefined ? (
+                {recipe?.imageId != 'null' && recipe != undefined ? (
                     /* Swap ImageRequest out for Input for images! */
                     <ImageRequest
-                        filename={recipeInfo.imageId}
+                        filename={recipe.imageId}
                         imageWidth={250}
                         imageHeight={250}
                     />
@@ -62,35 +88,38 @@ export default function EditRecipe({
                     <FormInput
                         label="Title"
                         type="text"
-                        value={recipeTitle}
+                        value={recipe.recipeName}
                         placeholder="Enter Your Title"
-                        onChange={(event) => setRecipeTitle(event.target.value)}
+                        onChange={(event) =>
+                            setRecipeCard({
+                                ...recipe,
+                                recipeName: event.target.value,
+                            })
+                        }
                     />
                     <FormTextArea
                         label="Description"
-                        value={recipeDescription}
+                        value={recipe.recipeDescription}
                         placeholder="Enter Your Description"
                         onChange={(event) =>
-                            setRecipeDescription(event.target.value)
+                            setRecipeCard({
+                                ...recipe,
+                                recipeDescription: event.target.value,
+                            })
                         }
                     />
                 </section>
             </section>
             <section className="flex flex-col w-full px-10 gap-4 mt-5">
                 <section>
-                    <section className="flex flex-row flex-nowrap max-w-72 gap-2 mb-2">
-                        <h3 className="text-2xl">Ingredients</h3>
-                        {/*
-                            Open Add Ingredients form!
-                        */}
-                        <FormButton
-                            buttonText="+ Add Ingredients"
-                            onClick={() => {}}
-                        />
-                    </section>
-                    <ul className="rounded-md border-4 border-stroke p-2 w-full list-disc list-inside min-h-10">
-                        {recipeIngredients ? (
-                            recipeIngredients.map((ingredient) => (
+                    <h3 className="text-2xl">Ingredients</h3>
+                    <AddIngredientsForm
+                        recipe={recipe}
+                        setRecipe={setRecipeCard}
+                    />
+                    <ul className="rounded-md border-4 border-stroke p-2 w-full list-disc list-inside">
+                        {recipe.ingredients ? (
+                            recipe.ingredients.map((ingredient) => (
                                 <ListItemEditor
                                     onClick={() => {
                                         handleRemoveIngredient(ingredient);
@@ -108,22 +137,14 @@ export default function EditRecipe({
                     </ul>
                 </section>
                 <section>
-                    <section className="flex flex-row flex-nowrap max-w-72 gap-2 mb-2">
-                        <h3 className="text-2xl">Directions</h3>
-                        {/*
-                            Open Add Direction form!
-                        */}
-                        <FormButton
-                            buttonText="+ Add Directions"
-                            onClick={() => {}}
-                        />
-                    </section>
+                    <h3 className="text-2xl">Directions</h3>
+                    <AddStepsForm recipe={recipe} setRecipe={setRecipeCard} />
 
-                    <ul className="rounded-md border-4 border-stroke p-2 w-full list-disc list-inside min-h-10">
-                        {recipeSteps ? (
-                            recipeSteps.map((step) => (
+                    <ul className="rounded-md border-4 border-stroke p-2 w-full list-decimal list-inside">
+                        {recipe.steps ? (
+                            recipe.steps.map((step) => (
                                 <ListItemEditor
-                                    key={recipeSteps.indexOf(step)}
+                                    key={recipe.steps.indexOf(step)}
                                     onClick={() => {
                                         handleRemoveStep(step);
                                     }}
@@ -138,15 +159,11 @@ export default function EditRecipe({
                 </section>
             </section>
             <div className="w-full px-10 mt-5 grid gap-4">
-                <FormButton
-                    buttonText="Save Recipe"
-                    onClick={() => {
-                        handleRecipeSubmit;
-                    }}
-                />
+                <FormButton buttonText="Save Recipe" onClick={handleSubmit} />
                 <Link className="flex w-full" href="/my-recipes">
                     <FormButton buttonText="Cancel" />
                 </Link>
+                <FormButton buttonText="Delete Recipe" onClick={handleDelete} />
             </div>
         </>
     );

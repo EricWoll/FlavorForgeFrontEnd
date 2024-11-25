@@ -10,7 +10,7 @@ export default function EditRecipeCard({
     card: RecipeCard;
 }): ReactNode {
     return (
-        <div className="flex flex-col justify-center items-center my-4 relative rounded-md border border-stroke overflow-hidden">
+        <div className="flex flex-col justify-start items-center my-4 relative rounded-md border border-stroke overflow-hidden">
             <Link
                 href={{
                     pathname: '/recipe/edit',
@@ -27,25 +27,22 @@ export default function EditRecipeCard({
                     imageHeight={250}
                 />
             ) : (
-                <div className="w-64 h-64 bg-slate-700 block rounded-md"></div>
+                <div className="w-64 h-64 bg-slate-700 rounded-md"></div>
             )}
-            <div className="max-w-64">
-                <section className="text-center">
-                    <h2>{card.recipeName}</h2>
-                </section>
-                <section className="grid my-2 gap-2 px-2">
-                    <p>{card.recipeDescription}</p>
-                    <div className="text-right select-none">
-                        <Link
-                            href={{
-                                pathname: '/recipe',
-                                query: { id: card.recipeId },
-                            }}
-                        >
-                            View Recipe
-                        </Link>
-                    </div>
-                </section>
+            <div className="w-64 max-h-40 flex flex-col gap-3 pb-3 flex-grow px-2">
+                <h2 className="text-center">{card.recipeName}</h2>
+
+                <p className="">{card.recipeDescription}</p>
+                <div className="text-right select-none mt-auto mb-0 ">
+                    <Link
+                        href={{
+                            pathname: '/recipe',
+                            query: { id: card.recipeId },
+                        }}
+                    >
+                        View Recipe
+                    </Link>
+                </div>
             </div>
         </div>
     );
