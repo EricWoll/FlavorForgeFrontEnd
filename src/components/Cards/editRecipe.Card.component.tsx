@@ -20,11 +20,12 @@ export default function EditRecipeCard({
             >
                 Edit
             </Link>
-            {card.imageId != 'null' ? (
+            {card.imageId != 'none' ? (
                 <ImageRequest
                     filename={card.imageId}
-                    imageWidth={250}
-                    imageHeight={250}
+                    imageWidth={256}
+                    imageHeight={256}
+                    keyId={card.imageId}
                 />
             ) : (
                 <div className="w-64 h-64 bg-slate-700 rounded-md"></div>
@@ -32,7 +33,9 @@ export default function EditRecipeCard({
             <div className="w-64 max-h-40 flex flex-col gap-3 pb-3 flex-grow px-2">
                 <h2 className="text-center">{card.recipeName}</h2>
 
-                <p className="">{card.recipeDescription}</p>
+                <p className="">
+                    {card.recipeDescription || 'No description available'}
+                </p>
                 <div className="text-right select-none mt-auto mb-0 ">
                     <Link
                         href={{

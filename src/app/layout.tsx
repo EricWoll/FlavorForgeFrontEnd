@@ -7,6 +7,7 @@ import { NavBarProvider } from '@/contexts/NavBar.context';
 import NavBar from '@/components/Navigation/navBar.component';
 import Header from '@/components/header.component';
 import Footer from '@/components/footer.component';
+import { UserProvider } from '@/contexts/User.context';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -25,18 +26,20 @@ export default async function RootLayout({
     const session = await getServerSession();
     return (
         <ClientSessionProvider session={session}>
-            <NavBarProvider>
-                <html lang="en">
-                    <body className="min-h-screen flex flex-col mx-4 bg-grayscale-1_000 gap-x-2">
-                        <Header />
-                        <main className="flex flex-nowrap grow">
-                            <NavBar />
-                            {children}
-                        </main>
-                        <Footer />
-                    </body>
-                </html>
-            </NavBarProvider>
+            <UserProvider>
+                <NavBarProvider>
+                    <html lang="en">
+                        <body className="min-h-screen flex flex-col mx-4 bg-grayscale-1_000 gap-x-2">
+                            <Header />
+                            <main className="flex flex-nowrap grow">
+                                <NavBar />
+                                {children}
+                            </main>
+                            <Footer />
+                        </body>
+                    </html>
+                </NavBarProvider>
+            </UserProvider>
         </ClientSessionProvider>
     );
 }

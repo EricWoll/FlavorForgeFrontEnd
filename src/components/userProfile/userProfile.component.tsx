@@ -10,17 +10,19 @@ export default function UserProfile({
 }: {
     userProfile: PublicUser;
 }) {
+    const { username, imageId, aboutText } = userProfile;
+
     return (
         <div className="grow mx-4">
             <section className="flex w-full justify-center">
-                {userProfile.imageId != 'null' ? (
+                {imageId !== 'none' ? (
                     <ImageRequest
-                        filename={userProfile.imageId.toString()}
-                        imageWidth={250}
-                        imageHeight={250}
+                        filename={imageId}
+                        imageWidth={256}
+                        imageHeight={256}
                     />
                 ) : (
-                    <div className="w-64 h-64 bg-slate-700"></div>
+                    <div className=" w-64 h-64 bg-slate-700 rounded-md"></div>
                 )}
             </section>
 
@@ -30,7 +32,7 @@ export default function UserProfile({
                     <p
                         className={`px-4 w-full bg-transparent rounded-md border border-stroke py-1 text-dark-6 bg-grayscale-900`}
                     >
-                        {userProfile.username}
+                        {username}
                     </p>
                 </section>
                 <section>
@@ -39,7 +41,7 @@ export default function UserProfile({
                         className={`select-none px-4 w-full bg-transparent rounded-md border border-stroke py-1 text-dark-6 bg-grayscale-900`}
                     >
                         {userProfile.aboutText != ''
-                            ? userProfile.aboutText
+                            ? aboutText
                             : 'No About Section'}
                     </p>
                 </section>

@@ -8,7 +8,7 @@ export default function RecipePageInfo({
     return (
         <>
             <section className="flex flex-row flex-wrap w-full gap-10 justify-center">
-                {recipeCard?.imageId != 'null' ? (
+                {recipeCard?.imageId != 'none' ? (
                     <ImageRequest
                         filename={recipeCard.imageId}
                         imageWidth={250}

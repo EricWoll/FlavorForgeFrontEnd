@@ -1,5 +1,5 @@
 interface EditUser {
-    userId: string;
+    userId: string | null;
     username: string;
     email: string;
     password: string;

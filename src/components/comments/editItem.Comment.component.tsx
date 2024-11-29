@@ -1,7 +1,7 @@
 'use client';
 
+import { useUserContext } from '@/contexts/User.context';
 import { apiDelete, apiGet } from '@/utils/fetchHelpers';
-import { useSession } from 'next-auth/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export default function EditCommentItem({
@@ -11,29 +11,50 @@ export default function EditCommentItem({
     comment: IComment;
     commentListUpdater: Dispatch<SetStateAction<Array<IComment> | undefined>>;
 }) {
-    const { data: session } = useSession();
+    const { user, loading } = useUserContext();
     const [publicUser, setPublicUser] = useState<PublicUser>();
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (loading || !user || !user.userId) return;
+
         const getUser = async () => {
-            setPublicUser(
-                await apiGet(`users/id/${comment.userId}`, '').then((res) =>
-                    res.json()
-                )
-            );
+            try {
+                if (comment.userId) {
+                    const response = await apiGet(`users/id/${comment.userId}`);
+                    if (!response.ok) {
+                        setError(
+                            `Failed to fetch User: ${response.statusText}`
+                        );
+                    }
+                    const commentUserData = await response.json();
+                    setPublicUser(commentUserData);
+                } else {
+                    setError("Comment's user data is missing!");
+                }
+            } catch (error) {}
         };
         getUser();
     }, []);
 
     const handleDelete = async (commentToRemove: IComment) => {
-        await apiDelete(
-            `comments/${comment.commentId}`,
-            session?.user.accessToken
-        );
-        commentListUpdater((prevItems) =>
-            prevItems?.filter((item) => item != commentToRemove)
-        );
+        try {
+            await apiDelete(`comments/${comment.commentId}`, user?.token);
+            commentListUpdater((prevItems) =>
+                prevItems?.filter((item) => item != commentToRemove)
+            );
+        } catch (error) {
+            alert('Failed to delete Comment.');
+        }
     };
+
+    if (loading) {
+        return <div>Loading Comment...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <div className="my-4 w-full rounded-md border-2 border-stroke p-2">

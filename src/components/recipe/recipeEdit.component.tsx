@@ -1,17 +1,22 @@
 'use client';
 
-import { Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import FormButton from '../FormElements/button.Form.component';
 import { FormInput } from '../FormElements/input.Form.Component';
 import FormTextArea from '../FormElements/textArea.Form.component';
 import ImageRequest from '../Images/request.image.component';
 import Link from 'next/link';
 import ListItemEditor from './recipeItemEditor.component';
-import { apiDelete, apiPost, apiPut } from '@/utils/fetchHelpers';
-import { useSession } from 'next-auth/react';
+import {
+    apiDelete,
+    apiPost,
+    apiPostForImage,
+    apiPut,
+} from '@/utils/fetchHelpers';
 import AddIngredientsForm from './addIngredientsForm.component';
 import AddStepsForm from './addStepsForm.components';
 import { useRouter } from 'next/navigation';
+import { useUserContext } from '@/contexts/User.context';
 
 export default function EditRecipe({
     recipe,
@@ -20,8 +25,12 @@ export default function EditRecipe({
     recipe: RecipeCard;
     setRecipeCard: Dispatch<SetStateAction<RecipeCard>>;
 }) {
-    const { data: session } = useSession();
+    const { user } = useUserContext();
     const Router = useRouter();
+
+    const [file, setFile] = useState<File | null>(null);
+    const [uploadRecipe, setUploadRecipe] = useState<boolean>(true);
+    const newUUID = crypto.randomUUID();
 
     const handleRemoveStep = (stepToRemove: string) => {
         setRecipeCard({
@@ -40,50 +49,106 @@ export default function EditRecipe({
     };
 
     const handleSubmit = async () => {
-        /* information check. Needed info filled. */
         if (
-            recipe.recipeName == '' &&
-            recipe.ingredients.length <= 0 &&
+            recipe.recipeName == '' ||
+            recipe.ingredients.length <= 0 ||
             recipe.steps.length <= 0
         ) {
             return;
         }
 
-        if (recipe.recipeId != null) {
-            await apiPut(
-                `recipes/${recipe.recipeId}`,
-                recipe,
-                session?.user.accessToken
-            );
-            Router.push('/my-recipes');
-        } else if (recipe.recipeId == null) {
-            await apiPost('recipes', recipe, session?.user.accessToken);
+        if (file) {
+            const isUpdateImage = recipe.imageId != 'none';
+            try {
+                await apiPostForImage(
+                    'images',
+                    file,
+                    recipe.imageId,
+                    newUUID,
+                    isUpdateImage,
+                    user?.token
+                );
+                setUploadRecipe(true);
+            } catch (error) {
+                console.error('Error with your image upload:', error);
+                alert('Failed to upload image. Please try again.');
+                setUploadRecipe(false);
+            }
+        }
+
+        if (uploadRecipe) {
+            try {
+                const updatedRecipe = {
+                    ...recipe,
+                    imageId: file ? newUUID : 'none',
+                };
+
+                if (recipe.recipeId != null) {
+                    await apiPut(
+                        `recipes/${recipe.recipeId}`,
+                        updatedRecipe,
+                        user?.token
+                    );
+                } else {
+                    await apiPost('recipes', updatedRecipe, user?.token);
+                }
+                Router.push('/my-recipes');
+            } catch (error) {
+                alert('Failed to update recipe. Please try again.');
+                setUploadRecipe(false);
+            }
+        }
+    };
+    const handleDelete = async () => {
+        try {
+            if (recipe.recipeId != null) {
+                await apiDelete(`recipes/${recipe.recipeId}`, user?.token);
+                Router.push('/my-recipes');
+            }
+        } catch (error) {
+            alert('Failed to Delete Recipe.');
         }
     };
 
-    const handleDelete = async () => {
-        if (recipe.recipeId != null) {
-            await apiDelete(
-                `recipes/${recipe.recipeId}`,
-                session?.user.accessToken
-            );
-            Router.push('/my-recipes');
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setFile(e.target.files[0] || null);
+        } else {
+            alert('There was an error adding file to recipe.');
         }
     };
 
     return (
         <>
             <section className="flex flex-row flex-wrap w-full justify-center">
-                {recipe?.imageId != 'null' && recipe != undefined ? (
-                    /* Swap ImageRequest out for Input for images! */
-                    <ImageRequest
-                        filename={recipe.imageId}
-                        imageWidth={250}
-                        imageHeight={250}
+                <section className="flex flex-col items-center gap-2">
+                    {recipe != undefined &&
+                    recipe?.imageId != 'none' &&
+                    !file ? (
+                        /* Swap ImageRequest out for Input for images! */
+                        <ImageRequest
+                            filename={recipe.imageId}
+                            imageWidth={256}
+                            imageHeight={256}
+                        />
+                    ) : (
+                        <>
+                            {file ? (
+                                <img
+                                    className="h-64"
+                                    src={URL.createObjectURL(file)}
+                                />
+                            ) : (
+                                <div className=" w-64 h-64 bg-slate-700 rounded-md"></div>
+                            )}
+                        </>
+                    )}
+                    <input
+                        accept="image/*"
+                        type="file"
+                        onChange={handleFileChange}
                     />
-                ) : (
-                    <div className="w-64 h-64 bg-slate-700 block rounded-md"></div>
-                )}
+                </section>
                 <section className="flex flex-col w-full px-10 mt-5">
                     <FormInput
                         label="Title"
@@ -119,12 +184,12 @@ export default function EditRecipe({
                     />
                     <ul className="rounded-md border-4 border-stroke p-2 w-full list-disc list-inside">
                         {recipe.ingredients ? (
-                            recipe.ingredients.map((ingredient) => (
+                            recipe.ingredients.map((ingredient, index) => (
                                 <ListItemEditor
                                     onClick={() => {
                                         handleRemoveIngredient(ingredient);
                                     }}
-                                    key={ingredient.name}
+                                    key={index}
                                 >
                                     <p>
                                         {ingredient.amount} {ingredient.name}
@@ -142,9 +207,9 @@ export default function EditRecipe({
 
                     <ul className="rounded-md border-4 border-stroke p-2 w-full list-decimal list-inside">
                         {recipe.steps ? (
-                            recipe.steps.map((step) => (
+                            recipe.steps.map((step, index) => (
                                 <ListItemEditor
-                                    key={recipe.steps.indexOf(step)}
+                                    key={index}
                                     onClick={() => {
                                         handleRemoveStep(step);
                                     }}
@@ -163,7 +228,12 @@ export default function EditRecipe({
                 <Link className="flex w-full" href="/my-recipes">
                     <FormButton buttonText="Cancel" />
                 </Link>
-                <FormButton buttonText="Delete Recipe" onClick={handleDelete} />
+                {recipe.recipeId != null && (
+                    <FormButton
+                        buttonText="Delete Recipe"
+                        onClick={handleDelete}
+                    />
+                )}
             </div>
         </>
     );

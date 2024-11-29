@@ -1,12 +1,12 @@
 'use client';
 
-import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import FormButton from '../FormElements/button.Form.component';
 import { FormColumn } from '../FormElements/column.Form.component';
 import FormContainer from '../FormElements/container.Form.component';
 import FormTextArea from '../FormElements/textArea.Form.component';
-import { useSession } from 'next-auth/react';
 import { apiPost } from '@/utils/fetchHelpers';
+import { useUserContext } from '@/contexts/User.context';
 
 export default function AddComment({
     recipeId,
@@ -15,23 +15,30 @@ export default function AddComment({
     recipeId: string | undefined;
     userId: string;
 }) {
-    const { data: session } = useSession();
+    const { user } = useUserContext();
 
     const [commentText, setCommentText] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (commentText != '') {
-            await apiPost(
-                `comments`,
-                {
-                    userId: userId,
-                    attachedId: recipeId,
-                    commentText: commentText,
-                },
-                session?.user.accessToken
-            );
-            setCommentText('');
+        try {
+            if (commentText != '') {
+                await apiPost(
+                    `comments`,
+                    {
+                        userId: userId,
+                        attachedId: recipeId,
+                        commentText: commentText,
+                    },
+                    user?.token
+                );
+                setCommentText('');
+            } else {
+                setError('No comment to submit!');
+            }
+        } catch (error) {
+            setError('Error Submitting Comment!');
         }
     };
 
@@ -45,6 +52,7 @@ export default function AddComment({
                         setCommentText(event.target.value);
                     }}
                 />
+                {error && <p>{error}</p>}
                 <FormButton buttonText="Comment" type="submit" />
             </FormColumn>
         </FormContainer>

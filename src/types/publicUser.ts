@@ -1,5 +1,5 @@
 interface PublicUser {
-    userId: string;
+    userId: string | null;
     username: string;
     imageId: string;
     followerCount: number;

@@ -1,27 +1,79 @@
-import RecipeCardContainer from '@/components/Cards/recipeContainer.Card.component';
-import SearchBar from '@/components/searchBar.component';
-import { authOptions } from '@/utils/authOptions';
+'use client';
+
+import EditRecipeCard from '@/components/Cards/editRecipe.Card.component';
+import { useUserContext } from '@/contexts/User.context';
 import { apiGet } from '@/utils/fetchHelpers';
-import { getServerSession } from 'next-auth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-export default async function Page() {
-    const session = await getServerSession(authOptions);
+export default function MyRecipes() {
+    const { user, loading } = useUserContext(); // Use updated context with loading state
+    const router = useRouter();
 
-    const cardsList: Array<RecipeCard> = await apiGet(
-        `recipes/users/${session?.user.userId}`
-    ).then((res) => res.json());
+    const [recipes, setRecipes] = useState<Array<RecipeCard>>([]);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (loading || !user || !user.userId) return; // Skip API call during loading or if no user
+
+        if (!user?.userId) {
+            router.push('/'); // Redirect if not logged in
+        }
+
+        const fetchRecipes = async () => {
+            try {
+                if (user.userId) {
+                    const response = await apiGet(
+                        `recipes/users/${user.userId}`
+                    );
+                    if (!response.ok) {
+                        throw new Error(
+                            `Failed to fetch recipes: ${response.statusText}`
+                        );
+                    }
+                    const recipeData = await response.json();
+                    setRecipes(recipeData);
+                } else {
+                    setError('User ID is missing!');
+                }
+            } catch (error: any) {
+                console.error('Error fetching recipes:', error);
+                setError('Error loading recipes. Please try again later.');
+            }
+        };
+
+        fetchRecipes();
+    }, [user, loading]);
+
+    if (loading) {
+        return <div>Loading your recipes...</div>;
+    }
+
+    if (error) {
+        return <div className="error-message">{error}</div>;
+    }
 
     return (
-        <div className="grow relative">
+        <div className="grow m-2 relative">
             <Link
+                className="absolute bottom-5 right-5 bg-gray-600 text-gray-300 p-2 text-2xl rounded-full"
                 href="/recipe/edit"
-                className="absolute bottom-5 right-10 text-2xl cursor-pointer select-none bg-slate-400 text-slate-900 hover:bg-slate-600 hover:text-slate-200 flex justify-center items-center p-3 rounded-full"
             >
-                Add Recipe
+                Add recipes
             </Link>
-            <SearchBar />
-            {cardsList && <RecipeCardContainer cardsList={cardsList} />}
+            <section className="flex flex-wrap gap-4 justify-center">
+                {recipes.length > 0 ? (
+                    recipes.map((cardInfo) => (
+                        <EditRecipeCard
+                            key={cardInfo.recipeId}
+                            card={cardInfo}
+                        />
+                    ))
+                ) : (
+                    <div>No recipes found</div>
+                )}
+            </section>
         </div>
     );
 }

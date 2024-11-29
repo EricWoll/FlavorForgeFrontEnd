@@ -10,6 +10,7 @@ interface imageRequest {
     imageWidth: number;
     imageHeight: number;
     priority?: boolean;
+    keyId?: string;
 }
 
 export default function ImageRequest({
@@ -17,6 +18,7 @@ export default function ImageRequest({
     imageWidth,
     imageHeight,
     priority = false,
+    keyId = '',
 }: imageRequest): ReactNode {
     const [image, setImage] = useState<Response>(new Response());
     const [loading, setLoading] = useState<boolean>(true);
@@ -41,6 +43,7 @@ export default function ImageRequest({
                 </section>
             ) : (
                 <Image
+                    key={keyId}
                     className="select-none"
                     unoptimized
                     src={image.url}

@@ -7,42 +7,67 @@ import CommentItem from './item.Comment.component';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
+import { useUserContext } from '@/contexts/User.context';
 
 export default function CommentContainer() {
     const searchParams = useSearchParams();
     const recipeId = searchParams.get('id');
 
-    const { data: session } = useSession();
+    const { user } = useUserContext();
 
     const [commentList, setCommentList] = useState<
         Array<IComment> | undefined
     >();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const getComments = async () => {
-            setCommentList(
-                await apiGet(`comments/attached/${recipeId}`, '').then((res) =>
-                    res.json()
-                )
-            );
+            try {
+                setLoading(true);
+                if (recipeId) {
+                    const response = await apiGet(
+                        `comments/attached/${recipeId}`
+                    );
+                    if (!response.ok) {
+                        throw new Error(
+                            `Failed to fetch Comments: ${response.statusText}`
+                        );
+                    }
+                    const commentData = await response.json();
+                    setCommentList(commentData);
+                } else {
+                    setError('Recipe Id is missing!');
+                }
+            } catch (error) {
+                setError('Error loading Comments. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
         };
 
         getComments();
-    }, []);
+    }, [recipeId]);
 
-    console.log(commentList);
+    if (loading) {
+        return <div>Loading Comments...</div>;
+    }
+
+    if (error) {
+        return <div className="error-message">{error}</div>;
+    }
 
     return (
         <div className="w-full px-10 mt-5">
             <h2 className="text-2xl rounded-lg bg-gray-600 text-slate-300 p-4 mb-2">
                 Comments
             </h2>
-            {session?.user.userId && recipeId != undefined && (
-                <AddComment recipeId={recipeId} userId={session.user.userId} />
+            {user?.userId && recipeId != undefined && (
+                <AddComment recipeId={recipeId} userId={user.userId} />
             )}
             {commentList && commentList.length > 0 ? (
                 commentList.map((comment) =>
-                    comment.userId == session?.user.userId ? (
+                    comment.userId == user?.userId ? (
                         <EditCommentItem
                             key={comment.commentId}
                             comment={comment}

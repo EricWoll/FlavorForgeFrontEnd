@@ -3,7 +3,8 @@ import { NavBarContext } from '@/contexts/NavBar.context';
 import { ReactNode, useContext } from 'react';
 import NavItem from './navItem.component';
 import { INavBarContext } from '@/types/iNavBarContext';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import { useUserContext } from '@/contexts/User.context';
 
 export default function NavBar(): ReactNode {
     const NavBar = useContext(NavBarContext);
@@ -19,7 +20,7 @@ export default function NavBar(): ReactNode {
 }
 
 function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
-    const { data: session } = useSession();
+    const { user } = useUserContext();
     const handleNavItemClick = () => {
         NavBar.setIsNavOpen(false);
     };
@@ -33,7 +34,7 @@ function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                         itemName="Home"
                         onClick={handleNavItemClick}
                     />
-                    {!session?.user ? (
+                    {!user?.token ? (
                         <NavItem
                             navLink="/auth"
                             icon={<p className="text-xl">SI</p>}
@@ -72,7 +73,7 @@ function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
 }
 
 function MediumNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
-    const { data: session } = useSession();
+    const { user } = useUserContext();
     return (
         <nav className="list-none bg-grayscale-900 px-1 rounded-xl max-h-fit sticky top-14">
             <NavItem
@@ -81,7 +82,7 @@ function MediumNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                 itemName="Home"
                 showFullView={NavBar.isNavOpen}
             />
-            {!session?.user ? (
+            {!user?.token ? (
                 <NavItem
                     navLink="/auth"
                     icon={<p className="text-xl">SI</p>}
