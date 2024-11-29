@@ -62,12 +62,12 @@ export default function CommentContainer() {
             <h2 className="text-2xl rounded-lg bg-gray-600 text-slate-300 p-4 mb-2">
                 Comments
             </h2>
-            {user?.userId && recipeId != undefined && (
-                <AddComment recipeId={recipeId} userId={user.userId} />
+            {user?.id && recipeId != undefined && (
+                <AddComment recipeId={recipeId} userId={user.id} />
             )}
             {commentList && commentList.length > 0 ? (
                 commentList.map((comment) =>
-                    comment.userId == user?.userId ? (
+                    comment.userId == user?.id ? (
                         <EditCommentItem
                             key={comment.commentId}
                             comment={comment}

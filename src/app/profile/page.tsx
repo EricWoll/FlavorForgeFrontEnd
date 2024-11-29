@@ -11,8 +11,8 @@ export default function Page() {
     const router = useRouter();
 
     const [userProfile, setUserProfile] = useState<PublicUser>({
-        userId: user?.userId || null,
-        username: user?.username || '',
+        userId: user?.id || null,
+        username: user?.name || '',
         imageId: 'none',
         followerCount: 0,
         aboutText: '',
@@ -21,17 +21,17 @@ export default function Page() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (loading || !user || !user.userId) return;
+        if (loading || !user || !user.id) return;
 
-        if (!user?.userId) {
+        if (!user?.id) {
             router.push('/'); // Redirect if not logged in
         }
 
         const getUser = async () => {
             try {
-                if (user.username) {
+                if (user.name) {
                     const response = await apiGet(
-                        `users/${user.username}`,
+                        `users/${user.name}`,
                         '',
                         user.token
                     );

@@ -16,7 +16,7 @@ export default function EditCommentItem({
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (loading || !user || !user.userId) return;
+        if (loading || !user || !user.id) return;
 
         const getUser = async () => {
             try {

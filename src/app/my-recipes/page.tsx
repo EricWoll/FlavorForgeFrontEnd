@@ -15,18 +15,18 @@ export default function MyRecipes() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (loading || !user || !user.userId) return; // Skip API call during loading or if no user
+        if (loading || !user || !user.id) return; // Skip API call during loading or if no user
 
-        if (!user?.userId) {
+        console.log('user loaded');
+
+        if (!user?.id) {
             router.push('/'); // Redirect if not logged in
         }
 
         const fetchRecipes = async () => {
             try {
-                if (user.userId) {
-                    const response = await apiGet(
-                        `recipes/users/${user.userId}`
-                    );
+                if (user.id) {
+                    const response = await apiGet(`recipes/users/${user.id}`);
                     if (!response.ok) {
                         throw new Error(
                             `Failed to fetch recipes: ${response.statusText}`

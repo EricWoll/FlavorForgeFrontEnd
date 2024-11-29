@@ -8,6 +8,7 @@ import NavBar from '@/components/Navigation/navBar.component';
 import Header from '@/components/header.component';
 import Footer from '@/components/footer.component';
 import { UserProvider } from '@/contexts/User.context';
+import { authOptions } from '@/utils/authOptions';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -18,12 +19,14 @@ export const metadata: Metadata = {
     icons: null,
 };
 
+interface RootLayoutProps {
+    children: React.ReactNode;
+}
+
 export default async function RootLayout({
     children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
-    const session = await getServerSession();
+}: RootLayoutProps): Promise<JSX.Element> {
+    const session = await getServerSession(authOptions);
     return (
         <ClientSessionProvider session={session}>
             <UserProvider>

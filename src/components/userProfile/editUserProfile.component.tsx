@@ -33,7 +33,7 @@ export default function EditUserProfile({
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (loading || !user || !user.userId) {
+        if (loading || !user || !user.id) {
             alert('Error Loading User. Please try again later');
         }
 

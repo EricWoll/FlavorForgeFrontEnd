@@ -17,9 +17,9 @@ export default function Page(): ReactNode {
     const router = useRouter();
 
     useEffect(() => {
-        if (loading || !user || !user.userId) return; // Skip API call during loading or if no user
+        if (loading || !user || !user.id) return; // Skip API call during loading or if no user
 
-        if (!user?.userId) {
+        if (!user?.id) {
             router.push('/'); // Redirect if not logged in
         }
     }, [user, router]);

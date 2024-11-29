@@ -1,7 +1,9 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtDecode } from 'jwt-decode';
 import { apiPost, apiRefreshToken } from './fetchHelpers';
-import { NextAuthOptions } from 'next-auth';
+import { NextAuthOptions, Session } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
+import { AdapterUser } from 'next-auth/adapters';
 
 async function refreshAccessToken(token: any): Promise<any> {
     try {
@@ -19,13 +21,15 @@ async function refreshAccessToken(token: any): Promise<any> {
             accessTokenExpires: decodedToken?.exp! * 1000, // update expiration
         };
     } catch (e: any) {
-        // Log the error to understand what went wrong
         console.error('Error refreshing token', e);
-        return { ...token }; // Return original token if refresh fails
+        return { ...token, error: 'RefreshAccessTokenError' };
     }
 }
 
 export const authOptions: NextAuthOptions = {
+    session: {
+        strategy: 'jwt',
+    },
     cookies: {
         sessionToken: {
             name: 'next-auth.session-token',
@@ -50,33 +54,45 @@ export const authOptions: NextAuthOptions = {
                 },
                 password: { label: 'Password', type: 'password' },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
+                if (!credentials) throw new Error('Missing credentials');
+
                 const res = await apiPost('auth/login', credentials);
-                if (!res.ok) return null;
-                try {
-                    const user = await res.json();
-                    return { ...user };
-                } catch (error) {
-                    throw new Error(`Failed to Login: ${error}`);
+                const user = await res.json();
+                // console.log(user);
+                if (res.ok && user) {
+                    return {
+                        id: user.id,
+                        userId: user.userId, // Added this explicitly for clarity
+                        username: user.username,
+                        email: user.email,
+                        imageId: user.imageId,
+                        role: user.role,
+                        accessToken: user.accessToken,
+                        refreshToken: user.refreshToken,
+                    };
                 }
+                return null;
             },
         }),
     ],
-    //86400
     callbacks: {
-        async jwt({
-            token,
-            user,
-            account,
-        }: {
-            token: any;
-            user: any;
-            account: any;
-        }) {
-            // Initial sign-in
-            if (account && user) {
-                return {
+        async session({ session, token }: { session: Session; token: JWT }) {
+            session.user.id = token.userId;
+            session.user.name = token.username;
+            session.user.image = token.imageId;
+            session.user.email = token.email;
+            session.user.role = token.role;
+            session.user.accessToken = token.accessToken;
+
+            return session;
+        },
+        async jwt({ token, user }: { token: any; user: any }) {
+            // On initial login, add user data to token
+            if (user) {
+                const newToken = {
                     ...token,
+                    id: user.userId,
                     userId: user.userId,
                     username: user.username,
                     email: user.email,
@@ -84,30 +100,18 @@ export const authOptions: NextAuthOptions = {
                     imageId: user.imageId,
                     accessToken: user.accessToken,
                     refreshToken: user.refreshToken,
-                    accessTokenExpires: jwtDecode(user.accessToken).exp! * 1000, // Expiration time in ms
+                    accessTokenExpires: Date.now() + 60 * 60 * 1000, // Set expiration (1 hour for example)
                 };
+                return newToken;
             }
 
-            // Return existing token if it’s still valid
+            // Return existing token if still valid
             if (Date.now() < token.accessTokenExpires) {
                 return token;
             }
 
-            // Access token expired, refresh it
+            // Token expired, refresh it
             return await refreshAccessToken(token);
-        },
-        async session({ session, token }: { session: any; token: any }) {
-            // Merge token fields into session.user
-            session.user = {
-                userId: token.userId,
-                username: token.username,
-                email: token.email,
-                role: token.role,
-                imageId: token.imageId,
-                accessToken: token.accessToken,
-                refreshToken: token.refreshToken,
-            };
-            return session;
         },
     },
 };

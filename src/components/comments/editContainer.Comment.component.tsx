@@ -20,7 +20,7 @@ export default function EditCommentContainer({
 
     useEffect(() => {
         const getComments = async () => {
-            if (loading || !user || !user.userId) return;
+            if (loading || !user || !user.id) return;
 
             try {
                 if (recipeId) {
@@ -52,8 +52,8 @@ export default function EditCommentContainer({
     return (
         <div className="grow">
             <h2 className="text-3xl">Comments</h2>
-            {user?.userId && recipeId != undefined && (
-                <AddComment recipeId={recipeId} userId={user.userId} />
+            {user?.id && recipeId != undefined && (
+                <AddComment recipeId={recipeId} userId={user.id} />
             )}
             {commentList && commentList.length > 0 ? (
                 commentList.map((comment) => (

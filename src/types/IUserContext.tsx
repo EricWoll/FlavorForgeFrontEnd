@@ -1,8 +1,8 @@
 interface IUserContextPublic {
-    userId: string;
-    username: string;
+    id: string;
+    name: string;
+    image: string;
     email: string;
-    imageId: string;
-    token: string;
     role: string;
+    token: string;
 }

@@ -23,17 +23,17 @@ export default function Page() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (loading || !user || !user.userId) return;
+        if (loading || !user || !user.id) return;
 
-        if (!user?.userId) {
+        if (!user?.id) {
             router.push('/'); // Redirect if not logged in
         }
 
         const getUser = async () => {
             try {
-                if (user.username) {
+                if (user.name) {
                     const response = await apiGet(
-                        `users/edit/${user.username}`,
+                        `users/edit/${user.name}`,
                         '',
                         user.token
                     );

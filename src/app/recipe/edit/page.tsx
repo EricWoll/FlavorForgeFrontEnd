@@ -15,7 +15,7 @@ export default function Page() {
 
     const [recipe, setRecipe] = useState<RecipeCard>({
         recipeId: null,
-        userId: user?.userId,
+        userId: user?.id,
         recipeName: '',
         recipeDescription: '',
         ingredients: [],
@@ -26,9 +26,9 @@ export default function Page() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (loading || !user || !user.userId) return;
+        if (loading || !user || !user.id) return;
 
-        if (!user?.userId) {
+        if (!user?.id) {
             router.push('/'); // Redirect if not logged in
         }
 
