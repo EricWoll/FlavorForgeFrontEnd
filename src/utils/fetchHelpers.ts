@@ -60,6 +60,45 @@ export async function apiPost(
     }
 }
 
+export async function apiPostParams(
+    url: string,
+    bodyContent: any,
+    authToken?: string
+): Promise<Response> {
+    const headers: { [key: string]: string } = {
+        'Content-Type': 'application/json',
+    };
+
+    if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+    }
+
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/${url}${
+                bodyContent ? '?' + bodyContent : ''
+            }`,
+            {
+                method: 'POST',
+                headers: headers,
+            }
+        );
+
+        // Check if the response is successful (status code in range 200-299)
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(
+                `HTTP error! status: ${response.status} - ${errorText}`
+            );
+        }
+
+        return response; // Return the response if successful
+    } catch (error) {
+        console.error('API Post Request Failed:', error);
+        throw error; // Re-throw or return a custom error response
+    }
+}
+
 export async function apiPostForImage(
     url: string,
     file: File,
@@ -132,7 +171,8 @@ export async function apiRefreshToken(refreshToken: string) {
 
 export async function apiDelete(
     url: string,
-    authToken: string | undefined
+    authToken: string | undefined,
+    bodyContent?: string
 ): Promise<Response> {
     const headers = { 'Content-Type': 'application/json' };
 
@@ -140,8 +180,13 @@ export async function apiDelete(
         Object.assign(headers, { Authorization: `Bearer ${authToken}` });
     }
 
-    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${url}`, {
-        method: 'DELETE',
-        headers: headers,
-    });
+    return await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/${url}${
+            bodyContent ? '?' + bodyContent : ''
+        }`,
+        {
+            method: 'DELETE',
+            headers: headers,
+        }
+    );
 }

@@ -23,10 +23,11 @@ export default function Page() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (loading || !user || !user.id) return;
+        if (loading) return;
 
         if (!user?.id) {
             router.push('/'); // Redirect if not logged in
+            return;
         }
 
         const getUser = async () => {

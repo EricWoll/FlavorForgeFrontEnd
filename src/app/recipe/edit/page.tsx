@@ -15,7 +15,7 @@ export default function Page() {
 
     const [recipe, setRecipe] = useState<RecipeCard>({
         recipeId: null,
-        userId: user?.id,
+        creatorId: user?.id,
         recipeName: '',
         recipeDescription: '',
         ingredients: [],

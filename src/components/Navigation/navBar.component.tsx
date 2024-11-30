@@ -64,6 +64,12 @@ function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                                 itemName="My Recipes"
                                 onClick={handleNavItemClick}
                             />
+                            <NavItem
+                                navLink="/followed-creators"
+                                icon={<p className="text-xl">F</p>}
+                                itemName="Followed Creators"
+                                onClick={handleNavItemClick}
+                            />
                         </>
                     )}
                 </nav>
@@ -75,7 +81,7 @@ function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
 function MediumNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
     const { user } = useUserContext();
     return (
-        <nav className="list-none bg-grayscale-900 px-1 rounded-xl max-h-fit sticky top-14">
+        <nav className="list-none bg-grayscale-900 px-1 rounded-xl min-w-fit max-h-fit sticky top-14">
             <NavItem
                 navLink="/"
                 icon={<p className="text-xl">H</p>}
@@ -108,6 +114,12 @@ function MediumNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                         navLink="/my-recipes"
                         icon={<p className="text-xl">R</p>}
                         itemName="My Recipes"
+                        showFullView={NavBar.isNavOpen}
+                    />
+                    <NavItem
+                        navLink="/followed-creators"
+                        icon={<p className="text-xl">F</p>}
+                        itemName="Followed Creators"
                         showFullView={NavBar.isNavOpen}
                     />
                 </>

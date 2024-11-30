@@ -30,13 +30,13 @@ export default function EditRecipeCard({
             ) : (
                 <div className="w-64 h-64 bg-slate-700 rounded-md"></div>
             )}
-            <div className="w-64 max-h-40 flex flex-col gap-3 pb-3 flex-grow px-2">
+            <div className="w-64 flex flex-col gap-3 pb-3 flex-grow px-2">
                 <h2 className="text-center">{card.recipeName}</h2>
 
-                <p className="">
-                    {card.recipeDescription || 'No description available'}
+                <p className="max-h-9 truncate text-gray-500">
+                    {card.recipeDescription}
                 </p>
-                <div className="text-right select-none mt-auto mb-0 ">
+                <div className="text-right select-none">
                     <Link
                         href={{
                             pathname: '/recipe',

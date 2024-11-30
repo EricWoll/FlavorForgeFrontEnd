@@ -42,7 +42,7 @@ export default function Home() {
                 searchParam={searchParam}
                 setSearchParam={setSearchParam}
             />
-            <div className="m-2 flex flex-wrap gap-4 justify-center">
+            <div className="grow flex flex-wrap m-5 gap-4">
                 {recipes.map((cardInfo: RecipeCard) => {
                     return (
                         <RecipeCard key={cardInfo.recipeId} card={cardInfo} />

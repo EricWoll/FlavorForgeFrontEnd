@@ -1,10 +1,23 @@
+import { Dispatch, SetStateAction } from 'react';
 import ImageRequest from '../Images/request.image.component';
+import FollowTile from '../followtile.component';
 
 export default function RecipePageInfo({
     recipeCard,
+    updateRecipe,
+    user,
 }: {
     recipeCard: RecipeCard;
+    updateRecipe: Dispatch<SetStateAction<RecipeCard | undefined>>;
+    user: IUserContextPublic | null;
 }) {
+    const handleFollowTile = async () => {
+        updateRecipe({
+            ...recipeCard,
+            following: !recipeCard.following,
+        });
+    };
+
     return (
         <>
             <section className="flex flex-row flex-wrap w-full gap-10 justify-center">
@@ -17,10 +30,19 @@ export default function RecipePageInfo({
                 ) : (
                     <div className="w-64 h-64 bg-slate-700 block rounded-md"></div>
                 )}
-                <section>
-                    <h2 className="text-3xl text-center">
-                        {recipeCard?.recipeName}
-                    </h2>
+
+                <section className="mx-10">
+                    <section className="flex flex-col items-center gap-1 mb-4">
+                        <h2 className="text-3xl">{recipeCard.recipeName}</h2>
+                        {recipeCard.following && (
+                            <FollowTile
+                                isFollowed={recipeCard.following}
+                                updateClientFunction={handleFollowTile}
+                                creatorId={recipeCard.creatorId}
+                                creatorName={recipeCard.creatorUsername}
+                            />
+                        )}
+                    </section>
                     <p>{recipeCard?.recipeDescription}</p>
                 </section>
             </section>
