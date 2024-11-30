@@ -35,24 +35,30 @@ export default function RecipePageInfo({
                 <section className="mx-10">
                     <section className="flex flex-col items-center gap-1 mb-4">
                         <h2 className="text-3xl">{recipeCard.recipeName}</h2>
-                        {user && (
-                            <span className="flex flex-nowrap gap-2 border-2 border-gray-500 pl-2 rounded-full items-center">
-                                <Link
-                                    className="cursor-pointer select-none"
-                                    href={{
-                                        pathname: '/creator-page',
-                                        query: { id: recipeCard.creatorId },
-                                    }}
-                                >
-                                    {recipeCard.creatorUsername}
-                                </Link>
+
+                        <span
+                            className={`flex flex-nowrap gap-2 border-2 border-gray-500  ${
+                                user ? 'pl-2' : 'px-2'
+                            } rounded-full items-center`}
+                        >
+                            <Link
+                                className="cursor-pointer select-none"
+                                href={{
+                                    pathname: '/creator-page',
+                                    query: { id: recipeCard.creatorId },
+                                }}
+                            >
+                                {recipeCard.creatorUsername ||
+                                    recipeCard?.creator}
+                            </Link>
+                            {user && (
                                 <FollowTile
                                     isFollowed={recipeCard.following}
                                     updateClientFunction={handleFollowTile}
                                     creatorId={recipeCard.creatorId}
                                 />
-                            </span>
-                        )}
+                            )}
+                        </span>
                     </section>
                     <p>{recipeCard?.recipeDescription}</p>
                 </section>

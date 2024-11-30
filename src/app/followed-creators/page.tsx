@@ -54,7 +54,7 @@ export default function Page() {
     }
 
     return (
-        <div className="grow flex flex-wrap m-5 gap-4">
+        <div className="grow flex flex-wrap m-5 gap-4 justify-center">
             {creatorList.length > 0 ? (
                 creatorList.map((creator) => (
                     <CreatorCard

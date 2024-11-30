@@ -9,4 +9,5 @@ interface RecipeCard {
     likesCount: number;
     creatorUsername: string;
     following?: boolean;
+    creator?: string | undefined;
 }

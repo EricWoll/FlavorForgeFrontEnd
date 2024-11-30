@@ -62,7 +62,7 @@ export default function MyRecipes() {
             >
                 Add recipes
             </Link>
-            <section className="grow flex flex-wrap m-5 gap-4">
+            <section className="grow flex flex-wrap m-5 gap-4 justify-center">
                 {recipes.length > 0 ? (
                     recipes.map((cardInfo) => (
                         <EditRecipeCard

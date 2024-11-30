@@ -78,7 +78,7 @@ export default function Page() {
         }
         if (loading) return;
         getCreatorPageContent();
-    }, [loading, user]);
+    }, [loading, user, creatorId]);
 
     if (pageLoading) {
         return <div>Loading Recipe...</div>;
@@ -123,7 +123,7 @@ export default function Page() {
                 </section>
             </section>
             <hr />
-            <section className="max-w-fit max-h-fit flex flex-wrap gap-4">
+            <section className="flex flex-wrap gap-4 justify-center">
                 {recipeList.length > 0 ? (
                     recipeList.map((recipe) => (
                         <RecipeCard key={recipe.recipeId} card={recipe} />
