@@ -54,7 +54,7 @@ export default function Page() {
             if (!creatorResponse.ok)
                 throw new Error('Error fetching creator data.');
 
-            const creatorData: ICreator = await creatorResponse.json();
+            const creatorData = await creatorResponse.json();
             setCreator(creatorData);
         } catch (error) {
             setError(
@@ -105,14 +105,17 @@ export default function Page() {
                 )}
                 <section className="flex flex-col gap-3">
                     <h2 className="text-3xl font-semibold">
-                        {creator.creatorUsername}
+                        {creator.creatorUsername || creator?.username}
                     </h2>
-                    <FollowTile
-                        isFollowed={creator.followed}
-                        updateClientFunction={toggleFollowStatus}
-                        creatorId={creator.creatorId}
-                        creatorName={creator.creatorUsername}
-                    />
+                    {user && (
+                        <span className="max-w-fit max-h-fit">
+                            <FollowTile
+                                isFollowed={creator.followed}
+                                updateClientFunction={toggleFollowStatus}
+                                creatorId={creator.creatorId}
+                            />
+                        </span>
+                    )}
                     <p className="text-gray-500">
                         {creator.creatorAboutText ||
                             'No About Section Available'}

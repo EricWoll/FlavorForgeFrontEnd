@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import FollowTile from '../followtile.component';
 import ImageRequest from '../Images/request.image.component';
+import Link from 'next/link';
 
 export default function CreatorCard({
     creator,
@@ -32,12 +33,22 @@ export default function CreatorCard({
                 )}
             </section>
             <section className="flex flex-row justify-center">
-                <FollowTile
-                    isFollowed={true}
-                    updateClientFunction={handleFollowTile}
-                    creatorId={creator.creatorId}
-                    creatorName={creator.creatorUsername}
-                />
+                <span className="flex flex-nowrap gap-2 border-2 border-gray-500 pl-2 rounded-full items-center">
+                    <Link
+                        className="cursor-pointer select-none"
+                        href={{
+                            pathname: '/creator-page',
+                            query: { id: creator.creatorId },
+                        }}
+                    >
+                        {creator.creatorUsername}
+                    </Link>
+                    <FollowTile
+                        isFollowed={true}
+                        updateClientFunction={handleFollowTile}
+                        creatorId={creator.creatorId}
+                    />
+                </span>
             </section>
         </div>
     );

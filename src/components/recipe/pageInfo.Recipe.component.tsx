@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import ImageRequest from '../Images/request.image.component';
 import FollowTile from '../followtile.component';
+import Link from 'next/link';
 
 export default function RecipePageInfo({
     recipeCard,
@@ -34,13 +35,23 @@ export default function RecipePageInfo({
                 <section className="mx-10">
                     <section className="flex flex-col items-center gap-1 mb-4">
                         <h2 className="text-3xl">{recipeCard.recipeName}</h2>
-                        {recipeCard.following && (
-                            <FollowTile
-                                isFollowed={recipeCard.following}
-                                updateClientFunction={handleFollowTile}
-                                creatorId={recipeCard.creatorId}
-                                creatorName={recipeCard.creatorUsername}
-                            />
+                        {user && (
+                            <span className="flex flex-nowrap gap-2 border-2 border-gray-500 pl-2 rounded-full items-center">
+                                <Link
+                                    className="cursor-pointer select-none"
+                                    href={{
+                                        pathname: '/creator-page',
+                                        query: { id: recipeCard.creatorId },
+                                    }}
+                                >
+                                    {recipeCard.creatorUsername}
+                                </Link>
+                                <FollowTile
+                                    isFollowed={recipeCard.following}
+                                    updateClientFunction={handleFollowTile}
+                                    creatorId={recipeCard.creatorId}
+                                />
+                            </span>
                         )}
                     </section>
                     <p>{recipeCard?.recipeDescription}</p>

@@ -7,4 +7,5 @@ interface ICreator {
     creatorRole: string;
 
     followed: boolean | undefined;
+    username?: string | undefined;
 }

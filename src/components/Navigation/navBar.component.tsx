@@ -70,6 +70,12 @@ function SmallNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                                 itemName="Followed Creators"
                                 onClick={handleNavItemClick}
                             />
+                            <NavItem
+                                navLink={`/creator-page?id=${user.id}`}
+                                icon={<p className="text-xl">C</p>}
+                                itemName="Creator Page"
+                                onClick={handleNavItemClick}
+                            />
                         </>
                     )}
                 </nav>
@@ -120,6 +126,12 @@ function MediumNav({ NavBar }: { NavBar: INavBarContext }): ReactNode {
                         navLink="/followed-creators"
                         icon={<p className="text-xl">F</p>}
                         itemName="Followed Creators"
+                        showFullView={NavBar.isNavOpen}
+                    />
+                    <NavItem
+                        navLink={`/creator-page?id=${user.id}`}
+                        icon={<p className="text-xl">C</p>}
+                        itemName="Creator Page"
                         showFullView={NavBar.isNavOpen}
                     />
                 </>
