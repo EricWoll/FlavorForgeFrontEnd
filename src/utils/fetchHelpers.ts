@@ -162,11 +162,7 @@ export async function apiPut(
 }
 
 export async function apiRefreshToken(refreshToken: string) {
-    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
-        headers: {
-            Authorization: `Bearer ${refreshToken}`,
-        },
-    });
+    return await apiPost('auth/refresh', '', refreshToken);
 }
 
 export async function apiDelete(

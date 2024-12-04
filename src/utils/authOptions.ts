@@ -3,11 +3,10 @@ import { jwtDecode } from 'jwt-decode';
 import { apiPost, apiRefreshToken } from './fetchHelpers';
 import { NextAuthOptions, Session } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
-import { AdapterUser } from 'next-auth/adapters';
 
 async function refreshAccessToken(token: any): Promise<any> {
     try {
-        const res = await apiRefreshToken(token?.refreshToken);
+        const res = await apiRefreshToken(token.refreshToken);
         if (!res.ok) {
             throw new Error('Refresh Token error');
         }
@@ -100,18 +99,17 @@ export const authOptions: NextAuthOptions = {
                     imageId: user.imageId,
                     accessToken: user.accessToken,
                     refreshToken: user.refreshToken,
-                    accessTokenExpires: Date.now() + 60 * 60 * 1000, // Set expiration (1 hour for example)
+                    accessTokenExpires: Date.now() + 86400000, // 1 day [86400000]
                 };
                 return newToken;
             }
 
-            // Return existing token if still valid
-            if (Date.now() < token.accessTokenExpires) {
-                return token;
+            if (token.accessTokenExpires < new Date()) {
+                // regenerate and return new token
+                return await refreshAccessToken(token);
             }
 
-            // Token expired, refresh it
-            return await refreshAccessToken(token);
+            return token;
         },
     },
 };
