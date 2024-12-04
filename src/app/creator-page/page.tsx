@@ -81,7 +81,7 @@ export default function Page() {
     }, [loading, user, creatorId]);
 
     if (pageLoading) {
-        return <div>Loading Recipe...</div>;
+        return <div>Loading Creator Page...</div>;
     }
 
     if (error) {

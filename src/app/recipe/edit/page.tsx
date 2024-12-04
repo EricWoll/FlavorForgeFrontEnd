@@ -44,6 +44,7 @@ export default function Page() {
                     }
                     const recipeData = await response.json();
                     setRecipe(recipeData);
+                    console.log(recipeData);
                 }
             } catch (error) {
                 setError('Error loading user. Please try again later');
@@ -53,7 +54,7 @@ export default function Page() {
     }, [user, loading]);
 
     if (loading) {
-        return <div>Loading User...</div>;
+        return <div>Loading Recipe...</div>;
     }
 
     if (error) {

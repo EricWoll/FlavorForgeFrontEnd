@@ -6,11 +6,13 @@ export default function RecipeCard({ card }: { card: RecipeCard }): ReactNode {
     return (
         <div className="flex flex-col justify-start items-center my-4 relative rounded-md border border-stroke overflow-hidden">
             {card.imageId != 'none' ? (
-                <ImageRequest
-                    filename={card.imageId}
-                    imageWidth={256}
-                    imageHeight={256}
-                />
+                <span className="h-full max-h-64 overflow-hidden">
+                    <ImageRequest
+                        filename={card.imageId}
+                        imageWidth={256}
+                        imageHeight={256}
+                    />
+                </span>
             ) : (
                 <div className="w-64 h-64 bg-slate-700 block rounded-md"></div>
             )}

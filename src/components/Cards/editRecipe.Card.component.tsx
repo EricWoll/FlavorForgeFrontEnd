@@ -21,12 +21,14 @@ export default function EditRecipeCard({
                 Edit
             </Link>
             {card.imageId != 'none' ? (
-                <ImageRequest
-                    filename={card.imageId}
-                    imageWidth={256}
-                    imageHeight={256}
-                    keyId={card.imageId}
-                />
+                <span className="h-full max-h-64 overflow-hidden">
+                    <ImageRequest
+                        filename={card.imageId}
+                        imageWidth={256}
+                        imageHeight={256}
+                        keyId={card.imageId}
+                    />
+                </span>
             ) : (
                 <div className="w-64 h-64 bg-slate-700 rounded-md"></div>
             )}

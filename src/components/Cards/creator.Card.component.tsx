@@ -21,7 +21,7 @@ export default function CreatorCard({
 
     return (
         <div className="border-2  max-w-fit max-h-fit p-2 rounded-xl bg-gray-200">
-            <section className="flex w-full justify-center mb-2">
+            <section className="flex max-w-64 max-h-64 justify-center mb-2 overflow-hidden">
                 {creator.creatorImage !== 'none' ? (
                     <ImageRequest
                         filename={creator.creatorImage}

@@ -17,8 +17,6 @@ export default function MyRecipes() {
     useEffect(() => {
         if (loading || !user || !user.id) return; // Skip API call during loading or if no user
 
-        console.log('user loaded');
-
         if (!user?.id) {
             router.push('/'); // Redirect if not logged in
         }

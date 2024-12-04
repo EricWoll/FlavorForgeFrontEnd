@@ -14,27 +14,44 @@ export default function Home() {
         Search.get('search') || ''
     );
     const [noSearch, setNoSearch] = useState<boolean>(false);
+    const [pageLoading, setPageLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const getRecipes = async () => {
-            if ((searchParam == null || searchParam == '') && !noSearch) {
-                setRecipes(
-                    await apiGet('search/recipes', 'pageAmount=10').then(
-                        (res) => res.json()
-                    )
-                );
-                setNoSearch(true);
-            } else {
-                setRecipes(
-                    await apiGet(`search/recipes/${searchParam}`).then((res) =>
-                        res.json()
-                    )
-                );
-                setNoSearch(false);
+            try {
+                setPageLoading(true);
+                if ((searchParam == null || searchParam == '') && !noSearch) {
+                    setRecipes(
+                        await apiGet('search/recipes', 'pageAmount=10').then(
+                            (res) => res.json()
+                        )
+                    );
+                    setNoSearch(true);
+                } else {
+                    setRecipes(
+                        await apiGet(`search/recipes/${searchParam}`).then(
+                            (res) => res.json()
+                        )
+                    );
+                    setNoSearch(false);
+                }
+            } catch (error) {
+                setError('Error loading Recipes. Please try again later.');
+            } finally {
+                setPageLoading(false);
             }
         };
         getRecipes();
     }, [searchParam]);
+
+    if (pageLoading) {
+        return <div>Loading Recipe...</div>;
+    }
+
+    if (error) {
+        return <div className="error-message">{error}</div>;
+    }
 
     return (
         <div className="grow">
