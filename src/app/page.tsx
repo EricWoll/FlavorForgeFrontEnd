@@ -2,7 +2,11 @@
 
 import RecipeCard from '@/components/Cards/recipe.Card.component';
 import SearchBar from '@/components/searchBar.component';
-import { apiGet } from '@/utils/fetchHelpers';
+import {
+    findRandomRecipe,
+    findSearchedRecipes,
+} from '@/utils/FetchHelpers/recipes.FetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -22,18 +26,10 @@ export default function Home() {
             try {
                 setPageLoading(true);
                 if ((searchParam == null || searchParam == '') && !noSearch) {
-                    setRecipes(
-                        await apiGet('search/recipes', 'pageAmount=10').then(
-                            (res) => res.json()
-                        )
-                    );
+                    setRecipes(await findRandomRecipe());
                     setNoSearch(true);
                 } else {
-                    setRecipes(
-                        await apiGet(`search/recipes/${searchParam}`).then(
-                            (res) => res.json()
-                        )
-                    );
+                    setRecipes(await findSearchedRecipes(searchParam));
                     setNoSearch(false);
                 }
             } catch (error) {

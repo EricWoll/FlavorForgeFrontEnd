@@ -1,10 +1,10 @@
 'use client';
 
 import AddComment from './add.Comment.component';
-import { apiGet } from '@/utils/fetchHelpers';
 import EditCommentItem from './editItem.Comment.component';
 import { useEffect, useState } from 'react';
 import { useUserContext } from '@/contexts/User.context';
+import { findComments } from '@/utils/FetchHelpers/comments.FetchHelpers';
 
 export default function EditCommentContainer({
     recipeId,
@@ -24,14 +24,7 @@ export default function EditCommentContainer({
 
             try {
                 if (recipeId) {
-                    const response = await apiGet(`comments/${recipeId}`);
-                    if (!response.ok) {
-                        setError(
-                            `Failed to fetch Comments: ${response.statusText}`
-                        );
-                    }
-                    const commentData = await response.json();
-                    setCommentList(commentData);
+                    setCommentList(await findComments(recipeId));
                 } else {
                     setError('Recipe Id is missing!');
                 }

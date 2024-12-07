@@ -1,7 +1,11 @@
 'use client';
 
 import { useUserContext } from '@/contexts/User.context';
-import { apiDelete, apiPostParams } from '@/utils/fetchHelpers';
+import {
+    addFollower,
+    deleteFollower,
+} from '@/utils/FetchHelpers/followed.FetchHelpers';
+import { apiDelete, apiPostParams } from '@/utils/handlerHelpers';
 
 export default function FollowTile({
     isFollowed,
@@ -17,11 +21,7 @@ export default function FollowTile({
     const handleUnFollow = async () => {
         if (!user) return;
         try {
-            await apiDelete(
-                'users/followed',
-                user.token,
-                `user_id=${user.id}&creator_id=${creatorId}`
-            );
+            await deleteFollower(user.id, creatorId, user.token);
             updateClientFunction();
         } catch (error) {
             alert('Could not unFollow Creator');
@@ -31,11 +31,7 @@ export default function FollowTile({
     const handleFollow = async () => {
         if (!user) return;
         try {
-            await apiPostParams(
-                'users/followed',
-                `user_id=${user.id}&creator_id=${creatorId}`,
-                user.token
-            );
+            await addFollower(user.id, creatorId, user.token);
 
             updateClientFunction();
         } catch (error) {

@@ -5,8 +5,8 @@ import FormButton from '../FormElements/button.Form.component';
 import { FormColumn } from '../FormElements/column.Form.component';
 import FormContainer from '../FormElements/container.Form.component';
 import FormTextArea from '../FormElements/textArea.Form.component';
-import { apiPost } from '@/utils/fetchHelpers';
 import { useUserContext } from '@/contexts/User.context';
+import { postComments } from '@/utils/FetchHelpers/comments.FetchHelpers';
 
 export default function AddComment({
     recipeId,
@@ -24,15 +24,7 @@ export default function AddComment({
         event.preventDefault();
         try {
             if (commentText != '') {
-                await apiPost(
-                    `comments`,
-                    {
-                        userId: userId,
-                        attachedId: recipeId,
-                        commentText: commentText,
-                    },
-                    user?.token
-                );
+                await postComments(userId, recipeId, commentText, user?.token);
                 setCommentText('');
             } else {
                 setError('No comment to submit!');

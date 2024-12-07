@@ -1,6 +1,7 @@
 'use client';
 
-import { apiGet } from '@/utils/fetchHelpers';
+import { findUserById } from '@/utils/FetchHelpers/users.FetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import { useEffect, useState } from 'react';
 
 export default function CommentItem({ comment }: { comment: IComment }) {
@@ -8,11 +9,7 @@ export default function CommentItem({ comment }: { comment: IComment }) {
 
     useEffect(() => {
         const getUser = async () => {
-            setPublicUser(
-                await apiGet(`users/id/${comment.userId}`, '').then((res) =>
-                    res.json()
-                )
-            );
+            setPublicUser(await findUserById(comment.userId));
         };
         getUser();
     }, []);

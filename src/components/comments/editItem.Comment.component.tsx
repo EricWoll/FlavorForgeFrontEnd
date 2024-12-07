@@ -1,7 +1,8 @@
 'use client';
 
 import { useUserContext } from '@/contexts/User.context';
-import { apiDelete, apiGet } from '@/utils/fetchHelpers';
+import { deleteComment } from '@/utils/FetchHelpers/comments.FetchHelpers';
+import { findUserById } from '@/utils/FetchHelpers/users.FetchHelpers';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export default function EditCommentItem({
@@ -21,30 +22,29 @@ export default function EditCommentItem({
         const getUser = async () => {
             try {
                 if (comment.userId) {
-                    const response = await apiGet(`users/id/${comment.userId}`);
-                    if (!response.ok) {
-                        setError(
-                            `Failed to fetch User: ${response.statusText}`
-                        );
-                    }
-                    const commentUserData = await response.json();
-                    setPublicUser(commentUserData);
+                    setPublicUser(await findUserById(comment.userId));
                 } else {
                     setError("Comment's user data is missing!");
                 }
-            } catch (error) {}
+            } catch (error) {
+                setError('Failed to fetch user! Please try again later.');
+            }
         };
         getUser();
     }, []);
 
     const handleDelete = async (commentToRemove: IComment) => {
         try {
-            await apiDelete(`comments/${comment.commentId}`, user?.token);
-            commentListUpdater((prevItems) =>
-                prevItems?.filter((item) => item != commentToRemove)
-            );
+            if (user?.token) {
+                await deleteComment(commentToRemove.commentId, user.token);
+                commentListUpdater((prevItems) =>
+                    prevItems?.filter((item) => item != commentToRemove)
+                );
+            } else {
+                setError('Failed to delete Comment.');
+            }
         } catch (error) {
-            alert('Failed to delete Comment.');
+            setError('Failed to delete Comment.');
         }
     };
 

@@ -4,7 +4,9 @@ import RecipeCard from '@/components/Cards/recipe.Card.component';
 import FollowTile from '@/components/followtile.component';
 import ImageRequest from '@/components/Images/request.image.component';
 import { useUserContext } from '@/contexts/User.context';
-import { apiGet } from '@/utils/fetchHelpers';
+import { findCreators } from '@/utils/FetchHelpers/creators.FetchHelpers';
+import { findRecipesByUser } from '@/utils/FetchHelpers/recipes.FetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -28,34 +30,12 @@ export default function Page() {
         followed: false,
     });
 
-    const handleGetCreator = async (user: IUserContextPublic | null) => {
-        if (user?.id) {
-            return await apiGet(
-                `users/creator/${creatorId}`,
-                `user_id=${user.id}`,
-                user.token
-            );
-        } else {
-            return await apiGet(`users/id/${creatorId}`);
-        }
-    };
-
     const getCreatorPageContent = async () => {
         setPageLoading(true);
         try {
-            const recipeResponse = await apiGet(`recipes/users/${creatorId}`);
-            if (!recipeResponse.ok)
-                throw new Error("Error fetching creator's recipes.");
+            setRecipeList(await findRecipesByUser(creatorId));
 
-            const recipeData = await recipeResponse.json();
-            setRecipeList(recipeData);
-
-            const creatorResponse = await handleGetCreator(user);
-            if (!creatorResponse.ok)
-                throw new Error('Error fetching creator data.');
-
-            const creatorData = await creatorResponse.json();
-            setCreator(creatorData);
+            setCreator(await findCreators(user?.id, creatorId, user?.token));
         } catch (error) {
             setError(
                 'Failed to load Creator and their Recipes. Please try again later.'

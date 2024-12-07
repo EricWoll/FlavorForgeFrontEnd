@@ -1,9 +1,10 @@
 'use client';
 
-import { apiGet } from '@/utils/fetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import { ReactNode, useEffect, useState } from 'react';
 import LoadingCircle from './loadingCircle.image.component';
 import Image from 'next/image';
+import { findImage } from '@/utils/FetchHelpers/images.FetchHelpers';
 
 interface imageRequest {
     filename: string;
@@ -22,14 +23,15 @@ export default function ImageRequest({
 }: imageRequest): ReactNode {
     const [image, setImage] = useState<Response>(new Response());
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchImage = async () => {
             setLoading(true);
             try {
-                setImage(await apiGet(`images`, `filename=${filename}`));
-            } catch (e) {
-                console.log(e);
+                setImage(await findImage(filename));
+            } catch (error) {
+                setError('Failed to fetch image!');
             }
             setLoading(false);
         };
@@ -41,6 +43,8 @@ export default function ImageRequest({
                 <section>
                     <LoadingCircle />
                 </section>
+            ) : error ? (
+                <section className="text-sm">{error}</section>
             ) : (
                 <Image
                     key={keyId}

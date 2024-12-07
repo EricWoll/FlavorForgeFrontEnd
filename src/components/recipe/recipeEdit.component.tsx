@@ -12,11 +12,16 @@ import {
     apiPost,
     apiPostForImage,
     apiPut,
-} from '@/utils/fetchHelpers';
+} from '@/utils/handlerHelpers';
 import AddIngredientsForm from './addIngredientsForm.component';
 import AddStepsForm from './addStepsForm.components';
 import { useRouter } from 'next/navigation';
 import { useUserContext } from '@/contexts/User.context';
+import {
+    addRecipe,
+    deleteRecipe,
+    updateRecipe,
+} from '@/utils/FetchHelpers/recipes.FetchHelpers';
 
 export default function EditRecipe({
     recipe,
@@ -84,13 +89,13 @@ export default function EditRecipe({
                 };
 
                 if (recipe.recipeId != null) {
-                    await apiPut(
-                        `recipes/${recipe.recipeId}`,
+                    await updateRecipe(
+                        recipe.recipeId,
                         updatedRecipe,
                         user?.token
                     );
                 } else {
-                    await apiPost('recipes', updatedRecipe, user?.token);
+                    await addRecipe(updatedRecipe, user?.token);
                 }
                 Router.push('/my-recipes');
             } catch (error) {
@@ -102,7 +107,7 @@ export default function EditRecipe({
     const handleDelete = async () => {
         try {
             if (recipe.recipeId != null) {
-                await apiDelete(`recipes/${recipe.recipeId}`, user?.token);
+                await deleteRecipe(recipe.recipeId, user?.token);
                 Router.push('/my-recipes');
             }
         } catch (error) {

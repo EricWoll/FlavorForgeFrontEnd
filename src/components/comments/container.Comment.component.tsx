@@ -1,13 +1,12 @@
 'use client';
 
 import AddComment from './add.Comment.component';
-import { apiGet } from '@/utils/fetchHelpers';
 import EditCommentItem from './editItem.Comment.component';
 import CommentItem from './item.Comment.component';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useUserContext } from '@/contexts/User.context';
+import { findComments } from '@/utils/FetchHelpers/comments.FetchHelpers';
 
 export default function CommentContainer() {
     const searchParams = useSearchParams();
@@ -26,16 +25,7 @@ export default function CommentContainer() {
             try {
                 setLoading(true);
                 if (recipeId) {
-                    const response = await apiGet(
-                        `comments/attached/${recipeId}`
-                    );
-                    if (!response.ok) {
-                        throw new Error(
-                            `Failed to fetch Comments: ${response.statusText}`
-                        );
-                    }
-                    const commentData = await response.json();
-                    setCommentList(commentData);
+                    setCommentList(await findComments(recipeId));
                 } else {
                     setError('Recipe Id is missing!');
                 }

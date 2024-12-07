@@ -2,7 +2,8 @@
 
 import CreatorCard from '@/components/Cards/creator.Card.component';
 import { useUserContext } from '@/contexts/User.context';
-import { apiGet } from '@/utils/fetchHelpers';
+import { findFollowedCreators } from '@/utils/FetchHelpers/creators.FetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -22,18 +23,7 @@ export default function Page() {
         }
         const getCreators = async () => {
             try {
-                const response = await apiGet(
-                    `users/followed/${user.id}`,
-                    '',
-                    user.token
-                );
-                if (!response.ok) {
-                    throw new Error(
-                        `Failed to fetch Followed Creators: ${response.statusText}`
-                    );
-                }
-                const creatorData: CreatorCard[] = await response.json();
-                setCreatorList(creatorData);
+                setCreatorList(await findFollowedCreators(user.id, user.token));
             } catch (error: unknown) {
                 console.error('Error fetching creators:', error);
                 setError(

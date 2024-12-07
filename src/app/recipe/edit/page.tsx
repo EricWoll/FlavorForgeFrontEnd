@@ -2,7 +2,8 @@
 
 import EditRecipe from '@/components/recipe/recipeEdit.component';
 import { useUserContext } from '@/contexts/User.context';
-import { apiGet } from '@/utils/fetchHelpers';
+import { findRecipe } from '@/utils/FetchHelpers/recipes.FetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -36,15 +37,7 @@ export default function Page() {
         const getRecipe = async () => {
             try {
                 if (recipeId) {
-                    const response = await apiGet(`recipes/${recipeId}`);
-                    if (!response.ok) {
-                        throw new Error(
-                            `Failed fetching User: ${response.statusText}`
-                        );
-                    }
-                    const recipeData = await response.json();
-                    setRecipe(recipeData);
-                    console.log(recipeData);
+                    setRecipe(await findRecipe(recipeId));
                 }
             } catch (error) {
                 setError('Error loading user. Please try again later');

@@ -3,7 +3,7 @@
 import CommentContainer from '@/components/comments/container.Comment.component';
 import RecipePageInfo from '@/components/recipe/pageInfo.Recipe.component';
 import { useUserContext } from '@/contexts/User.context';
-import { apiGet } from '@/utils/fetchHelpers';
+import { findRecipesWithUser } from '@/utils/FetchHelpers/recipes.FetchHelpers';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -17,18 +17,6 @@ export default function Page() {
     const [pageLoading, setPageLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const handleGetRecipe = async (user: IUserContextPublic | null) => {
-        if (user) {
-            return await apiGet(
-                `recipes/followed/${recipeId}`,
-                `user_id=${user.id}`,
-                user.token
-            );
-        } else {
-            return await apiGet(`recipes/${recipeId}`);
-        }
-    };
-
     useEffect(() => {
         const getRecipe = async () => {
             if (loading) return;
@@ -36,15 +24,7 @@ export default function Page() {
             try {
                 setPageLoading(true);
                 if (recipeId) {
-                    const response = await handleGetRecipe(user);
-
-                    if (!response.ok) {
-                        throw new Error(
-                            `Failed to fecth recipe: ${response.statusText}`
-                        );
-                    }
-                    const recipeData = await response.json();
-                    setRecipe(recipeData);
+                    setRecipe(await findRecipesWithUser(user, recipeId));
                 } else {
                     setError('Recipe Id is missing!');
                 }

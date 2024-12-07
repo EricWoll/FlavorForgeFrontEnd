@@ -2,7 +2,8 @@
 
 import UserProfile from '@/components/userProfile/userProfile.component';
 import { useUserContext } from '@/contexts/User.context';
-import { apiGet } from '@/utils/fetchHelpers';
+import { findUserByUsername } from '@/utils/FetchHelpers/users.FetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -30,18 +31,9 @@ export default function Page() {
         const getUser = async () => {
             try {
                 if (user.name) {
-                    const response = await apiGet(
-                        `users/${user.name}`,
-                        '',
-                        user.token
+                    setUserProfile(
+                        await findUserByUsername(user.name, user.token)
                     );
-                    if (!response.ok) {
-                        throw new Error(
-                            `Failed to fetch User: ${response.statusText}`
-                        );
-                    }
-                    const profileData = await response.json();
-                    setUserProfile(profileData);
                 } else {
                     setError('Username is missing!');
                 }

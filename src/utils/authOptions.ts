@@ -1,6 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtDecode } from 'jwt-decode';
-import { apiPost, apiRefreshToken } from './fetchHelpers';
+import { apiPost, apiRefreshToken } from './handlerHelpers';
 import { NextAuthOptions, Session } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 

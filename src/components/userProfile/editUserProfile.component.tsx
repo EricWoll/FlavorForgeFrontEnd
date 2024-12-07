@@ -14,9 +14,11 @@ import { FormColumn } from '../FormElements/column.Form.component';
 import { FormEmailInput } from '../FormElements/emailInput.Form.component';
 import { FormUsernameInput } from '../FormElements/usernameInput.Form.component';
 import FormTextArea from '../FormElements/textArea.Form.component';
-import { apiPostForImage, apiPut } from '@/utils/fetchHelpers';
+import { apiPostForImage, apiPut } from '@/utils/handlerHelpers';
 import { useRouter } from 'next/navigation';
 import { useUserContext } from '@/contexts/User.context';
+import { updateUser } from '@/utils/FetchHelpers/users.FetchHelpers';
+import { updateImage } from '@/utils/FetchHelpers/images.FetchHelpers';
 
 export default function EditUserProfile({
     userProfile,
@@ -46,8 +48,7 @@ export default function EditUserProfile({
                 const newUUID = crypto.randomUUID();
                 const isUpdateImage = userProfile.imageId !== 'none';
 
-                await apiPostForImage(
-                    'images',
+                await updateImage(
                     file,
                     userProfile.imageId,
                     newUUID,
@@ -56,11 +57,7 @@ export default function EditUserProfile({
                 );
                 userProfile.imageId = newUUID;
             }
-            await apiPut(
-                `users/${userProfile.username}`,
-                { ...userProfile, imageId: userProfile.imageId },
-                user?.token
-            );
+            await updateUser(userProfile, user?.token);
         } catch (error) {
             console.error('Error with your Profile:', error);
             alert('Failed to upload Profile. Please try again.');

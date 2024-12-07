@@ -7,7 +7,8 @@ import { FormEmailInput } from '@/components/FormElements/emailInput.Form.compon
 import FormPassword from '@/components/FormElements/passwordInput.Form.component';
 import { FormUsernameInput } from '@/components/FormElements/usernameInput.Form.component';
 import { useUserContext } from '@/contexts/User.context';
-import { apiPost } from '@/utils/fetchHelpers';
+import { Register } from '@/utils/FetchHelpers/auth.FetchHelpers';
+import { apiPost } from '@/utils/handlerHelpers';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from 'react';
@@ -51,11 +52,7 @@ export default function Page(): ReactNode {
     const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (usernameInput && passwordInput && emailInput) {
-            await apiPost('auth/register', {
-                email: emailInput,
-                username: usernameInput,
-                password: passwordInput,
-            });
+            await Register(emailInput, usernameInput, passwordInput);
             await signIn('credentials', {
                 redirect: false,
                 username: usernameInput,

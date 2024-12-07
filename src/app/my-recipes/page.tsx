@@ -2,7 +2,8 @@
 
 import EditRecipeCard from '@/components/Cards/editRecipe.Card.component';
 import { useUserContext } from '@/contexts/User.context';
-import { apiGet } from '@/utils/fetchHelpers';
+import { findRecipesByUser } from '@/utils/FetchHelpers/recipes.FetchHelpers';
+import { apiGet } from '@/utils/handlerHelpers';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -24,14 +25,7 @@ export default function MyRecipes() {
         const fetchRecipes = async () => {
             try {
                 if (user.id) {
-                    const response = await apiGet(`recipes/users/${user.id}`);
-                    if (!response.ok) {
-                        throw new Error(
-                            `Failed to fetch recipes: ${response.statusText}`
-                        );
-                    }
-                    const recipeData = await response.json();
-                    setRecipes(recipeData);
+                    setRecipes(await findRecipesByUser(user.id));
                 } else {
                     setError('User ID is missing!');
                 }
