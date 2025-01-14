@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
-
-export default function Footer(): ReactNode {
+export default function Footer() {
     return (
-        <footer className="mr-0 ml-auto mb-1 select-none">
-            <p className="text-grayscale-500">&copy;2024 Flavor Forge</p>
-        </footer>
+        <div className="mt-auto mb-2">
+            <p className="text-tinted_gray_400 text-sm">
+                &copy; FlavorForge 2020
+            </p>
+        </div>
     );
 }

@@ -13,7 +13,7 @@ declare module 'next-auth' {
     }
 
     interface Session {
-        user: User; // Ensure session includes custom user fields
+        user: User;
     }
 }
 
