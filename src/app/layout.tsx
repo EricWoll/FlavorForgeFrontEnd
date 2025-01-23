@@ -37,7 +37,7 @@ export default async function RootLayout({
                         <html lang="en">
                             <body className="min-h-screen flex flex-col gap-x-2 bg-body-background font-roboto bg-tinted_gray_700">
                                 <Header />
-                                <main className="flex flex-nowrap grow relative">
+                                <main className="flex flex-nowrap grow relative m-2 gap-6">
                                     <NavBar />
                                     {children}
                                 </main>

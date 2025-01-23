@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import ProfileDropDown from './dropdowns/profile.dropdowns.component';
 import { ChangeEvent, useState } from 'react';
-import SearchBar from './searchbar.component';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import CustomInput, { InputStyleType } from './customInput.component';
 import { useSearchContext } from '@/contexts/search.context';
 import { useNavBarContext } from '@/contexts/navbar.context';
+
+import LargeSearchBar from './searchbars/large.searchbars.component';
+import SmallSearchBar from './searchbars/small.searchbars.component';
 
 import MenuIcon from '@/svgs/icon-menu.svg';
 import UserIcon from '@/svgs/icon-user.svg';
@@ -32,7 +34,7 @@ export default function Header() {
             Window.windowSize == WindowSizes.SMALL ? (
                 <div className="flex gap-2 w-screen">
                     <LeftArrowIcon
-                        className="w-6 h-6 select-none cursor-pointer"
+                        className="w-8 h-8 select-none cursor-pointer"
                         onClick={() => {
                             setIsSmallSearchIconClicked((prev) => !prev);
                         }}
@@ -48,7 +50,12 @@ export default function Header() {
                     />
                 </div>
             ) : (
-                <>
+                <div
+                    className={`grid grid-flow-col justify-between w-full items-center ${
+                        !Window.windowSize.match(WindowSizes.SMALL) &&
+                        'grid-cols-[1fr_2fr_1fr]'
+                    }`}
+                >
                     <section className="flex gap-2 items-center mr-5">
                         <MenuIcon
                             viewBox="0 0 40 40"
@@ -68,22 +75,23 @@ export default function Header() {
                             FlavorForge
                         </Link>
                     </section>
-                    <section
-                        className={`flex items-center relative gap-4 ${
-                            Window.windowSize == WindowSizes.SMALL
-                                ? 'justify-center'
-                                : 'justify-between w-full'
-                        }`}
-                    >
-                        <SearchBar
-                            searchIsclicked={isSmallSearchIconClicked}
+                    {!Window.windowSize.match(WindowSizes.SMALL) && (
+                        <LargeSearchBar
                             setSearchIsclicked={setIsSmallSearchIconClicked}
-                            onChange={(e) => {
-                                SearchContext.setSearchText(e.target.value);
-                            }}
+                            onChange={handleProfileClick}
                             value={SearchContext.searchText}
                         />
-
+                    )}
+                    <section className={`flex relative gap-4 justify-end`}>
+                        {Window.windowSize.match(WindowSizes.SMALL) && (
+                            <SmallSearchBar
+                                onClick={() => {
+                                    setIsSmallSearchIconClicked(
+                                        (prev) => !prev
+                                    );
+                                }}
+                            />
+                        )}
                         <div
                             className={`rounded-md select-none cursor-pointer p-1 ${
                                 isProfileOpen && 'shadow-inner_tinted_gray_1'
@@ -100,7 +108,7 @@ export default function Header() {
                             <ProfileDropDown className="top-10 right-0 p-3 rounded-md" />
                         )}
                     </section>
-                </>
+                </div>
             )}
         </header>
     );

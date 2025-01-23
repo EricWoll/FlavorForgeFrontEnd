@@ -5,7 +5,13 @@ import useWindow, {
 } from '@/hooks/useWindow.hook';
 import Link from 'next/link';
 
-export default function NavItem({ children }: { children: React.ReactNode }) {
+export default function NavItem({
+    children,
+    hiddenOnLargeScreenClose = false,
+}: {
+    children: React.ReactNode;
+    hiddenOnLargeScreenClose?: boolean;
+}) {
     const NavBarContext = useNavBarContext();
     const Window = useWindow();
     return (
@@ -26,7 +32,7 @@ export default function NavItem({ children }: { children: React.ReactNode }) {
             } ${
                 !NavBarContext.isNavOpen &&
                 !Window.windowSize.match(WindowSizes.SMALL) &&
-                'flex-col text-xs gap-1'
+                `flex-col text-xs gap-1 ${hiddenOnLargeScreenClose && 'hidden'}`
             } `}
         >
             {children}

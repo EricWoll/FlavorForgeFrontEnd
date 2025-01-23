@@ -12,7 +12,7 @@ export default function NavBar() {
 
     return (
         <nav
-            className={` mx-2 gap-2
+            className={`gap-2
               ${
                   NavBarContext.isNavOpen &&
                   Window.windowSize.match(WindowSizes.SMALL) &&
