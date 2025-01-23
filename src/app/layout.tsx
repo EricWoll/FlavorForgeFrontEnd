@@ -6,6 +6,12 @@ import ClientSessionProvider from '@/contexts/session.Provider';
 import { UserProvider } from '@/contexts/User.context';
 import { authOptions } from '@/utils/authOptions';
 
+import Header from '@/components/header.component';
+import Footer from '@/components/footer.component';
+import { SearchProvider } from '@/contexts/search.context';
+import { NavBarProvider } from '@/contexts/navbar.context';
+import NavBar from '@/components/navbar/navbar.component';
+
 export const metadata: Metadata = {
     title: 'Flavor Forge',
     applicationName: 'FlavorForge',
@@ -26,11 +32,20 @@ export default async function RootLayout({
     return (
         <ClientSessionProvider session={session}>
             <UserProvider>
-                <html lang="en">
-                    <body className="bg-body-background font-roboto bg-tinted_gray_700">
-                        <main>{children}</main>
-                    </body>
-                </html>
+                <NavBarProvider>
+                    <SearchProvider>
+                        <html lang="en">
+                            <body className="min-h-screen flex flex-col gap-x-2 bg-body-background font-roboto bg-tinted_gray_700">
+                                <Header />
+                                <main className="flex flex-nowrap grow relative">
+                                    <NavBar />
+                                    {children}
+                                </main>
+                                <Footer />
+                            </body>
+                        </html>
+                    </SearchProvider>
+                </NavBarProvider>
             </UserProvider>
         </ClientSessionProvider>
     );

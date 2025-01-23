@@ -1,7 +1,5 @@
 'use client';
 
-import Footer from '@/components/footer.component';
-import Header from '@/components/header.component';
 import {
     findRandomRecipe,
     findSearchedRecipes,
@@ -11,10 +9,43 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-    return (
-        <div className="flex flex-nowrap grow min-h-screen mx-4 gap-x-2 flex-col">
-            <Header />
-            <Footer />
-        </div>
+    const Search = useSearchParams();
+
+    const [recipes, setRecipes] = useState<Array<RecipeCard>>([]);
+    const [searchParam, setSearchParam] = useState<string>(
+        Search.get('search') || ''
     );
+    const [noSearch, setNoSearch] = useState<boolean>(false);
+    const [pageLoading, setPageLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const getRecipes = async () => {
+            try {
+                setPageLoading(true);
+                if ((searchParam == null || searchParam == '') && !noSearch) {
+                    setRecipes(await findRandomRecipe());
+                    setNoSearch(true);
+                } else {
+                    setRecipes(await findSearchedRecipes(searchParam));
+                    setNoSearch(false);
+                }
+            } catch (error) {
+                setError('Error loading Recipes. Please try again later.');
+            } finally {
+                setPageLoading(false);
+            }
+        };
+        getRecipes();
+    }, [searchParam]);
+
+    if (pageLoading) {
+        return <div className="w-full">Loading Recipe...</div>;
+    }
+
+    if (error) {
+        return <div className="error-message w-full">{error}</div>;
+    }
+
+    return <div className="grow w-full"></div>;
 }

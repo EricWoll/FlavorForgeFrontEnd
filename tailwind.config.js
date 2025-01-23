@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    mode: 'jit', // Enable JIT mode
     content: [
         './app/**/*.{js,ts,jsx,tsx,mdx}',
         './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -32,7 +33,7 @@ module.exports = {
                 gradient_red:
                     'linear-gradient(270deg, #4C0B2F 0%, #7A0420 18.12%, #CA2C3F 55.09%, #FE7847 95%)',
             },
-            dropShadow: {
+            boxShadow: {
                 'inner_tinted_gray_0-5': '0px 0px 4px 0.5px #B0BCC7 inset',
                 inner_tinted_gray_1: '0px 0px 10px 1px #B0BCC7 inset',
                 'inner_tinted_gray_2-5': '0px 0px 10px 2.5px #B0BCC7 inset',
