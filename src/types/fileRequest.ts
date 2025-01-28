@@ -1,5 +1,5 @@
-interface IFileRequest {
+type TFileRequest = {
     file: File;
     objectKey: string;
     updateFile: boolean;
-}
+};

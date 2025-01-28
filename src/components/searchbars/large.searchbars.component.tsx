@@ -30,7 +30,7 @@ export default function LargeSearchBar({
                 placeholder="Search"
                 inputType="search"
             />
-            <div className="px-2 hover:bg-tinted_gray_500 rounded-sm">
+            <div className="px-2 hover:bg-tinted_gray_600 active:shadow-popin_tinted_gray rounded-sm">
                 <SearchIcon className="w-6 h-6 rounded-sm select-none cursor-pointer" />
             </div>
         </div>

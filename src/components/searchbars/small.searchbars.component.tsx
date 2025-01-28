@@ -1,18 +1,29 @@
-import SearchIcon from '@/svgs/icon-search.svg';
-import { Dispatch, SetStateAction } from 'react';
+import { ChangeEventHandler, Dispatch, SetStateAction } from 'react';
+
+import LeftArrowIcon from '@/svgs/icon-arrow-left.svg';
+import CustomInput, { InputStyleType } from '../customInput.component';
 
 export default function SmallSearchBar({
-    onClick,
+    onArrowClick,
+    value,
+    onChange,
 }: {
-    onClick: Dispatch<SetStateAction<boolean>>;
+    onArrowClick: Dispatch<SetStateAction<boolean>>;
+    value: string | undefined;
+    onChange: ChangeEventHandler<HTMLInputElement>;
 }) {
     return (
-        <div
-            className={`flex items-center justify-end rounded-md select-none cursor-pointer p-1`}
-        >
-            <SearchIcon
-                onClick={onClick}
-                className="w-6 h-6 rounded-sm select-none cursor-pointer"
+        <div className="flex gap-2 w-screen">
+            <LeftArrowIcon
+                className="w-8 h-8 select-none cursor-pointer"
+                onClick={onArrowClick}
+                viewBox="0 0 40 40"
+            />
+            <CustomInput
+                onChange={onChange}
+                value={value}
+                styleType={InputStyleType.HEADER_SEARCH_SMALL}
+                inputType="search"
             />
         </div>
     );
