@@ -2,8 +2,8 @@
 
 import { useNavBarContext } from '@/contexts/navbar.context';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
-import NavItem from './navItem.component';
-import UserIcon from '../svgs/userIcon.svg.component';
+import NavItem from './item.navbar.component';
+import UserIcon from '../svg/userIcon.svg.component';
 
 export default function NavBar() {
     const NavBarContext = useNavBarContext();

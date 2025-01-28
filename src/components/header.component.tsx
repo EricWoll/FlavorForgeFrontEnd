@@ -8,12 +8,12 @@ import CustomInput, { InputStyleType } from './customInput.component';
 import { useSearchContext } from '@/contexts/search.context';
 import { useNavBarContext } from '@/contexts/navbar.context';
 
-import LargeSearchBar from './searchbars/large.searchbars.component';
-import SmallSearchBar from './searchbars/small.searchbars.component';
+import LargeSearchBar from './searchbar/large.searchbar.component';
+import SmallSearchBar from './searchbar/small.searchbar.component';
 
-import MenuIcon from './svgs/menuIcon.svg.component';
-import SearchIcon from './svgs/searchIcon.svg.component';
-import UserIcon from './svgs/userIcon.svg.component';
+import MenuIcon from './svg/menuIcon.svg.component';
+import SearchIcon from './svg/searchIcon.svg.component';
+import UserIcon from './svg/userIcon.svg.component';
 
 export default function Header() {
     const Window = useWindow();
@@ -23,10 +23,6 @@ export default function Header() {
     const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
     const [isSmallSearchIconClicked, setIsSmallSearchIconClicked] =
         useState<boolean>(false);
-
-    const handleProfileClick = () => {
-        setIsProfileOpen((prev) => !prev);
-    };
 
     return (
         <header className="flex justify-between items-center py-2 shadow-sm z-20 px-4">
@@ -81,11 +77,11 @@ export default function Header() {
                                 className={`rounded-md select-none cursor-pointer p-1`}
                             >
                                 <SearchIcon
-                                    onClick={() => {
+                                    onClick={() =>
                                         setIsSmallSearchIconClicked(
                                             (prev) => !prev
-                                        );
-                                    }}
+                                        )
+                                    }
                                     className="w-6 h-6 rounded-sm select-none cursor-pointer"
                                 />
                             </div>
@@ -97,7 +93,9 @@ export default function Header() {
                         >
                             <UserIcon
                                 className={`w-6 h-6`}
-                                onClick={handleProfileClick}
+                                onClick={() =>
+                                    setIsProfileOpen((prev) => !prev)
+                                }
                             />
                         </div>
 

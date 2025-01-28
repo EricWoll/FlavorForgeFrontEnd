@@ -12,6 +12,7 @@ export default function SearchIcon({
     return (
         <svg
             className={className}
+            onClick={onClick}
             width="24"
             height="40"
             viewBox="0 0 24 24"

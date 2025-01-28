@@ -3,7 +3,7 @@
 import formatNumber from '@/utils/numberFormatter';
 import Link from 'next/link';
 import { useState } from 'react';
-import HeartIcon from '../svgs/heartIcon.svg.component';
+import HeartIcon from '../svg/heartIcon.svg.component';
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
     const [isRecipeLiked, setIsRecipeLiked] = useState<boolean>(

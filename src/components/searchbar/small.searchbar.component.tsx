@@ -6,7 +6,7 @@ import {
 } from 'react';
 
 import CustomInput, { InputStyleType } from '../customInput.component';
-import LeftArrowIcon from '../svgs/leftArrowIcon.svg.component';
+import LeftArrowIcon from '../svg/leftArrowIcon.svg.component';
 
 export default function SmallSearchBar({
     onArrowClick,

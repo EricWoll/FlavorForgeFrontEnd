@@ -9,7 +9,7 @@ import {
     SetStateAction,
     useState,
 } from 'react';
-import SearchIcon from '../svgs/searchIcon.svg.component';
+import SearchIcon from '../svg/searchIcon.svg.component';
 
 export default function LargeSearchBar({
     setSearchIsclicked,

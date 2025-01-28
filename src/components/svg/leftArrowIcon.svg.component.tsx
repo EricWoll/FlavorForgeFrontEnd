@@ -5,7 +5,7 @@ export default function LeftArrowIcon({
     className,
     fill = '#353E47',
 }: {
-    onClick: MouseEventHandler<SVGSVGElement>;
+    onClick?: MouseEventHandler<SVGSVGElement>;
     className?: string;
     fill?: string;
 }) {

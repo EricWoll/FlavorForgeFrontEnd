@@ -10,7 +10,7 @@ import Header from '@/components/header.component';
 import Footer from '@/components/footer.component';
 import { SearchProvider } from '@/contexts/search.context';
 import { NavBarProvider } from '@/contexts/navbar.context';
-import NavBar from '@/components/navbar/navbar.component';
+import NavBar from '@/components/navbar/container.navbar.component';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
