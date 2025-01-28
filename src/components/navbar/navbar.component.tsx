@@ -3,8 +3,7 @@
 import { useNavBarContext } from '@/contexts/navbar.context';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import NavItem from './navItem.component';
-
-import UserIcon from '@/svgs/icon-user.svg';
+import UserIcon from '../svgs/userIcon.svg.component';
 
 export default function NavBar() {
     const NavBarContext = useNavBarContext();
@@ -24,11 +23,11 @@ export default function NavBar() {
             }`}
         >
             <NavItem href="/">
-                <UserIcon viewBox="0 0 24 24" className={`w-6 h-6`} />
+                <UserIcon className={`w-6 h-6`} />
                 <p>Home</p>
             </NavItem>
             <NavItem href="/user/profile">
-                <UserIcon viewBox="0 0 24 24" className={`w-6 h-6`} />
+                <UserIcon className={`w-6 h-6`} />
                 <p>Profile</p>
             </NavItem>
         </nav>

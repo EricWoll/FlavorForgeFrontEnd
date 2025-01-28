@@ -5,7 +5,7 @@ export default function HeartIcon({
     isLiked,
     isDisabled = false,
 }: {
-    onClick: MouseEventHandler<SVGSVGElement>;
+    onClick?: MouseEventHandler<SVGSVGElement>;
     isLiked: boolean;
     isDisabled?: boolean;
 }) {

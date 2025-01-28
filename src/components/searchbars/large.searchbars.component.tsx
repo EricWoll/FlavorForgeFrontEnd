@@ -9,8 +9,7 @@ import {
     SetStateAction,
     useState,
 } from 'react';
-
-import SearchIcon from '@/svgs/icon-search.svg';
+import SearchIcon from '../svgs/searchIcon.svg.component';
 
 export default function LargeSearchBar({
     setSearchIsclicked,
@@ -30,7 +29,7 @@ export default function LargeSearchBar({
                 placeholder="Search"
                 inputType="search"
             />
-            <div className="px-2 hover:bg-tinted_gray_600 active:shadow-popin_tinted_gray rounded-sm">
+            <div className="flex px-2 hover:bg-tinted_gray_600 active:shadow-popin_tinted_gray rounded-sm">
                 <SearchIcon className="w-6 h-6 rounded-sm select-none cursor-pointer" />
             </div>
         </div>

@@ -11,10 +11,9 @@ import { useNavBarContext } from '@/contexts/navbar.context';
 import LargeSearchBar from './searchbars/large.searchbars.component';
 import SmallSearchBar from './searchbars/small.searchbars.component';
 
-import MenuIcon from '@/svgs/icon-menu.svg';
-import UserIcon from '@/svgs/icon-user.svg';
-import LeftArrowIcon from '@/svgs/icon-arrow-left.svg';
-import SearchIcon from '@/svgs/icon-search.svg';
+import MenuIcon from './svgs/menuIcon.svg.component';
+import SearchIcon from './svgs/searchIcon.svg.component';
+import UserIcon from './svgs/userIcon.svg.component';
 
 export default function Header() {
     const Window = useWindow();
@@ -51,7 +50,6 @@ export default function Header() {
                 >
                     <section className="flex gap-2 items-center mr-5">
                         <MenuIcon
-                            viewBox="0 0 40 40"
                             className={`w-8 h-8 select-none cursor-pointer rounded-md ${
                                 NavBarContext.isNavOpen &&
                                 Window.windowSize.match(WindowSizes.SMALL) &&
@@ -80,7 +78,7 @@ export default function Header() {
                     <section className={`flex relative gap-4 justify-end`}>
                         {Window.windowSize.match(WindowSizes.SMALL) && (
                             <div
-                                className={`flex items-center justify-end rounded-md select-none cursor-pointer p-1`}
+                                className={`rounded-md select-none cursor-pointer p-1`}
                             >
                                 <SearchIcon
                                     onClick={() => {
@@ -98,7 +96,6 @@ export default function Header() {
                             }`}
                         >
                             <UserIcon
-                                viewBox="0 0 24 24"
                                 className={`w-6 h-6`}
                                 onClick={handleProfileClick}
                             />

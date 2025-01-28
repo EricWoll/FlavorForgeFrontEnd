@@ -1,23 +1,27 @@
-import { ChangeEventHandler, Dispatch, SetStateAction } from 'react';
+import {
+    ChangeEventHandler,
+    Dispatch,
+    MouseEventHandler,
+    SetStateAction,
+} from 'react';
 
-import LeftArrowIcon from '@/svgs/icon-arrow-left.svg';
 import CustomInput, { InputStyleType } from '../customInput.component';
+import LeftArrowIcon from '../svgs/leftArrowIcon.svg.component';
 
 export default function SmallSearchBar({
     onArrowClick,
     value,
     onChange,
 }: {
-    onArrowClick: Dispatch<SetStateAction<boolean>>;
+    onArrowClick: MouseEventHandler<SVGSVGElement>;
     value: string | undefined;
     onChange: ChangeEventHandler<HTMLInputElement>;
 }) {
     return (
         <div className="flex gap-2 w-screen">
             <LeftArrowIcon
-                className="w-8 h-8 select-none cursor-pointer"
                 onClick={onArrowClick}
-                viewBox="0 0 40 40"
+                className="w-8 h-8 select-none cursor-pointer"
             />
             <CustomInput
                 onChange={onChange}
