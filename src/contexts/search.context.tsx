@@ -6,17 +6,20 @@ import {
     ReactNode,
     SetStateAction,
     useContext,
+    useEffect,
     useState,
 } from 'react';
 
 interface ISearchContext {
     searchText: string | undefined;
     setSearchText: Dispatch<SetStateAction<string | undefined>>;
+    search: () => void;
 }
 
 const defaultSearchContext = {
     searchText: '',
     setSearchText: () => {},
+    search: () => {},
 };
 
 export const SearchContext =
@@ -29,7 +32,13 @@ export const SearchProvider = ({
 }): React.JSX.Element => {
     const [searchText, setSearchText] = useState<string | undefined>('');
 
-    const value = { searchText, setSearchText };
+    const search = async () => {
+        if (searchText && searchText.trim().length > 0) {
+            console.log('Searching for: ' + searchText);
+        }
+    };
+
+    const value = { searchText, setSearchText, search };
 
     return (
         <SearchContext.Provider value={value}>

@@ -7,26 +7,30 @@ export const InputStyleType = {
         'w-full px-2 placeholder:text-tinted_gray_500 text-tinted_gray_300 bg-tinted_gray_700 outline outline-2 outline-tinted_gray_500 focus:outline-tinted_gray_100 rounded-md',
 };
 
-export default function CustomInput({
-    onChange,
-    placeholder,
-    value,
-    styleType,
-    inputType,
-}: {
+interface CustomInputProps {
     onChange: ChangeEventHandler<HTMLInputElement>;
     placeholder?: string | undefined;
     value: string | number | readonly string[] | undefined;
     styleType: string;
     inputType?: string;
-}) {
+    onEnter?: () => void;
+}
+
+export default function CustomInput(props: CustomInputProps) {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            props.onEnter?.();
+        }
+    };
+
     return (
         <input
-            className={styleType}
-            onChange={onChange}
-            placeholder={placeholder}
-            value={value}
-            type={inputType}
+            className={props.styleType}
+            onChange={props.onChange}
+            placeholder={props.placeholder}
+            value={props.value}
+            type={props.inputType}
+            onKeyDown={handleKeyDown}
         />
     );
 }

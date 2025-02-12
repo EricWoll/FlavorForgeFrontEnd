@@ -11,21 +11,19 @@ import {
 } from 'react';
 import SearchIcon from '../svg/searchIcon.svg.component';
 
-export default function LargeSearchBar({
-    setSearchIsclicked,
-    onChange,
-    value,
-}: {
+interface LargeSearchBarProps {
     setSearchIsclicked: Dispatch<SetStateAction<boolean>>;
     onChange: ChangeEventHandler<HTMLInputElement>;
     value: string | number | readonly string[] | undefined;
-}) {
+}
+
+export default function LargeSearchBar(props: LargeSearchBarProps) {
     return (
         <div className="flex max-w-4xl rounded-md outline outline-2 outline-tinted_gray_500 focus:outline-tinted_gray_100">
             <CustomInput
                 styleType={InputStyleType.HEADER_SEARCH_LARGE}
-                onChange={onChange}
-                value={value}
+                onChange={props.onChange}
+                value={props.value}
                 placeholder="Search"
                 inputType="search"
             />

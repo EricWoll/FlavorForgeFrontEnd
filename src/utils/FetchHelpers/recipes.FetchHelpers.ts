@@ -25,7 +25,7 @@ export async function findRecipe(recipeId: string) {
 }
 
 export async function findRecipesWithUser(
-    user: IUserContextPublic | null,
+    user: UserContextPublic | null,
     recipeId: string
 ) {
     if (user) {
@@ -38,7 +38,7 @@ export async function findRecipesWithUser(
     }
 }
 
-async function getRecipes(user: IUserContextPublic | null, recipeId: string) {
+async function getRecipes(user: UserContextPublic | null, recipeId: string) {
     if (user) {
         return await apiGet(
             `recipes/followed/${recipeId}`,
@@ -62,7 +62,7 @@ export async function findRecipesByUser(userId: string | null) {
 
 export async function updateRecipe(
     recipeId: string,
-    updatedRecipe: RecipeCard,
+    updatedRecipe: Recipe,
     token: string | undefined
 ) {
     if (token) {
@@ -73,7 +73,7 @@ export async function updateRecipe(
 }
 
 export async function addRecipe(
-    updatedRecipe: RecipeCard,
+    updatedRecipe: Recipe,
     token: string | undefined
 ) {
     if (token) {

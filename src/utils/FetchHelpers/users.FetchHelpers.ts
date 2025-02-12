@@ -34,17 +34,17 @@ export async function findEditableUserByUsername(
     return await response.json();
 }
 
-export async function updateUser(
-    userProfile: EditUser,
-    token: string | undefined
-) {
-    if (token) {
-        await apiPut(
-            `users/${userProfile.username}`,
-            { ...userProfile },
-            token
-        );
-    } else {
-        throw new Error('No Token!');
-    }
-}
+// export async function updateUser(
+//     userProfile: EditUser,
+//     token: string | undefined
+// ) {
+//     if (token) {
+//         await apiPut(
+//             `users/${userProfile.username}`,
+//             { ...userProfile },
+//             token
+//         );
+//     } else {
+//         throw new Error('No Token!');
+//     }
+// }
