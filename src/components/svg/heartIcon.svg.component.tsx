@@ -4,20 +4,24 @@ export default function HeartIcon({
     onClick,
     isLiked,
     isDisabled = false,
+    className,
 }: {
     onClick?: MouseEventHandler<SVGSVGElement>;
     isLiked: boolean;
     isDisabled?: boolean;
+    className?: string;
 }) {
     return (
         <svg
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
+            width="25"
+            height="25"
+            viewBox="0 0 25 25"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             onClick={onClick}
-            className={`select-none ${!isDisabled && 'cursor-pointer'}`}
+            className={`select-none ${
+                !isDisabled && 'cursor-pointer'
+            } ${className}`}
         >
             <path
                 d="M5.00005 13.5L12.0001 20.5L19.0001 13.5C19.0001 13.5 24 8.99996 21 5.49991C18 1.99987 13.5 4.99996 13.5 4.99996C13.5 4.99996 12.704 5.99993 12 5.99993C11.2959 5.99993 10.5 4.99993 10.5 4.99993C5.99997 1.50015 3 5.99999 3 5.99999C0.500122 10.5 5.00005 13.5 5.00005 13.5Z"

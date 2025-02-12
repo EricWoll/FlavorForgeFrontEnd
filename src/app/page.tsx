@@ -1,6 +1,7 @@
 'use client';
 
 import RecipeCardsContainer from '@/components/cards/recipeContainer.cards.component';
+import { dummyRecipes } from '@/data/dummyData';
 import {
     findRandomRecipe,
     findSearchedRecipes,
@@ -8,84 +9,6 @@ import {
 import { apiGet } from '@/utils/handlerHelpers';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-const dummyCardInfo = [
-    {
-        creatorId: '321123adsfadsefsda',
-        creatorName: 'Willow Hearthstone',
-        creatorIcon:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeId: '321123adsfadsefsda',
-        recipeName: 'Enchanted Forest Berry Tart',
-        recipeImage:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeDescription:
-            'Step into a magical world of flavor with this Enchanted Forest Berry Tart. This delightful dessert features a flaky, golden crust filled with a luscious vanilla bean custard, topped with a vibrant medley of fresh berries—blueberries, raspberries, and blackberries. A hint of lemon zest and a drizzle of honey add an enchanting touch of sweetness. Perfect for gatherings or an afternoon treat, this tart is as beautiful as it is delicious. Serve chilled and let the magic of the forest come alive in every bite!',
-        recipeLikes: 12652147,
-        recipeCreatedDate: '2017-06-15T10:25:00Z',
-        userLikedRecipe: false,
-    },
-    {
-        creatorId: '321123adsfadsefsda',
-        creatorName: 'Willow Hearthstone',
-        creatorIcon:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeId: '321123adsfadsefssda',
-        recipeName: 'Enchanted Forest Berry Tart',
-        recipeImage:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeDescription:
-            'Step into a magical world of flavor with this Enchanted Forest Berry Tart. This delightful dessert features a flaky, golden crust filled with a luscious vanilla bean custard, topped with a vibrant medley of fresh berries—blueberries, raspberries, and blackberries. A hint of lemon zest and a drizzle of honey add an enchanting touch of sweetness. Perfect for gatherings or an afternoon treat, this tart is as beautiful as it is delicious. Serve chilled and let the magic of the forest come alive in every bite!',
-        recipeLikes: 12652147,
-        recipeCreatedDate: '2017-06-15T10:25:00Z',
-        userLikedRecipe: false,
-    },
-    {
-        creatorId: '321123adsfadsefsda',
-        creatorName: 'Willow Hearthstone',
-        creatorIcon:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeId: '321123adsfadsefsdsa',
-        recipeName: 'Enchanted Forest Berry Tart',
-        recipeImage:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeDescription:
-            'Step into a magical world of flavor with this Enchanted Forest Berry Tart. This delightful dessert features a flaky, golden crust filled with a luscious vanilla bean custard, topped with a vibrant medley of fresh berries—blueberries, raspberries, and blackberries. A hint of lemon zest and a drizzle of honey add an enchanting touch of sweetness. Perfect for gatherings or an afternoon treat, this tart is as beautiful as it is delicious. Serve chilled and let the magic of the forest come alive in every bite!',
-        recipeLikes: 12652147,
-        recipeCreatedDate: '2017-06-15T10:25:00Z',
-        userLikedRecipe: false,
-    },
-    {
-        creatorId: '321123adsfadsefsda',
-        creatorName: 'Willow Hearthstone',
-        creatorIcon:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeId: '321s123adsfadsefsdsa',
-        recipeName: 'Enchanted Forest Berry Tart',
-        recipeImage:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeDescription:
-            'Step into a magical world of flavor with this Enchanted Forest Berry Tart. This delightful dessert features a flaky, golden crust filled with a luscious vanilla bean custard, topped with a vibrant medley of fresh berries—blueberries, raspberries, and blackberries. A hint of lemon zest and a drizzle of honey add an enchanting touch of sweetness. Perfect for gatherings or an afternoon treat, this tart is as beautiful as it is delicious. Serve chilled and let the magic of the forest come alive in every bite!',
-        recipeLikes: 12652147,
-        recipeCreatedDate: '2017-06-15T10:25:00Z',
-        userLikedRecipe: false,
-    },
-    {
-        creatorId: '321123adsfadsefsda',
-        creatorName: 'Willow Hearthstone',
-        creatorIcon:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeId: '321s123adsfadsefsdssa',
-        recipeName: 'Enchanted Forest Berry Tart',
-        recipeImage:
-            'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image',
-        recipeDescription:
-            'Step into a magical world of flavor with this Enchanted Forest Berry Tart. This delightful dessert features a flaky, golden crust filled with a luscious vanilla bean custard, topped with a vibrant medley of fresh berries—blueberries, raspberries, and blackberries. A hint of lemon zest and a drizzle of honey add an enchanting touch of sweetness. Perfect for gatherings or an afternoon treat, this tart is as beautiful as it is delicious. Serve chilled and let the magic of the forest come alive in every bite!',
-        recipeLikes: 12652147,
-        recipeCreatedDate: '2017-06-15T10:25:00Z',
-        userLikedRecipe: false,
-    },
-];
 
 export default function Home() {
     const Search = useSearchParams();
@@ -108,7 +31,7 @@ export default function Home() {
 
     return (
         <div className="grow w-full">
-            <RecipeCardsContainer listOfRecipes={dummyCardInfo} />
+            <RecipeCardsContainer listOfRecipes={dummyRecipes} />
         </div>
     );
 }
