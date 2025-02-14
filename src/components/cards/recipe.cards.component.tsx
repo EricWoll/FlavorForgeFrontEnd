@@ -3,21 +3,12 @@
 import formatNumber from '@/utils/numberFormatter';
 import Link from 'next/link';
 import { useState } from 'react';
-import HeartIcon from '../svg/heartIcon.svg.component';
+
 import { useRouter } from 'next/navigation';
+import HeartTile from '../tiles/heart.tile.component';
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
     const Router = useRouter();
-
-    const [isRecipeLiked, setIsRecipeLiked] = useState<boolean>(
-        recipe.userLikedRecipe
-    );
-
-    const handleRecipeLike = () => {
-        setIsRecipeLiked((prev) => !prev);
-        // update database!
-        recipe.userLikedRecipe = isRecipeLiked;
-    };
 
     return (
         <div className="max-w-[250px] max-h-[395px]">
@@ -53,11 +44,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
                     <p className="text-tinted_gray_300">
                         {formatNumber(recipe.recipeLikes)}{' '}
                     </p>
-                    <HeartIcon
-                        onClick={handleRecipeLike}
-                        isLiked={isRecipeLiked}
-                        className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray p-1 w-fit h-fit rounded-md"
-                    />
+                    <HeartTile isLiked={recipe.userLikedRecipe} />
                 </div>
             </section>
         </div>

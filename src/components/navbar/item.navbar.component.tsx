@@ -19,9 +19,16 @@ export default function NavItem({
     const Window = useWindow();
     const urlPath = usePathname();
 
+    const handleOnClickSmall = () => {
+        if (Window.windowSize.match(WindowSizes.SMALL)) {
+            NavBarContext.setIsNavOpen(false);
+        }
+    };
+
     return (
         <Link
             href={href}
+            onClick={handleOnClickSmall}
             className={`flex items-center justify-center select-none cursor-pointer border-l-4 border-r-4 border-transparent hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray py-1 px-2 rounded-lg ${
                 urlPath === href &&
                 'shadow-popin_tinted_gray hover:outline hover:outline-2 hover:outline-tinted_gray_600 active:outline-none'

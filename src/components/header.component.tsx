@@ -100,7 +100,10 @@ export default function Header() {
                         </div>
 
                         {isProfileOpen && (
-                            <ProfileDropDown className="top-10 right-0 p-3 rounded-md" />
+                            <ProfileDropDown
+                                setIsProfileOpen={setIsProfileOpen}
+                                className="top-10 right-0 p-3 rounded-md"
+                            />
                         )}
                     </section>
                 </div>
