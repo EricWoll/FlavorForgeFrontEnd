@@ -1,19 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import ProfileDropDown from './dropdowns/profile.dropdowns.component';
+import ProfileDropDown from '../lib/my_custom_components/dropdowns/components/profile.dropdowns.component';
 import { ChangeEvent, useState } from 'react';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
-import CustomInput, { InputStyleType } from './customInput.component';
-import { useSearchContext } from '@/contexts/search.context';
-import { useNavBarContext } from '@/contexts/navbar.context';
+import CustomInput, {
+    InputStyleType,
+} from '../lib/my_custom_components/inputs/components/customInput.component';
+import { useSearchContext } from '@/features/searchbar/contexts/search.context';
+import { useNavBarContext } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
 
-import LargeSearchBar from './searchbar/large.searchbar.component';
-import SmallSearchBar from './searchbar/small.searchbar.component';
+import LargeSearchBar from '../features/searchbar/components/large.searchbar.component';
+import SmallSearchBar from '../features/searchbar/components/small.searchbar.component';
 
-import MenuIcon from './svg/menuIcon.svg.component';
-import SearchIcon from './svg/searchIcon.svg.component';
-import UserIcon from './svg/userIcon.svg.component';
+import MenuIcon from '../components/svg/menuIcon.svg.component';
+import SearchIcon from '../components/svg/searchIcon.svg.component';
+import UserIcon from '../components/svg/userIcon.svg.component';
 
 export default function Header() {
     const Window = useWindow();

@@ -1,7 +1,7 @@
 'use client';
 
-import RecipeCardsContainer from '@/components/cards/recipeContainer.cards.component';
 import { dummyRecipes } from '@/data/dummyData';
+import RecipeCardsContainer from '@/features/cards/components/recipeContainer.cards.component';
 import {
     findRandomRecipe,
     findSearchedRecipes,

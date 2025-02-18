@@ -1,9 +1,9 @@
 'use client';
 
-import { useNavBarContext } from '@/contexts/navbar.context';
+import { useNavBarContext } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import NavItem from './item.navbar.component';
-import UserIcon from '../svg/userIcon.svg.component';
+import UserIcon from '@/components/svg/userIcon.svg.component';
 
 export default function NavBar() {
     const NavBarContext = useNavBarContext();

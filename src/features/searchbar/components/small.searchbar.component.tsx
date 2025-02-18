@@ -5,8 +5,10 @@ import {
     SetStateAction,
 } from 'react';
 
-import CustomInput, { InputStyleType } from '../customInput.component';
-import LeftArrowIcon from '../svg/leftArrowIcon.svg.component';
+import CustomInput, {
+    InputStyleType,
+} from '../../../lib/my_custom_components/inputs/components/customInput.component';
+import LeftArrowIcon from '../../../components/svg/leftArrowIcon.svg.component';
 
 interface SmallSearchBarProps {
     onArrowClick: MouseEventHandler<SVGSVGElement>;

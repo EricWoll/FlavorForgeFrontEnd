@@ -1,5 +1,5 @@
 import HeartIcon from '@/components/svg/heartIcon.svg.component';
-import HeartTile from '@/components/tiles/heart.tile.component';
+import HeartTile from '@/features/tiles/components/heart.tile.component';
 import { dummyRecipes } from '@/data/dummyData';
 import Link from 'next/link';
 import { useState } from 'react';

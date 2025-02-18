@@ -6,11 +6,11 @@ import ClientSessionProvider from '@/contexts/session.Provider';
 import { UserProvider } from '@/contexts/User.context';
 import { authOptions } from '@/utils/authOptions';
 
-import Header from '@/components/header.component';
-import Footer from '@/components/footer.component';
-import { SearchProvider } from '@/contexts/search.context';
-import { NavBarProvider } from '@/contexts/navbar.context';
-import NavBar from '@/components/navbar/container.navbar.component';
+import Header from '@/app/header.component';
+import Footer from '@/app/footer.component';
+import { SearchProvider } from '@/features/searchbar/contexts/search.context';
+import { NavBarProvider } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
+import NavBar from '@/lib/my_custom_components/navbar/components/container.navbar.component';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',

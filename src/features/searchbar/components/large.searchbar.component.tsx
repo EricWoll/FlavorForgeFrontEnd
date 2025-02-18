@@ -1,7 +1,9 @@
 'use client';
 
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
-import CustomInput, { InputStyleType } from '../customInput.component';
+import CustomInput, {
+    InputStyleType,
+} from '../../../lib/my_custom_components/inputs/components/customInput.component';
 import {
     ChangeEvent,
     ChangeEventHandler,
@@ -9,7 +11,7 @@ import {
     SetStateAction,
     useState,
 } from 'react';
-import SearchIcon from '../svg/searchIcon.svg.component';
+import SearchIcon from '../../../components/svg/searchIcon.svg.component';
 
 interface LargeSearchBarProps {
     setSearchIsclicked: Dispatch<SetStateAction<boolean>>;

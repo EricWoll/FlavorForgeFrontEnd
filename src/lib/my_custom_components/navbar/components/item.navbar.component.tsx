@@ -1,4 +1,7 @@
-import { INavBarContext, useNavBarContext } from '@/contexts/navbar.context';
+import {
+    INavBarContext,
+    useNavBarContext,
+} from '@/lib/my_custom_components/navbar/contexts/navbar.context';
 import useWindow, {
     WindowSizes,
     WindowSizesType,

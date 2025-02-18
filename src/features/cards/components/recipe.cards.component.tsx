@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
-import HeartTile from '../tiles/heart.tile.component';
+import HeartTile from '@/features/tiles/components/heart.tile.component';
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
     const Router = useRouter();
