@@ -1,8 +1,6 @@
-import HeartIcon from '@/components/svg/heartIcon.svg.component';
-import HeartTile from '@/features/tiles/components/heart.tile.component';
 import { dummyRecipes } from '@/data/dummyData';
-import Link from 'next/link';
-import { useState } from 'react';
+import RecipePageInfo from './pageInfo.recipe';
+import CommentsContainer from '@/features/comments/components/container.comments.component';
 
 interface RecipePageProps {
     params: Promise<{
@@ -17,35 +15,9 @@ export default async function RecipePage({ params }: RecipePageProps) {
         (recipe) => recipe.recipeId === recipeId
     );
 
-    /* temporary comment controller */
-    const commentsIsOpen = true;
-
     return (
-        <div className="mx-4">
-            <section className="flex flex-wrap justify-center gap-2 mb-4">
-                <img
-                    src={currentRecipe?.recipeImage}
-                    className="h-[250px] w-[250px] object-cover rounded-lg"
-                />
-                <div>
-                    <h1 className={`text-4xl text-center`}>
-                        {currentRecipe?.recipeName}
-                    </h1>
-
-                    <span className="flex flex-nowrap gap-1 items-center text-tinted_gray_300 justify-center">
-                        <HeartTile isLiked={currentRecipe?.userLikedRecipe} />
-                        by
-                        <Link
-                            href={`/creators/${currentRecipe?.creatorId}`}
-                            className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray px-1 w-fit rounded-md "
-                        >
-                            {currentRecipe?.creatorName}
-                        </Link>
-                    </span>
-
-                    <p className="my-2">{currentRecipe?.recipeDescription}</p>
-                </div>
-            </section>
+        <div className="mx-4 w-full">
+            <RecipePageInfo currentRecipe={currentRecipe} />
             <section className="">
                 <h2 className="text-2xl">Ingredients</h2>
                 <div className="shadow-popin_tinted_gray p-2 rounded-lg">
@@ -79,18 +51,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
                     ))}
                 </div>
             </section>
-            {/* Make the comment section it's own component! */}
-            <section>
-                <div className="flex flex-nowrap justify-between mb-4 px-2 py-2 shadow-popout_tinted_gray active:shadow-popin_tinted_gray rounded-md text-tinted_gray_300">
-                    <h2>Comments</h2>
-                    <p>Arrow</p>
-                </div>
-                {commentsIsOpen && (
-                    <div>
-                        <p>all the comments!!!</p>
-                    </div>
-                )}
-            </section>
+            <CommentsContainer />
         </div>
     );
 }
