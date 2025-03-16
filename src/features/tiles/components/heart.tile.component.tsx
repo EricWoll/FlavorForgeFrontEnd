@@ -3,10 +3,6 @@
 import HeartIcon from '@/components/svg/heartIcon.svg.component';
 import { MouseEventHandler, useState } from 'react';
 
-interface HeartIconTileProps {
-    isLiked: boolean;
-}
-
 export default function HeartTile({ isLiked }: { isLiked?: boolean }) {
     const [isRecipeLiked, setIsRecipeLiked] = useState<boolean>(
         isLiked || false

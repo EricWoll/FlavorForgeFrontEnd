@@ -1,4 +1,4 @@
-const dummyImage =
+const dummyImage: string =
     'https://dummyjson.com/image/1920x1080/CA2C3F?text=Dummy+Image';
 
 export const dummyRecipes: Recipe[] = [
@@ -261,5 +261,78 @@ export const dummyRecipes: Recipe[] = [
         recipeLikes: 312,
         recipeCreatedDate: '2018-02-28T10:00:00Z',
         userLikedRecipe: true,
+    },
+];
+
+export const dummyCreators: Creator[] = [
+    {
+        creatorId: '8f5b7c8c-35f4-4c93-9b9e-0e4a7e12b60d',
+        creatorName: 'Chef Willow Hearthstone',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'A master of herbal infusions and earthy flavors, Chef Willow Hearthstone specializes in creating comforting, rustic dishes with a touch of magic.',
+    },
+    {
+        creatorId: '42e92c4f-0e69-41d7-9a9b-b4e9d7c4df4b',
+        creatorName: 'Chef Aspen Evergreen',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'Inspired by the ancient forests, Chef Aspen Evergreen crafts dishes that blend wild ingredients with refined culinary techniques.',
+    },
+    {
+        creatorId: '5a0b7cfa-776b-4b4d-8dc1-3d2e57e3b580',
+        creatorName: 'Chef Ember Shadowbrook',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'A bold and experimental chef, Ember Shadowbrook enjoys fusing smoky, spicy, and mysterious flavors into her signature creations.',
+    },
+    {
+        creatorId: '23b5e3b4-21d9-4d2c-899e-b0f3e499e5e7',
+        creatorName: 'Chef Rowan Whisperwind',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'Known for his light and airy confections, Chef Rowan Whisperwind is a pastry specialist who creates desserts that feel like a soft breeze on the palate.',
+    },
+    {
+        creatorId: 'a6e9b0e1-6d87-4d9e-bbcb-7a5f5d4b6b8c',
+        creatorName: 'Chef Cedar Frostfall',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'A culinary alchemist who specializes in cold and preserved dishes, Chef Cedar Frostfall masters the art of pickling, curing, and winter-inspired delights.',
+    },
+    {
+        creatorId: '1d7f3b5e-5b4e-4a8d-9a67-3e6a7d1b2e9f',
+        creatorName: 'Chef Willow Moonshadow',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'Mystical and intuitive, Chef Willow Moonshadow incorporates lunar cycles into her cooking, crafting ethereal and enchanting meals.',
+    },
+    {
+        creatorId: '9b7e3c1d-7a5b-4d8f-9e7a-3f6a1d2b5e9c',
+        creatorName: 'Chef Aspen Starbloom',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'A visionary chef who blends cosmic inspiration with vibrant, colorful dishes that dazzle both the eyes and the taste buds.',
+    },
+    {
+        creatorId: 'e7a5c3d1-4f8b-4a9e-9d2f-6c1b5e3a7f9d',
+        creatorName: 'Chef Ember Dawnstar',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'A fiery culinary artist who specializes in grilling, roasting, and flame-kissed dishes that burst with bold flavors.',
+    },
+    {
+        creatorId: '6d8a1c7f-3b5e-4a9e-8c2d-9f1b4e7a5d3c',
+        creatorName: 'Chef Rowan Sunfall',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'A lover of golden-hour feasts, Chef Rowan Sunfall focuses on warm, comforting meals that bring people together in celebration.',
+    },
+    {
+        creatorId: 'd2e5b8a1-4c7f-4b9d-8e3a-9f6c1a5e7b4d',
+        creatorName: 'Chef Cedar Thundertide',
+        creatorIcon: dummyImage,
+        isFollowed: false,
+        about: 'Harnessing the power of the storm, Chef Cedar Thundertide creates dishes that are bold, electrifying, and full of unexpected flavors.',
     },
 ];

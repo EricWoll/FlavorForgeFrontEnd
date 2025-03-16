@@ -1,18 +1,24 @@
-// app/creators/[creatorId]/page.tsx
+import { dummyCreators } from '@/data/dummyData';
+import CreatorPageHeader from './pageHeader.creator';
+import CreatorPageContent from './pageContent.creator';
 
 interface CreatorPageProps {
     params: Promise<{
-        creatorId: string; // creatorId is directly a string from the dynamic route
+        creatorId: string;
     }>;
 }
 
 export default async function CreatorPage({ params }: CreatorPageProps) {
-    const { creatorId } = await params; // creatorId is a string, no need for Promise or await
+    const { creatorId } = await params;
+
+    const currentCreator = dummyCreators.find((creator) => {
+        return creatorId === creator.creatorId;
+    });
 
     return (
-        <div>
-            <h1>Creator Page</h1>
-            <p>{creatorId}</p> {/* Displays creatorId from the dynamic route */}
+        <div className="mx-4 w-full">
+            <CreatorPageHeader currentCreator={currentCreator} />
+            <CreatorPageContent currentCreator={currentCreator} />
         </div>
     );
 }
