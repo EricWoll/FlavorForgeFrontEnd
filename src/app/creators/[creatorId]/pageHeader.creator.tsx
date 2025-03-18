@@ -1,5 +1,6 @@
 'use client';
 
+import { useUserContext } from '@/contexts/User.context';
 import FollowTile from '@/features/tiles/components/subscribe.tile.component';
 
 export default function CreatorPageHeader({
@@ -7,6 +8,8 @@ export default function CreatorPageHeader({
 }: {
     currentCreator: Creator | undefined;
 }) {
+    const UserContext = useUserContext();
+
     return (
         <section className="flex gap-2">
             <img
@@ -19,7 +22,13 @@ export default function CreatorPageHeader({
                 </h2>
                 <div className="flex flex-nowrap gap-2">
                     <p>3.6M</p>
-                    <FollowTile isFollowed={currentCreator?.isFollowed} />
+                    <FollowTile
+                        isFollowed={currentCreator?.isFollowed}
+                        isDisabled={
+                            UserContext.user == null ||
+                            UserContext.user.id == currentCreator?.creatorId
+                        }
+                    />
                 </div>
             </section>
         </section>

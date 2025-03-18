@@ -3,7 +3,13 @@
 import HeartIcon from '@/components/svg/heartIcon.svg.component';
 import { MouseEventHandler, useState } from 'react';
 
-export default function HeartTile({ isLiked }: { isLiked?: boolean }) {
+export default function HeartTile({
+    isLiked,
+    isDisabled,
+}: {
+    isLiked?: boolean;
+    isDisabled?: boolean;
+}) {
     const [isRecipeLiked, setIsRecipeLiked] = useState<boolean>(
         isLiked || false
     );
@@ -15,9 +21,17 @@ export default function HeartTile({ isLiked }: { isLiked?: boolean }) {
 
     return (
         <HeartIcon
-            onClick={handleRecipeLike}
+            onClick={() => {
+                if (!isDisabled) {
+                    handleRecipeLike();
+                }
+            }}
             isLiked={isRecipeLiked}
-            className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray p-1 w-fit h-fit rounded-md"
+            className={`p-1 w-fit h-fit rounded-md ${
+                !isDisabled &&
+                'hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray'
+            }`}
+            isDisabled={isDisabled}
         />
     );
 }

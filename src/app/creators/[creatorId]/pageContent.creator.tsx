@@ -3,9 +3,6 @@
 import SearchIcon from '@/components/svg/searchIcon.svg.component';
 import { dummyRecipes } from '@/data/dummyData';
 import RecipeCardsContainer from '@/features/cards/components/recipeContainer.cards.component';
-import CustomInput, {
-    InputStyleType,
-} from '@/lib/my_custom_components/inputs/components/customInput.component';
 import { useState } from 'react';
 
 export default function CreatorPageContent({

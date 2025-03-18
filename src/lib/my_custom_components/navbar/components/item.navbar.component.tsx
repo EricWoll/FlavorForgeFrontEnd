@@ -1,11 +1,5 @@
-import {
-    INavBarContext,
-    useNavBarContext,
-} from '@/lib/my_custom_components/navbar/contexts/navbar.context';
-import useWindow, {
-    WindowSizes,
-    WindowSizesType,
-} from '@/hooks/useWindow.hook';
+import { useNavBarContext } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
+import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
