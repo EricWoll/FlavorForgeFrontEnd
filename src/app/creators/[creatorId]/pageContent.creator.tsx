@@ -18,36 +18,34 @@ export default function CreatorPageContent({
     );
 
     const [recipeSearchText, setRecipeSearchText] = useState<string>('');
+    const [isShowRecipes, setIsShowRecipes] = useState<boolean>(true);
+
     return (
         <div className="mt-2">
             <section className="flex gap-2">
-                <p>Recipes</p>
-                <p>Recent</p>
-                <p>About</p>
+                <p
+                    className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray px-1 w-fit h-fit rounded-md select-none cursor-pointer"
+                    onClick={() => {
+                        setIsShowRecipes(true);
+                    }}
+                >
+                    Recipes
+                </p>
+                <p
+                    className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray px-1 w-fit h-fit rounded-md select-none cursor-pointer"
+                    onClick={() => {
+                        setIsShowRecipes(false);
+                    }}
+                >
+                    About
+                </p>
             </section>
             <hr className="my-1 bg-tinted_gray_600 h-1 rounded-full" />
-            <section className="flex items-center">
-                <CustomInput
-                    styleType={InputStyleType.HEADER_SEARCH_LARGE}
-                    onChange={(e) => {
-                        setRecipeSearchText(e.target.value);
-                    }}
-                    value={recipeSearchText}
-                    placeholder="Search"
-                    inputType="search"
-                />{' '}
-                {/* Customize the styleType!!! */}
-                <button className="flex gap-2 flex-nowrap text-xl items-center">
-                    <SearchIcon /> Search
-                </button>
-            </section>
-            <section className="flex items-center">
-                <div className="w-full">Display Filter Chips Here!</div>
-                <button className="flex gap-2 flex-nowrap text-xl items-center">
-                    <SearchIcon /> Filter
-                </button>
-            </section>
-            <RecipeCardsContainer listOfRecipes={listOfRecipes} />
+            {isShowRecipes ? (
+                <RecipeCardsContainer listOfRecipes={listOfRecipes} />
+            ) : (
+                <p>{currentCreator?.about}</p>
+            )}
         </div>
     );
 }

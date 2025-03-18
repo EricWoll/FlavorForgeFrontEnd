@@ -12,10 +12,12 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
 
     return (
         <div className="max-w-[250px] max-h-[395px]">
-            <img
-                className="h-[250px] object-cover rounded-md mb-1 select-none"
-                src={recipe.recipeImage}
-            />
+            <Link href={`/recipes/${recipe.recipeId}`}>
+                <img
+                    className="h-[250px] object-cover rounded-md mb-1 select-none"
+                    src={recipe.recipeImage}
+                />
+            </Link>
             <section className="grid">
                 <Link
                     className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray px-1 w-fit rounded-md"
