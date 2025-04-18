@@ -1,13 +1,15 @@
 'use client';
 
-import { useNavBarContext } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
+import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import NavItem from './item.navbar.component';
 import UserIcon from '@/components/svg/userIcon.svg.component';
+import { useUserContext } from '@/contexts/User.context';
 
 export default function NavBar() {
     const NavBarContext = useNavBarContext();
     const Window = useWindow();
+    const User = useUserContext();
 
     return (
         <nav
@@ -24,12 +26,18 @@ export default function NavBar() {
         >
             <NavItem href="/">
                 <UserIcon className={`w-6 h-6`} />
-                <p>Home</p>
+                <p className="text-xs">Home</p>
             </NavItem>
             <NavItem href="/user/profile">
                 <UserIcon className={`w-6 h-6`} />
-                <p>Profile</p>
+                <p className="text-xs">Profile</p>
             </NavItem>
+            {NavBarContext.isLoggedIn && (
+                <NavItem href={`/creator/${User.user?.id}`}>
+                    <UserIcon className={`w-6 h-6`} />
+                    <p className="text-xs">My Recipes</p>
+                </NavItem>
+            )}
         </nav>
     );
 }

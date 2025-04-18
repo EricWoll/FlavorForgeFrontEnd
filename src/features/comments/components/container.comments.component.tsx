@@ -22,10 +22,14 @@ export default function CommentsContainer() {
                 <h2 className="select-none">Comments</h2>
                 <p className="select-none">Arrow</p>
             </div>
-            {isCommentsOpen &&
-                userCommentsList.map((comment) => (
-                    <CommentsItem key={comment.id} comment={comment} />
-                ))}
+            {isCommentsOpen && (
+                // userCommentsList.map((comment) => (
+                //     <CommentsItem key={comment.id} comment={comment} />
+                // ))
+                <p className="text-tinted_gray_500 text-center">
+                    Comming Soon!
+                </p>
+            )}
         </section>
     );
 }

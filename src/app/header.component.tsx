@@ -8,7 +8,7 @@ import CustomInput, {
     InputStyleType,
 } from '../lib/my_custom_components/inputs/components/customInput.component';
 import { useSearchContext } from '@/features/searchbar/contexts/search.context';
-import { useNavBarContext } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
+import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';
 
 import LargeSearchBar from '../features/searchbar/components/large.searchbar.component';
 import SmallSearchBar from '../features/searchbar/components/small.searchbar.component';
@@ -16,6 +16,7 @@ import SmallSearchBar from '../features/searchbar/components/small.searchbar.com
 import MenuIcon from '../components/svg/menuIcon.svg.component';
 import SearchIcon from '../components/svg/searchIcon.svg.component';
 import UserIcon from '../components/svg/userIcon.svg.component';
+import { Button } from '@/lib/my_custom_components/buttons/button.component';
 
 export default function Header() {
     const Window = useWindow();
@@ -27,7 +28,7 @@ export default function Header() {
         useState<boolean>(false);
 
     return (
-        <header className="flex justify-between items-center py-2 shadow-sm z-20 px-4">
+        <header className="flex justify-between items-center py-2 shadow-sm px-4">
             {isSmallSearchIconClicked &&
             Window.windowSize == WindowSizes.SMALL ? (
                 <SmallSearchBar
@@ -88,18 +89,12 @@ export default function Header() {
                                 />
                             </div>
                         )}
-                        <div
-                            className={`rounded-md select-none cursor-pointer p-1 ${
-                                isProfileOpen && 'shadow-popin_tinted_gray'
-                            }`}
+                        <Button.Switch
+                            onClick={() => setIsProfileOpen((prev) => !prev)}
+                            className="p-1"
                         >
-                            <UserIcon
-                                className={`w-6 h-6`}
-                                onClick={() =>
-                                    setIsProfileOpen((prev) => !prev)
-                                }
-                            />
-                        </div>
+                            <UserIcon className={`w-6 h-6`} />
+                        </Button.Switch>
 
                         {isProfileOpen && (
                             <ProfileDropDown

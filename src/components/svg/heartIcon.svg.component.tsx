@@ -1,12 +1,10 @@
 import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
 
 export default function HeartIcon({
-    onClick,
     isLiked,
     isDisabled = false,
     className,
 }: {
-    onClick?: MouseEventHandler<SVGSVGElement>;
     isLiked: boolean;
     isDisabled?: boolean;
     className?: string;
@@ -18,7 +16,6 @@ export default function HeartIcon({
             viewBox="0 0 25 25"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            onClick={onClick}
             className={`select-none ${
                 !isDisabled && 'cursor-pointer'
             } ${className}`}

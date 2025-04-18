@@ -5,7 +5,7 @@ interface CommentsItemProps {
 export default function CommentsItem(props: CommentsItemProps) {
     return (
         <div>
-            <p>all the comments!!!</p>
+            <p>Comment Item</p>
         </div>
     );
 }

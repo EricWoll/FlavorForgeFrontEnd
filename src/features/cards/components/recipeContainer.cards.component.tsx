@@ -9,25 +9,22 @@ export default function RecipeCardsContainer({
 }: {
     listOfRecipes: Array<Recipe>;
 }) {
-    const Window = useWindow();
     const UserContext = useUserContext();
 
     return (
-        <div
-            className={`flex gap-4 flex-wrap ${
-                Window.windowSize === WindowSizes.SMALL && 'justify-center'
-            }`}
-        >
+        <div className={`flex gap-4 flex-wrap justify-center`}>
             {listOfRecipes.map((recipe: Recipe) => (
                 <RecipeCard
                     key={recipe.recipeId}
                     recipeInfo={recipe}
-                    isLikeDisabled={
-                        UserContext.user == null ||
-                        UserContext.user.id == recipe.creatorId
-                    }
+                    isLikeDisabled={false}
                 />
             ))}
         </div>
     );
 }
+
+/*
+    UserContext.user == null ||
+    UserContext.user.id == recipe.creatorId
+*/

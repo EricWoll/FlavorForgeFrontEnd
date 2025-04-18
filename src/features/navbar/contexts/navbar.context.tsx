@@ -6,6 +6,7 @@ import useWindow, {
     WindowSizes,
     WindowSizesType,
 } from '@/hooks/useWindow.hook';
+import { Session } from 'next-auth';
 import {
     createContext,
     Dispatch,
@@ -19,11 +20,13 @@ import {
 export interface INavBarContext {
     isNavOpen: boolean;
     setIsNavOpen: Dispatch<SetStateAction<boolean>>;
+    isLoggedIn: boolean;
 }
 
 const defaultNavBarContext: INavBarContext = {
     isNavOpen: false,
     setIsNavOpen: () => {},
+    isLoggedIn: false,
 };
 
 export const NavBarContext =
@@ -31,12 +34,18 @@ export const NavBarContext =
 
 export const NavBarProvider = ({
     children,
+    session,
 }: {
     children: ReactNode;
+    session: Session | null | undefined;
 }): React.JSX.Element => {
     const Window = useWindow();
 
     const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
+
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+        session?.user.id ? true : false
+    );
 
     useEffect(() => {
         const handleResize = () => {
@@ -57,6 +66,7 @@ export const NavBarProvider = ({
     const value: INavBarContext = {
         isNavOpen,
         setIsNavOpen,
+        isLoggedIn,
     };
 
     return (

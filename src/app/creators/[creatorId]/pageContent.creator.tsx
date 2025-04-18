@@ -3,6 +3,7 @@
 import SearchIcon from '@/components/svg/searchIcon.svg.component';
 import { dummyRecipes } from '@/data/dummyData';
 import RecipeCardsContainer from '@/features/cards/components/recipeContainer.cards.component';
+import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import { useState } from 'react';
 
 export default function CreatorPageContent({
@@ -20,28 +21,28 @@ export default function CreatorPageContent({
     return (
         <div className="mt-2">
             <section className="flex gap-2">
-                <p
-                    className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray px-1 w-fit h-fit rounded-md select-none cursor-pointer"
+                <Button.Hover
+                    className="p-0 px-1"
                     onClick={() => {
                         setIsShowRecipes(true);
                     }}
                 >
                     Recipes
-                </p>
-                <p
-                    className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray px-1 w-fit h-fit rounded-md select-none cursor-pointer"
+                </Button.Hover>
+                <Button.Hover
+                    className="p-0 px-1"
                     onClick={() => {
                         setIsShowRecipes(false);
                     }}
                 >
                     About
-                </p>
+                </Button.Hover>
             </section>
             <hr className="my-1 bg-tinted_gray_600 h-1 rounded-full" />
             {isShowRecipes ? (
                 <RecipeCardsContainer listOfRecipes={listOfRecipes} />
             ) : (
-                <p>{currentCreator?.about}</p>
+                <p className="text-tinted_gray_300">{currentCreator?.about}</p>
             )}
         </div>
     );

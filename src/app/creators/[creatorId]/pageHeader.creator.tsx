@@ -21,7 +21,7 @@ export default function CreatorPageHeader({
                     {currentCreator?.creatorName}
                 </h2>
                 <div className="flex flex-nowrap gap-2">
-                    <p>3.6M</p>
+                    <p className="text-tinted_gray_300">3.6M</p>
                     <FollowTile
                         isFollowed={currentCreator?.isFollowed}
                         isDisabled={

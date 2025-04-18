@@ -1,18 +1,15 @@
 import { MouseEventHandler } from 'react';
 
 export default function LeftArrowIcon({
-    onClick,
     className,
     fill = '#353E47',
 }: {
-    onClick?: MouseEventHandler<SVGSVGElement>;
     className?: string;
     fill?: string;
 }) {
     return (
         <svg
             className={className}
-            onClick={onClick}
             width="40"
             height="40"
             viewBox="0 0 40 40"

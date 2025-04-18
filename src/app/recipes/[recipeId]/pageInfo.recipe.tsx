@@ -2,7 +2,7 @@
 
 import HeartTile from '@/features/tiles/components/heart.tile.component';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
-import Link from 'next/link';
+import { Button } from '@/lib/my_custom_components/buttons/button.component';
 
 export default function RecipePageInfo({
     currentRecipe,
@@ -33,14 +33,12 @@ export default function RecipePageInfo({
                         'justify-center'
                     }`}
                 >
-                    <HeartTile isLiked={currentRecipe?.userLikedRecipe} />
+                    <HeartTile isLiked={currentRecipe?.userLikedRecipe} />{' '}
+                    {/* Add isDisabled portion tp heartTile*/}
                     by
-                    <Link
-                        href={`/creators/${currentRecipe?.creatorId}`}
-                        className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray px-1 w-fit rounded-md "
-                    >
+                    <Button.Link href={`/creators/${currentRecipe?.creatorId}`}>
                         {currentRecipe?.creatorName}
-                    </Link>
+                    </Button.Link>
                 </span>
 
                 <p className="my-2">{currentRecipe?.recipeDescription}</p>

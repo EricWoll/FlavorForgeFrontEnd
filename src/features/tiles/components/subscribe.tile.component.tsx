@@ -2,6 +2,7 @@
 
 import FollowIcon from '@/components/svg/followIcon.svg.component';
 import HeartIcon from '@/components/svg/heartIcon.svg.component';
+import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import { MouseEventHandler, useState } from 'react';
 
 export default function FollowTile({
@@ -16,17 +17,22 @@ export default function FollowTile({
     );
 
     const handleUserFollow = () => {
-        setIsCreatorFollowed((prev) => !prev);
-        console.log('changed');
-        // update database!
+        if (!isDisabled) {
+            setIsCreatorFollowed((prev) => !prev);
+            // update database!
+        }
     };
 
     return (
-        <FollowIcon
+        <Button.Hover
             onClick={handleUserFollow}
-            isFollowed={isCreatorFollowed}
-            className="hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray p-1 w-fit h-fit rounded-md"
             isDisabled={isDisabled}
-        />
+            className="p-0 px-1"
+        >
+            <FollowIcon
+                isFollowed={isCreatorFollowed}
+                isDisabled={isDisabled}
+            />
+        </Button.Hover>
     );
 }

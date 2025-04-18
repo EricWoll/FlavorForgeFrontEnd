@@ -9,8 +9,8 @@ import { authOptions } from '@/utils/authOptions';
 import Header from '@/app/header.component';
 import Footer from '@/app/footer.component';
 import { SearchProvider } from '@/features/searchbar/contexts/search.context';
-import { NavBarProvider } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
-import NavBar from '@/lib/my_custom_components/navbar/components/container.navbar.component';
+import { NavBarProvider } from '@/features/navbar/contexts/navbar.context';
+import NavBar from '@/features/navbar/components/container.navbar.component';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -32,7 +32,7 @@ export default async function RootLayout({
     return (
         <ClientSessionProvider session={session}>
             <UserProvider>
-                <NavBarProvider>
+                <NavBarProvider session={session}>
                     <SearchProvider>
                         <html lang="en">
                             <body className="min-h-screen flex flex-col gap-x-2 bg-body-background font-roboto bg-tinted_gray_700">

@@ -1,25 +1,14 @@
 import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
 
 export default function FollowIcon({
-    onClick,
     isFollowed,
     isDisabled = false,
-    className,
 }: {
-    onClick?: MouseEventHandler<HTMLDivElement>;
     isFollowed: boolean;
     isDisabled?: boolean;
-    className?: string;
 }) {
     return (
-        <div
-            onClick={(e) => {
-                if (!isDisabled && onClick != undefined) {
-                    onClick(e);
-                }
-            }}
-            className={`relative h-fit ${!isDisabled && 'cursor-pointer'}`}
-        >
+        <div className={`relative h-fit`}>
             {!isDisabled && (
                 <svg
                     width={isFollowed ? '90' : '66'}

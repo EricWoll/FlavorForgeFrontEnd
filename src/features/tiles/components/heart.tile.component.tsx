@@ -1,6 +1,7 @@
 'use client';
 
 import HeartIcon from '@/components/svg/heartIcon.svg.component';
+import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import { MouseEventHandler, useState } from 'react';
 
 export default function HeartTile({
@@ -20,18 +21,12 @@ export default function HeartTile({
     };
 
     return (
-        <HeartIcon
-            onClick={() => {
-                if (!isDisabled) {
-                    handleRecipeLike();
-                }
-            }}
-            isLiked={isRecipeLiked}
-            className={`p-1 w-fit h-fit rounded-md ${
-                !isDisabled &&
-                'hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray'
-            }`}
+        <Button.Hover
+            onClick={handleRecipeLike}
             isDisabled={isDisabled}
-        />
+            className="p-[.1rem]"
+        >
+            <HeartIcon isLiked={isRecipeLiked} isDisabled={isDisabled} />
+        </Button.Hover>
     );
 }

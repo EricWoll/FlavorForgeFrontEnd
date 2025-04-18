@@ -3,16 +3,13 @@ import { MouseEventHandler } from 'react';
 export default function UserIcon({
     className,
     fill = '#353E47',
-    onClick,
 }: {
     className?: string;
     fill?: string;
-    onClick?: MouseEventHandler<SVGSVGElement>;
 }) {
     return (
         <svg
             className={className}
-            onClick={onClick}
             width="24"
             height="24"
             viewBox="0 0 24 24"

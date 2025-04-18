@@ -12,6 +12,7 @@ import {
     useState,
 } from 'react';
 import SearchIcon from '../../../components/svg/searchIcon.svg.component';
+import { Button } from '@/lib/my_custom_components/buttons/button.component';
 
 interface LargeSearchBarProps {
     setSearchIsclicked: Dispatch<SetStateAction<boolean>>;
@@ -29,9 +30,9 @@ export default function LargeSearchBar(props: LargeSearchBarProps) {
                 placeholder="Search"
                 inputType="search"
             />
-            <div className="flex px-2 hover:bg-tinted_gray_600 active:shadow-popin_tinted_gray rounded-sm">
-                <SearchIcon className="w-6 h-6 rounded-sm select-none cursor-pointer" />
-            </div>
+            <Button.Hover onClick={() => {}} className="p-0 px-1">
+                <SearchIcon className="w-6 h-6" />
+            </Button.Hover>
         </div>
     );
 }

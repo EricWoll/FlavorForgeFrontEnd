@@ -1,7 +1,8 @@
-import { useNavBarContext } from '@/lib/my_custom_components/navbar/contexts/navbar.context';
+import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { UrlObject } from 'url';
 
 export default function NavItem({
     children,
@@ -9,7 +10,7 @@ export default function NavItem({
     hiddenOnLargeScreenClose = false,
 }: {
     children: React.ReactNode;
-    href: string;
+    href: string | UrlObject;
     hiddenOnLargeScreenClose?: boolean;
 }) {
     const NavBarContext = useNavBarContext();
