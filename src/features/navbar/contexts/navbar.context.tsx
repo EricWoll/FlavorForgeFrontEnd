@@ -46,7 +46,7 @@ export const NavBarProvider = ({
     const Window = useWindow();
 
     const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
-    const [isMobile, setIsMobile] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(true);
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
         session?.user.id ? true : false
@@ -56,6 +56,7 @@ export const NavBarProvider = ({
         const handleResize = () => {
             if (Window.windowSize.match(WindowSizes.SMALL)) {
                 setIsMobile(true);
+                setIsNavOpen(false);
             } else if (Window.windowSize.match(WindowSizes.MEDIUM)) {
                 setIsNavOpen(false);
                 setIsMobile(false);

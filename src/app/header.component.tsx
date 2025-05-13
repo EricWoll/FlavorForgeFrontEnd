@@ -13,12 +13,23 @@ import { Input } from '@/components/ui/input';
 import LeftArrowIcon from '@/components/svg/leftArrowIcon.svg.component';
 import MenuIcon from '@/components/svg/menuIcon.svg.component';
 import UserIcon from '@/components/svg/userIcon.svg.component';
+import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import {
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItemProps,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@radix-ui/react-dropdown-menu';
+import { useUserContext } from '@/contexts/User.context';
+import Link from 'next/link';
+import { UrlObject } from 'url';
 
 export default function Header() {
     const SearchContext = useSearchContext();
     const NavbarContext = useNavBarContext();
+    const UserContext = useUserContext();
 
-    const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
     const [isSmallSearchIconClicked, setIsSmallSearchIconClicked] =
         useState<boolean>(false);
 
@@ -48,9 +59,7 @@ export default function Header() {
                                     setIsSmallSearchIconClicked(true)
                                 }
                             />
-                            <div className="bg-tinted_gray_600 w-7 h-7 rounded-full cursor-pointer hover:shadow-inset-gray-sm">
-                                {/* Make this into a DropDown! */}
-                            </div>
+                            <UserDropDown />
                         </div>
                     </>
                 )}
@@ -101,11 +110,98 @@ export default function Header() {
                     onClick={triggerSearch}
                 />
             </div>
-            <div className="flex flex-nowrap gap-1">
-                <UserIcon
-                    className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
-                />
-            </div>
+            {!UserContext.user?.id ? (
+                <UserDropDown />
+            ) : (
+                <Link href="/auth/login">Log In</Link>
+            )}
         </header>
+    );
+}
+
+function UserDropDown() {
+    const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
+    return (
+        <DropdownMenu open={isProfileOpen} onOpenChange={setIsProfileOpen}>
+            <DropdownMenuTrigger asChild>
+                <button aria-label="Open profile menu">
+                    <UserIcon
+                        className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
+                    />
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="mr-5 bg-tinted_gray_700 rounded-5 p-2 w-56 !outline outline-2 !outline-tinted_gray_600 shadow-gray-sm">
+                <UserDropDownLink
+                    href="/user/profile"
+                    displayText="Profile"
+                    dropDownProps={{
+                        onClick: () => {
+                            setIsProfileOpen(false);
+                        },
+                    }}
+                />
+                <UserDropDownLink
+                    href="/user/settings"
+                    displayText="Settings"
+                    dropDownProps={{
+                        onClick: () => {
+                            setIsProfileOpen(false);
+                        },
+                    }}
+                />
+                <DropdownMenuSeparator />
+                <UserDropDownItem
+                    displayText="Sign Out"
+                    dropDownProps={{ onClick: () => {} }}
+                />
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+}
+
+interface UserDropDownLinkProps {
+    dropDownProps?: DropdownMenuItemProps;
+    href: string | UrlObject;
+    displayText: string;
+    icon?: React.ReactNode;
+}
+
+function UserDropDownLink(props: UserDropDownLinkProps) {
+    return (
+        <Link href={props.href}>
+            <DropdownMenuItem
+                {...props.dropDownProps}
+                asChild
+                onClick={props.dropDownProps?.onClick}
+                className="hover:cursor-pointer !bg-tinted_gray_700 hover:shadow-gray-sm active:shadow-inset-gray-sm my-2"
+            >
+                <div className="flex items-center gap-2">
+                    {props.icon}
+                    {props.displayText}
+                </div>
+            </DropdownMenuItem>
+        </Link>
+    );
+}
+
+interface UserDropDownItemProps {
+    dropDownProps?: DropdownMenuItemProps;
+    displayText: string;
+    icon?: React.ReactNode;
+}
+
+function UserDropDownItem(props: UserDropDownItemProps) {
+    return (
+        <DropdownMenuItem
+            {...props.dropDownProps}
+            asChild
+            onClick={props.dropDownProps?.onClick}
+            className="hover:cursor-pointer !bg-tinted_gray_700 hover:shadow-gray-sm active:shadow-inset-gray-sm my-2"
+        >
+            <div className="flex items-center gap-2">
+                {props.icon}
+                {props.displayText}
+            </div>
+        </DropdownMenuItem>
     );
 }

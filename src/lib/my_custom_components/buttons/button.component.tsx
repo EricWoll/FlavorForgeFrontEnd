@@ -11,6 +11,7 @@ import {
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     isDisabled?: boolean;
     isOutlined?: boolean;
+    isCropped?: boolean;
 }
 
 interface LinkButtonProps extends LinkProps {
@@ -18,11 +19,13 @@ interface LinkButtonProps extends LinkProps {
     children: ReactNode;
     className?: string;
     isOutlined?: boolean;
+    isCropped?: boolean;
 }
 
 function buttonHover({
     isDisabled = false,
     isOutlined = false,
+    isCropped = false,
     ...props
 }: ButtonProps) {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -37,11 +40,11 @@ function buttonHover({
             className={`p-2 w-fit rounded-md ${props.className} ${
                 !isDisabled &&
                 !isOutlined &&
-                'hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray'
+                'hover:shadow-gray-sm active:shadow-inset-gray-sm'
             } ${isDisabled && 'cursor-default'} ${
                 isOutlined &&
-                'hover:outline outline-2 outline-tinted_gray_500 active:shadow-popin_tinted_gray shadow-popout_tinted_gray'
-            }`}
+                'hover:outline outline-2 outline-tinted_gray_500 active:shadow-inset-gray-sm shadow-gray-sm'
+            } ${isCropped && 'w-fit'}`}
             onClick={handleClick}
         >
             {props.children}
@@ -52,6 +55,7 @@ function buttonHover({
 function buttonSwitch({
     isDisabled = false,
     isOutlined = false,
+    isCropped = false,
     ...props
 }: ButtonProps) {
     const [isActive, setIsActive] = useState<boolean>(false);
@@ -71,16 +75,13 @@ function buttonSwitch({
                 !isActive &&
                 !isDisabled &&
                 !isOutlined &&
-                'hover:shadow-popout_tinted_gray'
+                'hover:shadow-gray-sm'
             } ${
-                isActive &&
-                !isDisabled &&
-                !isOutlined &&
-                'shadow-popin_tinted_gray'
+                isActive && !isDisabled && !isOutlined && 'shadow-inset-gray-sm'
             } ${isDisabled && 'cursor-default'} ${
                 isOutlined &&
-                'hover:outline outline-2 outline-tinted_gray_500 active:shadow-popin_tinted_gray shadow-popout_tinted_gray'
-            }`}
+                'hover:outline outline-2 outline-tinted_gray_500 active:shadow-shadow-inset-gray-sm shadow-gray-sm'
+            } ${isCropped && 'w-fit'}`}
             onClick={handleClick}
         >
             {props.children}
@@ -91,6 +92,7 @@ function buttonSwitch({
 function buttonLink({
     isDisabled = false,
     isOutlined = false,
+    isCropped = false,
     ...props
 }: LinkButtonProps) {
     return (
@@ -99,11 +101,11 @@ function buttonLink({
             className={`px-1 rounded-md select-none ${props.className} ${
                 !isDisabled &&
                 !isOutlined &&
-                'hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray'
+                'hover:shadow-gray-sm active:shadow-inset-gray-sm'
             } ${isDisabled && 'cursor-default'} ${
                 isOutlined &&
-                'hover:outline outline-2 outline-tinted_gray_500 active:shadow-popin_tinted_gray shadow-popout_tinted_gray'
-            }`}
+                'hover:outline outline-2 outline-tinted_gray_500 hover:shadow-gray-sm active:shadow-inset-gray-sm'
+            } ${isCropped && 'w-fit'}`}
         >
             {props.children}
         </Link>
