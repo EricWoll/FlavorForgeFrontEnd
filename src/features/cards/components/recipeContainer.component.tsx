@@ -24,6 +24,7 @@ export default function RecipeContainer(props: RecipeContainerProps) {
                         userContext.loading &&
                         userContext.user?.id == recipe.creatorId
                     }
+                    isLoggedIn={userContext.user?.id ? true : false}
                 />
             ))}
         </div>

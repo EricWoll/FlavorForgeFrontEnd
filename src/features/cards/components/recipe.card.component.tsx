@@ -9,12 +9,13 @@ import {
     DropdownMenu,
     DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
-import { CirclePlusIcon, DotIcon, Heart } from 'lucide-react';
+import { EllipsisVerticalIcon, Heart } from 'lucide-react';
 import Link from 'next/link';
 
 interface RecipeCardProps {
     recipe: RecipeWithCreator;
     isLikeDisabled: boolean;
+    isLoggedIn: boolean;
 }
 
 export default function RecipeCard(props: RecipeCardProps) {
@@ -48,18 +49,20 @@ export default function RecipeCard(props: RecipeCardProps) {
                                 fill="#939EA7"
                             />
                         </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button.Hover>
-                                    <CirclePlusIcon className="h-4 w-4 text-tinted_gray_400" />
-                                </Button.Hover>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="!outline outline-1 !outline-tinted_gray_600 !bg-tinted_gray_700 shadow-gray-sm">
-                                <DropdownMenuItem>
-                                    <p>text</p>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {props.isLoggedIn && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button.Hover>
+                                        <EllipsisVerticalIcon className="h-4 w-4 text-tinted_gray_400" />
+                                    </Button.Hover>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="!outline outline-1 !outline-tinted_gray_600 !bg-tinted_gray_700 shadow-gray-sm">
+                                    <DropdownMenuItem>
+                                        <p>Replace Me!</p>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
                     </div>
                 </div>
             </section>
