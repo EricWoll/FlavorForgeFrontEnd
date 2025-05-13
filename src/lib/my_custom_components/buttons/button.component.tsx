@@ -58,6 +58,7 @@ function buttonSwitch({
 
     const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
         if (props.onClick) {
+            e.preventDefault();
             props.onClick(e);
             setIsActive((prev) => !prev);
         }

@@ -2,7 +2,7 @@ import { ChangeEventHandler } from 'react';
 
 export const InputStyleType = {
     HEADER_SEARCH_LARGE:
-        'w-full px-2 outline-none placeholder:text-tinted_gray_500 text-tinted_gray_300 bg-transparent',
+        'w-full px-2 outline outline-2 outline-tinted_gray_500 focus:outline-tinted_gray_100 rounded-md placeholder:text-tinted_gray_500 text-tinted_gray_300 bg-transparent max-w-2xl',
     HEADER_SEARCH_SMALL:
         'w-full px-2 placeholder:text-tinted_gray_500 text-tinted_gray_300 bg-tinted_gray_700 outline outline-2 outline-tinted_gray_500 focus:outline-tinted_gray_100 rounded-md',
 };

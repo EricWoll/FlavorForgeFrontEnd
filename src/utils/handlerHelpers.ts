@@ -1,18 +1,18 @@
-export async function apiGet(
+export async function apiGet<T>(
     url: string,
-    bodyContent?: string,
+    requestContent?: string,
     authToken?: string,
     cache: 'default' | 'no-store' = 'default'
-): Promise<Response> {
+): Promise<T> {
     const headers = { 'Content-Type': 'application/json' };
 
     if (authToken) {
         Object.assign(headers, { Authorization: `Bearer ${authToken}` });
     }
 
-    return await fetch(
+    const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/${url}${
-            bodyContent ? '?' + bodyContent : ''
+            requestContent ? '?' + requestContent : ''
         }`,
         {
             method: 'GET',
@@ -20,13 +20,20 @@ export async function apiGet(
             cache: cache,
         }
     );
+
+    if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`API Error ${response.status}: ${error}`);
+    }
+
+    return response.json();
 }
 
-export async function apiPost(
+export async function apiPost<T>(
     url: string,
     bodyContent: any,
     authToken?: string
-): Promise<Response> {
+): Promise<T> {
     const headers: { [key: string]: string } = {
         'Content-Type': 'application/json',
     };
@@ -53,18 +60,18 @@ export async function apiPost(
             );
         }
 
-        return response; // Return the response if successful
+        return response.json(); // Return the response if successful
     } catch (error) {
         console.error('API Post Request Failed:', error);
         throw error; // Re-throw or return a custom error response
     }
 }
 
-export async function apiPostParams(
+export async function apiPostParams<T>(
     url: string,
-    bodyContent: any,
+    requestContent: any,
     authToken?: string
-): Promise<Response> {
+): Promise<T> {
     const headers: { [key: string]: string } = {
         'Content-Type': 'application/json',
     };
@@ -76,7 +83,7 @@ export async function apiPostParams(
     try {
         const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/${url}${
-                bodyContent ? '?' + bodyContent : ''
+                requestContent ? '?' + requestContent : ''
             }`,
             {
                 method: 'POST',
@@ -92,21 +99,21 @@ export async function apiPostParams(
             );
         }
 
-        return response; // Return the response if successful
+        return response.json();
     } catch (error) {
         console.error('API Post Request Failed:', error);
         throw error; // Re-throw or return a custom error response
     }
 }
 
-export async function apiPostForImage(
+export async function apiPostForImage<T>(
     url: string,
     file: File,
     objectKey: string,
     newObjectKey: string,
     updateFile: boolean,
     authToken?: string
-): Promise<Response> {
+): Promise<T> {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('objectKey', objectKey);
@@ -136,53 +143,67 @@ export async function apiPostForImage(
             );
         }
 
-        return response;
+        return response.json();
     } catch (error) {
         console.error('API Post Request Failed:', error);
         throw error;
     }
 }
 
-export async function apiPut(
+export async function apiPut<T>(
     url: string,
     bodyContent: any,
     authToken?: string
-): Promise<Response> {
+): Promise<T> {
     const headers = { 'Content-Type': 'application/json' };
 
     if (authToken) {
         Object.assign(headers, { Authorization: `Bearer ${authToken}` });
     }
 
-    return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${url}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${url}`, {
         method: 'PUT',
         body: JSON.stringify(bodyContent),
         headers: headers,
     });
+
+    if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`API Error ${response.status}: ${error}`);
+    }
+
+    return response.json();
 }
 
 export async function apiRefreshToken(refreshToken: string) {
     return await apiPost('auth/refresh', '', refreshToken);
 }
 
-export async function apiDelete(
+export async function apiDelete<T>(
     url: string,
     authToken: string | undefined,
-    bodyContent?: string
-): Promise<Response> {
+    requestContent?: string
+): Promise<T> {
     const headers = { 'Content-Type': 'application/json' };
 
     if (authToken) {
         Object.assign(headers, { Authorization: `Bearer ${authToken}` });
     }
 
-    return await fetch(
+    const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/${url}${
-            bodyContent ? '?' + bodyContent : ''
+            requestContent ? '?' + requestContent : ''
         }`,
         {
             method: 'DELETE',
             headers: headers,
         }
     );
+
+    if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`API Error ${response.status}: ${error}`);
+    }
+
+    return response.json();
 }

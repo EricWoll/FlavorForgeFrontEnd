@@ -1,8 +1,8 @@
 type PublicUser = {
-    userId: string | null;
+    userId: string;
     username: string;
     imageId: string;
     followerCount: number;
     aboutText: string;
-    role: string;
+    isFollowed: boolean;
 };

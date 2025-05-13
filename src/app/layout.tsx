@@ -10,7 +10,8 @@ import Header from '@/app/header.component';
 import Footer from '@/app/footer.component';
 import { SearchProvider } from '@/features/searchbar/contexts/search.context';
 import { NavBarProvider } from '@/features/navbar/contexts/navbar.context';
-import NavBar from '@/features/navbar/components/container.navbar.component';
+import QueryClientWrapper from '@/contexts/queryClient.Provider';
+import { NavBarLarge } from '@/features/navbar/components/container.navbar.component';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -31,22 +32,24 @@ export default async function RootLayout({
     const session = await getServerSession(authOptions);
     return (
         <ClientSessionProvider session={session}>
-            <UserProvider>
-                <NavBarProvider session={session}>
-                    <SearchProvider>
-                        <html lang="en">
-                            <body className="min-h-screen flex flex-col gap-x-2 bg-body-background font-roboto bg-tinted_gray_700">
-                                <Header />
-                                <main className="flex flex-nowrap grow m-2 gap-6">
-                                    <NavBar />
-                                    {children}
-                                </main>
-                                <Footer />
-                            </body>
-                        </html>
-                    </SearchProvider>
-                </NavBarProvider>
-            </UserProvider>
+            <QueryClientWrapper>
+                <UserProvider>
+                    <NavBarProvider session={session}>
+                        <SearchProvider>
+                            <html lang="en">
+                                <body className="min-h-screen flex flex-col gap-x-2 bg-body-background font-roboto bg-tinted_gray_700">
+                                    <Header />
+                                    <main className="flex flex-nowrap grow m-2 gap-2">
+                                        <NavBarLarge />
+                                        {children}
+                                    </main>
+                                    <Footer />
+                                </body>
+                            </html>
+                        </SearchProvider>
+                    </NavBarProvider>
+                </UserProvider>
+            </QueryClientWrapper>
         </ClientSessionProvider>
     );
 }

@@ -1,4 +1,4 @@
 type Ingredients = {
-    name: string;
-    amount: string;
+    ingredientName: string | null;
+    amount: string | null;
 };

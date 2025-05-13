@@ -1,54 +1,47 @@
-import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';
-import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { MouseEventHandler } from 'react';
 import { UrlObject } from 'url';
 
 export default function NavItem({
-    children,
+    icon,
+    displayText,
     href,
     hiddenOnLargeScreenClose = false,
+    onClick,
+    isCenter = false,
+    className,
+    isShown = true,
+    isIconOnly = false,
 }: {
-    children: React.ReactNode;
+    icon: React.ReactNode;
+    displayText: string;
     href: string | UrlObject;
     hiddenOnLargeScreenClose?: boolean;
+    onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
+    className?: string;
+    isCenter?: boolean;
+    isShown?: boolean;
+    isIconOnly?: boolean;
 }) {
-    const NavBarContext = useNavBarContext();
-    const Window = useWindow();
     const urlPath = usePathname();
 
-    const handleOnClickSmall = () => {
-        if (Window.windowSize.match(WindowSizes.SMALL)) {
-            NavBarContext.setIsNavOpen(false);
-        }
-    };
-
     return (
-        <Link
-            href={href}
-            onClick={handleOnClickSmall}
-            className={`flex items-center justify-center select-none cursor-pointer border-l-4 border-r-4 border-transparent hover:shadow-popout_tinted_gray active:shadow-popin_tinted_gray py-1 px-2 rounded-lg ${
-                urlPath === href &&
-                'shadow-popin_tinted_gray hover:outline hover:outline-2 hover:outline-tinted_gray_600 active:outline-none'
-            } ${
-                !NavBarContext.isNavOpen &&
-                Window.windowSize.match(WindowSizes.SMALL) &&
-                'hidden'
-            } ${
-                NavBarContext.isNavOpen &&
-                Window.windowSize.match(WindowSizes.SMALL) &&
-                'gap-2 mx-10'
-            } ${
-                NavBarContext.isNavOpen &&
-                !Window.windowSize.match(WindowSizes.SMALL) &&
-                'gap-2'
-            } ${
-                !NavBarContext.isNavOpen &&
-                !Window.windowSize.match(WindowSizes.SMALL) &&
-                `flex-col text-xs gap-1 ${hiddenOnLargeScreenClose && 'hidden'}`
-            } `}
-        >
-            {children}
-        </Link>
+        <>
+            {isShown && (
+                <Link
+                    href={href}
+                    onClick={onClick}
+                    className={`flex items-center gap-2 ${
+                        isCenter && 'justify-center'
+                    } hover:outline hover:outline-2 hover:outline-tinted_gray_600 select-none cursor-pointer border-transparent hover:shadow-gray-sm active:shadow-inset-gray-sm py-1 px-2 rounded-5 ${
+                        urlPath === href && 'shadow-inset-gray-sm'
+                    }`}
+                >
+                    {icon}
+                    {!isIconOnly && <p>{displayText}</p>}
+                </Link>
+            )}
+        </>
     );
 }

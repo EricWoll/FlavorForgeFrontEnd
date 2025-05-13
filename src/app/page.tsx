@@ -1,37 +1,34 @@
 'use client';
 
-import { dummyRecipes } from '@/data/dummyData';
-import RecipeCardsContainer from '@/features/cards/components/recipeContainer.cards.component';
-import {
-    findRandomRecipe,
-    findSearchedRecipes,
-} from '@/utils/FetchHelpers/recipes.FetchHelpers';
+import RecipeContainer from '@/features/cards/components/recipeContainer.component';
 import { apiGet } from '@/utils/handlerHelpers';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function Home() {
-    const Search = useSearchParams();
+    const queryClient = useQueryClient();
 
-    const [recipes, setRecipes] = useState<Array<Recipe>>([]);
-    const [searchParam, setSearchParam] = useState<string>(
-        Search.get('search') || ''
-    );
-    const [noSearch, setNoSearch] = useState<boolean>(false);
-    const [pageLoading, setPageLoading] = useState<boolean>(false); // Remember to change back to true!!!
-    const [error, setError] = useState<string | null>(null);
+    const { isPending, error, data } = useQuery<RecipeWithCreator[]>({
+        queryKey: ['home_recipes'],
+        queryFn: () => apiGet<RecipeWithCreator[]>('recipes/search'),
+    });
 
-    if (pageLoading) {
-        return <div className="w-full">Loading Recipe...</div>;
-    }
+    if (isPending)
+        return (
+            <div className="grow w-full">
+                <p>Loading recipes...</p>
+            </div>
+        );
 
-    if (error) {
-        return <div className="error-message w-full">{error}</div>;
-    }
+    if (error)
+        return (
+            <div className="grow w-full">
+                <p>An Error Occurred: {error.message}</p>
+            </div>
+        );
 
     return (
         <div className="grow w-full">
-            <RecipeCardsContainer listOfRecipes={dummyRecipes} />
+            <RecipeContainer recipeList={data} />
         </div>
     );
 }

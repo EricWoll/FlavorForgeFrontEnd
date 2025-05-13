@@ -1,7 +1,7 @@
-export default function ProfilePage() {
+export default function LoginPage() {
     return (
         <div className="mx-4 w-full">
-            <p>Profile Page</p>
+            <p>Login Page</p>
         </div>
     );
 }

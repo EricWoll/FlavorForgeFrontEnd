@@ -20,12 +20,16 @@ import {
 export interface INavBarContext {
     isNavOpen: boolean;
     setIsNavOpen: Dispatch<SetStateAction<boolean>>;
+    isMobile: boolean;
+    setIsMobile: Dispatch<SetStateAction<boolean>>;
     isLoggedIn: boolean;
 }
 
 const defaultNavBarContext: INavBarContext = {
     isNavOpen: false,
     setIsNavOpen: () => {},
+    isMobile: false,
+    setIsMobile: () => {},
     isLoggedIn: false,
 };
 
@@ -42,6 +46,7 @@ export const NavBarProvider = ({
     const Window = useWindow();
 
     const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
         session?.user.id ? true : false
@@ -49,10 +54,15 @@ export const NavBarProvider = ({
 
     useEffect(() => {
         const handleResize = () => {
-            Window.windowSize.match(WindowSizes.SMALL) ||
-            Window.windowSize.match(WindowSizes.MEDIUM)
-                ? setIsNavOpen(false)
-                : setIsNavOpen(true);
+            if (Window.windowSize.match(WindowSizes.SMALL)) {
+                setIsMobile(true);
+            } else if (Window.windowSize.match(WindowSizes.MEDIUM)) {
+                setIsNavOpen(false);
+                setIsMobile(false);
+            } else {
+                setIsNavOpen(true);
+                setIsMobile(false);
+            }
         };
         handleResize();
 
@@ -66,6 +76,8 @@ export const NavBarProvider = ({
     const value: INavBarContext = {
         isNavOpen,
         setIsNavOpen,
+        isMobile,
+        setIsMobile,
         isLoggedIn,
     };
 

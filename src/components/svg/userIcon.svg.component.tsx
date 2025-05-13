@@ -6,7 +6,7 @@ export default function UserIcon({
 }: {
     className?: string;
     fill?: string;
-}) {
+}): React.JSX.Element {
     return (
         <svg
             className={className}
