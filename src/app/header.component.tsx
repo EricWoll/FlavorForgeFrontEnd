@@ -1,15 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import CustomInput, {
-    InputStyleType,
-} from '../lib/my_custom_components/inputs/components/customInput.component';
+import { useRef, useState } from 'react';
+import Input from '@/lib/my_custom_components/inputs/components/input.Form.component';
+
 import { useSearchContext } from '@/features/searchbar/contexts/search.context';
 import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';
 
 import SearchIcon from '../components/svg/searchIcon.svg.component';
 import { NavBarSmall } from '@/features/navbar/components/container.navbar.component';
-import { Input } from '@/components/ui/input';
 import LeftArrowIcon from '@/components/svg/leftArrowIcon.svg.component';
 import MenuIcon from '@/components/svg/menuIcon.svg.component';
 import UserIcon from '@/components/svg/userIcon.svg.component';
@@ -24,11 +22,14 @@ import {
 import { useUserContext } from '@/contexts/User.context';
 import Link from 'next/link';
 import { UrlObject } from 'url';
+import { Search, X } from 'lucide-react';
 
 export default function Header() {
     const SearchContext = useSearchContext();
     const NavbarContext = useNavBarContext();
     const UserContext = useUserContext();
+
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [isSmallSearchIconClicked, setIsSmallSearchIconClicked] =
         useState<boolean>(false);
@@ -69,11 +70,10 @@ export default function Header() {
                             className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
                             onClick={() => setIsSmallSearchIconClicked(false)}
                         />
-                        <CustomInput
+                        <Input
                             onChange={(e) => setLocalSearchText(e.target.value)}
                             onEnter={triggerSearch}
                             value={localSearchText}
-                            styleType={InputStyleType.HEADER_SEARCH_SMALL}
                             placeholder="Search"
                         />
                         <SearchIcon
@@ -90,26 +90,46 @@ export default function Header() {
     }
 
     return (
-        <header className="flex justify-between flex-nowrap p-2 gap-2">
+        <header className="flex justify-between flex-nowrap px-2 gap-2 items-center">
             <MenuIcon
                 className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
                 onClick={() => {
                     NavbarContext.setIsNavOpen((prev) => !prev);
                 }}
             />
-            <div className="flex flex-nowrap gap-1 w-full justify-center">
-                <CustomInput
+            <div className="flex-grow max-w-xl">
+                <Input
+                    ref={inputRef}
+                    size="full"
+                    paddingX="sm"
+                    paddingY="sm"
+                    borderColor="border-tinted_gray_500"
                     onChange={(e) => setLocalSearchText(e.target.value)}
                     onEnter={triggerSearch}
                     value={localSearchText}
-                    styleType={InputStyleType.HEADER_SEARCH_LARGE}
                     placeholder="Search"
-                />
-                <SearchIcon
-                    className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
-                    onClick={triggerSearch}
+                    trailingIcon={
+                        <div className="flex flex-nowrap gap-1 items-center">
+                            {localSearchText.length > 0 && (
+                                <X
+                                    className="w-5 h-5 text-tinted_gray_100 stroke-current cursor-pointer"
+                                    stroke="currentColor"
+                                    onClick={() => {
+                                        setLocalSearchText('');
+                                        inputRef.current?.focus();
+                                    }}
+                                />
+                            )}
+                            <Search
+                                className="w-6 h-6 text-tinted_gray_100 stroke-current cursor-pointer"
+                                stroke="currentColor"
+                                onClick={triggerSearch}
+                            />
+                        </div>
+                    }
                 />
             </div>
+
             {!UserContext.user?.id ? (
                 <UserDropDown />
             ) : (

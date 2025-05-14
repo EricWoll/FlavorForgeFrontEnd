@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { EyeClosedIcon, EyeIcon, LockIcon } from 'lucide-react';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 
 interface FormInputProps {
     label?: string;
@@ -8,14 +8,24 @@ interface FormInputProps {
     placeholder?: string;
     value: string;
     onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    onEnter?: () => void;
     disabled?: boolean;
     bg?: string;
     borderColor?: string;
+    paddingY?: 'sm' | 'md' | 'lg' | 'none';
+    paddingX?: 'sm' | 'md' | 'lg' | 'none';
     name?: string;
     id?: string;
     isTextArea?: boolean;
     resize?: 'none' | 'x' | 'y' | 'both';
     size?: 'sm' | 'md' | 'lg' | 'full';
+    maxWidth?:
+        | 'sm'
+        | 'md'
+        | 'lg'
+        | 'xl'
+        | 'full'
+        | Omit<string, 'sm' | 'md' | 'lg' | 'xl' | 'full'>;
     leadingIcon?: React.ReactNode;
     trailingIcon?: React.ReactNode;
     onLeadingIconClick?: React.MouseEventHandler<HTMLSpanElement>;
@@ -31,14 +41,18 @@ interface FormInputProps {
  * @param placeholder - Placeholder text
  * @param value - Input or textarea value
  * @param onChange - Change event handler
+ * @param onEnter - Optional handler for the Enter key (e.g., for submission). NOT for a TextArea.
  * @param disabled - Disables the field and applies disabled styles
  * @param bg - Tailwind-compatible background color (e.g., "white", "gray-100")
  * @param borderColor - Optional border color (e.g., 'border-gray-300'). If provided, a border will be applied.
+ * @param paddingY - Padding size on the y-axis (default py-3)
+ * @param paddingX - Padding size on the x-axis (default px-3)
  * @param name - HTML name attribute
  * @param id - HTML id (auto-generated if not provided)
  * @param isTextArea - Renders a textarea if true
  * @param resize - Controls textarea resizability
  * @param size - Width size: 'sm', 'md', 'lg', or 'full'
+ * @param maxWidth - Max Width size: 'sm', 'md', 'lg', 'xl', custom (eg. [500px]).
  * @param leadingIcon - Optional icon before input
  * @param trailingIcon - Optional icon after input
  * @param onLeadingIconClick - Click handler for leading icon (if present)
@@ -46,7 +60,10 @@ interface FormInputProps {
  *
  * @returns JSX.Element - A styled input or textarea component
  */
-export default function Input(props: FormInputProps): React.JSX.Element {
+const Input = forwardRef<
+    HTMLInputElement | HTMLTextAreaElement,
+    FormInputProps
+>((props, ref) => {
     const inputId =
         props.id ||
         props.name ||
@@ -60,17 +77,54 @@ export default function Input(props: FormInputProps): React.JSX.Element {
     }[props.size || 'md'];
 
     const baseClass = clsx(
-        'rounded-md py-[10px] text-dark-6 border border-transparent placeholder:text-tinted_gray_500 transition',
-        'focus:border-tinted_gray_600 active:border-tinted_gray_300',
+        'rounded-md text-dark-6 placeholder:text-tinted_gray_500 placeholder:select-none transition',
         props.disabled && 'bg-gray-200 text-gray-500 cursor-not-allowed',
         !props.disabled && 'hover:border-muted-foreground',
         props.leadingIcon ? 'pl-12' : 'pl-3',
         props.trailingIcon ? 'pr-12' : 'pr-3',
         widthClass,
+        props.maxWidth === 'sm'
+            ? 'max-w-xs'
+            : props.maxWidth === 'md'
+            ? 'max-w-md'
+            : props.maxWidth === 'lg'
+            ? 'max-w-lg'
+            : props.maxWidth === 'xl'
+            ? 'max-w-xl'
+            : props.maxWidth === 'full'
+            ? 'max-w-full'
+            : props.maxWidth,
+        props.paddingY === 'sm'
+            ? 'py-1'
+            : props.paddingY === 'md'
+            ? 'py-2'
+            : props.paddingY === 'lg'
+            ? 'py-3'
+            : props.paddingY === 'none'
+            ? 'py-0'
+            : 'py-2',
+        props.paddingX === 'sm'
+            ? 'px-1'
+            : props.paddingX === 'md'
+            ? 'px-2'
+            : props.paddingX === 'lg'
+            ? 'px-3'
+            : props.paddingX === 'none'
+            ? 'px-0'
+            : 'px-2',
         props.bg ? `bg-${props.bg}` : 'bg-transparent',
-        props.borderColor &&
-            `border-${props.borderColor} focus:border-${props.borderColor}`
+        props.borderColor
+            ? clsx('border', props.borderColor, `focus:${props.borderColor}`)
+            : 'border border-transparent focus:border-tinted_gray_600 active:border-tinted_gray_300'
     );
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            props.onEnter?.();
+        } else if (event.key === 'Escape') {
+            (document.activeElement as HTMLElement).blur();
+        }
+    };
 
     return (
         <div className="mb-4 mt-2">
@@ -93,6 +147,7 @@ export default function Input(props: FormInputProps): React.JSX.Element {
                         placeholder={props.placeholder || ''}
                         onChange={props.onChange}
                         value={props.value}
+                        ref={ref as React.Ref<HTMLTextAreaElement>}
                         className={clsx(
                             baseClass,
                             props.resize
@@ -110,7 +165,9 @@ export default function Input(props: FormInputProps): React.JSX.Element {
                         placeholder={props.placeholder || ''}
                         onChange={props.onChange}
                         value={props.value}
+                        ref={ref as React.Ref<HTMLInputElement>}
                         className={baseClass}
+                        onKeyDown={handleKeyDown}
                     />
                 )}
 
@@ -142,4 +199,7 @@ export default function Input(props: FormInputProps): React.JSX.Element {
             </div>
         </div>
     );
-}
+});
+
+Input.displayName = 'Input';
+export default Input;

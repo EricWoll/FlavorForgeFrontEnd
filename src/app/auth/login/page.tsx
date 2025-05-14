@@ -57,7 +57,7 @@ export default function LoginPage() {
             <FormContainer method="post" onSubmit={handleSignIn}>
                 <FormColumn>
                     <Input
-                        borderColor="tinted_gray_300"
+                        borderColor="border-tinted_gray_300"
                         size="full"
                         value={usernameInput}
                         placeholder="MyUsername"
@@ -66,35 +66,35 @@ export default function LoginPage() {
                         }
                         leadingIcon={
                             <UserIcon
-                                className="w-6 h-6 text-tinted_gray_300 fill-current"
+                                className="w-6 h-6 text-tinted_gray_500 fill-current"
                                 fill="currentColor"
                             />
                         }
                     />
                     <Input
-                        borderColor="tinted_gray_300"
+                        borderColor="border-tinted_gray_300"
                         size="full"
                         type={showPassword ? 'text' : 'password'}
                         value={passwordInput}
-                        placeholder="*************"
+                        placeholder={showPassword ? 'Password' : '********'}
                         onChange={(event: ChangeEvent<HTMLInputElement>) =>
                             setPasswordInput(event.target.value)
                         }
                         leadingIcon={
                             <LockIcon
-                                className="w-6 h-6 text-tinted_gray_300 stroke-current"
+                                className="w-6 h-6 text-tinted_gray_500 stroke-current"
                                 stroke="currentColor"
                             />
                         }
                         trailingIcon={
                             showPassword ? (
                                 <EyeIcon
-                                    className="w-6 h-6 text-tinted_gray_300 stroke-current"
+                                    className="w-6 h-6 text-tinted_gray_500 stroke-current"
                                     stroke="currentColor"
                                 />
                             ) : (
                                 <EyeClosedIcon
-                                    className="w-6 h-6 text-tinted_gray_300 stroke-current"
+                                    className="w-6 h-6 text-tinted_gray_500 stroke-current"
                                     stroke="currentColor"
                                 />
                             )
@@ -103,11 +103,16 @@ export default function LoginPage() {
                             setShowPassword((prev) => !prev)
                         }
                     />
-                    <Button.Hover type="submit" isFullWidth isOutlined>
-                        Sign In
+                    <Button.Hover
+                        type="submit"
+                        isFullWidth
+                        isOutlined
+                        size="small"
+                    >
+                        <p className="select-none cursor-pointer">Log In</p>
                     </Button.Hover>
-                    <section className="flex flex-row gap-2 items-center text-sm my-1 justify-center">
-                        <p className="text-tinted_gray_500">
+                    <section className="flex flex-row gap-1 items-center text-xs my-2 justify-center">
+                        <p className="text-tinted_gray_500 select-none">
                             Don't have an account?
                         </p>
                         <Button.Link
@@ -115,7 +120,9 @@ export default function LoginPage() {
                             size="small"
                             href="/auth/signup"
                         >
-                            Create One
+                            <p className="select-none cursor-pointer">
+                                Create One
+                            </p>
                         </Button.Link>
                     </section>
                 </FormColumn>
