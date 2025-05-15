@@ -14,6 +14,8 @@ interface FormInputProps {
     borderColor?: string;
     paddingY?: 'sm' | 'md' | 'lg' | 'none';
     paddingX?: 'sm' | 'md' | 'lg' | 'none';
+    marginY?: 'sm' | 'md' | 'lg' | 'none';
+    marginX?: 'sm' | 'md' | 'lg' | 'none';
     name?: string;
     id?: string;
     isTextArea?: boolean;
@@ -45,8 +47,10 @@ interface FormInputProps {
  * @param disabled - Disables the field and applies disabled styles
  * @param bg - Tailwind-compatible background color (e.g., "white", "gray-100")
  * @param borderColor - Optional border color (e.g., 'border-gray-300'). If provided, a border will be applied.
- * @param paddingY - Padding size on the y-axis (default py-3)
- * @param paddingX - Padding size on the x-axis (default px-3)
+ * @param paddingY - Padding size on the y-axis (default: py-2)
+ * @param paddingX - Padding size on the x-axis (default: px-2)
+ * @param marginY - Margin size on the y-axis (default: py-0)
+ * @param marginX - Margin size on the x-axis (default: px-0)
  * @param name - HTML name attribute
  * @param id - HTML id (auto-generated if not provided)
  * @param isTextArea - Renders a textarea if true
@@ -83,7 +87,7 @@ const Input = forwardRef<
         props.leadingIcon ? 'pl-12' : 'pl-3',
         props.trailingIcon ? 'pr-12' : 'pr-3',
         widthClass,
-        props.maxWidth === 'sm'
+        props.maxWidth === 'sm' // Max Width
             ? 'max-w-xs'
             : props.maxWidth === 'md'
             ? 'max-w-md'
@@ -94,7 +98,7 @@ const Input = forwardRef<
             : props.maxWidth === 'full'
             ? 'max-w-full'
             : props.maxWidth,
-        props.paddingY === 'sm'
+        props.paddingY === 'sm' // padding Y
             ? 'py-1'
             : props.paddingY === 'md'
             ? 'py-2'
@@ -103,7 +107,7 @@ const Input = forwardRef<
             : props.paddingY === 'none'
             ? 'py-0'
             : 'py-2',
-        props.paddingX === 'sm'
+        props.paddingX === 'sm' // Padding X
             ? 'px-1'
             : props.paddingX === 'md'
             ? 'px-2'
@@ -112,6 +116,24 @@ const Input = forwardRef<
             : props.paddingX === 'none'
             ? 'px-0'
             : 'px-2',
+        props.marginY === 'sm' // Margin Y
+            ? 'my-1'
+            : props.marginY === 'md'
+            ? 'my-2'
+            : props.marginY === 'lg'
+            ? 'my-3'
+            : props.marginY === 'none'
+            ? 'my-0'
+            : 'my-0',
+        props.marginX === 'sm' // Margin X
+            ? 'mx-1'
+            : props.marginX === 'md'
+            ? 'mx-2'
+            : props.marginX === 'lg'
+            ? 'mx-3'
+            : props.marginX === 'none'
+            ? 'mx-0'
+            : 'mx-0',
         props.bg ? `bg-${props.bg}` : 'bg-transparent',
         props.borderColor
             ? clsx('border', props.borderColor, `focus:${props.borderColor}`)
@@ -127,11 +149,11 @@ const Input = forwardRef<
     };
 
     return (
-        <div className="mb-4 mt-2">
+        <div className="">
             <label
                 htmlFor={inputId}
                 className={clsx(
-                    'mb-1 block text-base font-medium',
+                    'block text-base font-medium',
                     props.disabled ? 'text-gray-400' : 'text-dark'
                 )}
             >

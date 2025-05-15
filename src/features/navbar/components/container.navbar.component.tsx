@@ -13,7 +13,7 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 import MenuIcon from '@/components/svg/menuIcon.svg.component';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function NavBarLarge() {
     const Window = useWindow();
@@ -30,14 +30,14 @@ export function NavBarLarge() {
                         isCenter
                         icon={<UserIcon className="w-6 h-6" />}
                         displayText="Home"
-                        isIconOnly={isNavOpen}
+                        isIconOnly={!isNavOpen}
                     />
                     <NavItem
                         href="/user/profile"
                         isCenter
                         icon={<UserIcon className="w-6 h-6" />}
                         displayText="Profile"
-                        isIconOnly={isNavOpen}
+                        isIconOnly={!isNavOpen}
                     />
                     <NavItem
                         href={user?.id ? `/user?id=${user.id}` : '/user'}
@@ -45,7 +45,7 @@ export function NavBarLarge() {
                         icon={<UserIcon className="w-6 h-6" />}
                         displayText="My Recipes"
                         isShown={isLoggedIn}
-                        isIconOnly={isNavOpen}
+                        isIconOnly={!isNavOpen}
                     />
                 </nav>
             )}

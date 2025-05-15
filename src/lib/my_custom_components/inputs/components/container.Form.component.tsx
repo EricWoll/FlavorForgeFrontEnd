@@ -8,6 +8,7 @@ interface FormContainerProps {
     borderColor?: string;
     textColor?: string;
     boxShadow?: string;
+    minWidth?: string | undefined;
 }
 
 /**
@@ -31,9 +32,11 @@ export default function FormContainer({
     borderColor,
     textColor = 'text-dark',
     boxShadow = '',
+    minWidth = 'min-w-96',
 }: FormContainerProps): React.JSX.Element {
     const formClassNames = clsx(
-        'py-1 dark:bg-dark rounded-10 min-w-96', // Base classes
+        'py-1 dark:bg-dark rounded-10', // Base classes
+        minWidth,
         borderColor && `border ${borderColor}`, // Conditionally apply border if borderColor is provided
         bgColor, // Conditionally apply bgColor
         textColor, // Conditionally apply textColor

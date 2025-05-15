@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import Input from '@/lib/my_custom_components/inputs/components/input.Form.component';
 
-import { useSearchContext } from '@/features/searchbar/contexts/search.context';
+import { useSearchContext } from '@/contexts/search.context';
 import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';
 
 import SearchIcon from '../components/svg/searchIcon.svg.component';
@@ -23,6 +23,8 @@ import { useUserContext } from '@/contexts/User.context';
 import Link from 'next/link';
 import { UrlObject } from 'url';
 import { Search, X } from 'lucide-react';
+import { signOut } from 'next-auth/react';
+import { Button } from '@/lib/my_custom_components/buttons/button.component';
 
 export default function Header() {
     const SearchContext = useSearchContext();
@@ -46,11 +48,11 @@ export default function Header() {
     if (NavbarContext.isMobile) {
         return (
             <header
-                className={`flex justify-between items-center py-2 shadow-sm px-4 ${
+                className={`flex justify-between items-center shadow-sm sticky top-0 px-4 py-2 bg-tinted_gray_700 ${
                     isSmallSearchIconClicked && 'gap-2'
                 }`}
             >
-                {!isSmallSearchIconClicked && (
+                {!isSmallSearchIconClicked ? (
                     <>
                         <NavBarSmall />
                         <div className="flex flex-nowrap gap-2 items-center">
@@ -60,24 +62,39 @@ export default function Header() {
                                     setIsSmallSearchIconClicked(true)
                                 }
                             />
-                            <UserDropDown />
+                            {UserContext.user?.id ? (
+                                <UserDropDown />
+                            ) : (
+                                <Link href="/auth/login">Log In</Link>
+                            )}
                         </div>
                     </>
-                )}
-                {isSmallSearchIconClicked && (
+                ) : (
                     <>
                         <LeftArrowIcon
-                            className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
+                            className={`w-6 h-6 cursor-pointer hover:shadow-inset-gray-sm rounded-5`}
                             onClick={() => setIsSmallSearchIconClicked(false)}
                         />
-                        <Input
-                            onChange={(e) => setLocalSearchText(e.target.value)}
-                            onEnter={triggerSearch}
-                            value={localSearchText}
-                            placeholder="Search"
-                        />
+                        <div className="flex-grow max-w-xl">
+                            <Input
+                                ref={inputRef}
+                                size="full"
+                                paddingX="none"
+                                paddingY="none"
+                                borderColor="border-tinted_gray_500"
+                                onChange={(e) =>
+                                    setLocalSearchText(e.target.value)
+                                }
+                                onEnter={() => {
+                                    setIsSmallSearchIconClicked(false);
+                                    triggerSearch();
+                                }}
+                                value={localSearchText}
+                                placeholder="Search"
+                            />
+                        </div>
                         <SearchIcon
-                            className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
+                            className={`w-6 h-6 cursor-pointer hover:shadow-inset-gray-sm rounded-5`}
                             onClick={() => {
                                 setIsSmallSearchIconClicked(false);
                                 triggerSearch();
@@ -90,7 +107,7 @@ export default function Header() {
     }
 
     return (
-        <header className="flex justify-between flex-nowrap px-2 gap-2 items-center">
+        <header className="flex justify-between flex-nowrap p-2 gap-2 items-center bg-tinted_gray_700 shadow-sm">
             <MenuIcon
                 className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
                 onClick={() => {
@@ -130,10 +147,12 @@ export default function Header() {
                 />
             </div>
 
-            {!UserContext.user?.id ? (
+            {UserContext.user?.id ? (
                 <UserDropDown />
             ) : (
-                <Link href="/auth/login">Log In</Link>
+                <Button.Link size="small" href="/auth/login">
+                    Log In
+                </Button.Link>
             )}
         </header>
     );
@@ -172,7 +191,11 @@ function UserDropDown() {
                 <DropdownMenuSeparator />
                 <UserDropDownItem
                     displayText="Sign Out"
-                    dropDownProps={{ onClick: () => {} }}
+                    dropDownProps={{
+                        onClick: () => {
+                            signOut();
+                        },
+                    }}
                 />
             </DropdownMenuContent>
         </DropdownMenu>

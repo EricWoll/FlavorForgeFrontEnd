@@ -8,7 +8,7 @@ import { authOptions } from '@/utils/authOptions';
 
 import Header from '@/app/header.component';
 import Footer from '@/app/footer.component';
-import { SearchProvider } from '@/features/searchbar/contexts/search.context';
+import { SearchProvider } from '@/contexts/search.context';
 import { NavBarProvider } from '@/features/navbar/contexts/navbar.context';
 import QueryClientWrapper from '@/contexts/queryClient.Provider';
 import { NavBarLarge } from '@/features/navbar/components/container.navbar.component';
@@ -34,7 +34,7 @@ export default async function RootLayout({
         <ClientSessionProvider session={session}>
             <QueryClientWrapper>
                 <UserProvider>
-                    <NavBarProvider session={session}>
+                    <NavBarProvider>
                         <SearchProvider>
                             <html lang="en">
                                 <body className="min-h-screen flex flex-col gap-x-2 bg-body-background font-roboto bg-tinted_gray_700">

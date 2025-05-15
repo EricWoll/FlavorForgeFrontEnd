@@ -2,6 +2,7 @@
 
 import UserIcon from '@/components/svg/userIcon.svg.component';
 import { useUserContext } from '@/contexts/User.context';
+import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import { FormColumn } from '@/lib/my_custom_components/inputs/components/column.Form.component';
 import FormContainer from '@/lib/my_custom_components/inputs/components/container.Form.component';
@@ -9,61 +10,65 @@ import Input from '@/lib/my_custom_components/inputs/components/input.Form.compo
 import { EyeClosedIcon, EyeIcon, LockIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function LoginPage() {
-    const { user, loading } = useUserContext();
     const router = useRouter();
+    const Window = useWindow();
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (loading || !user || !user.id) return; // Skip API call during loading or if no user
-
-        if (user.id) {
-            router.push('/'); // Redirect if logged in
-        }
-    }, [user, router]);
-
-    const [isSignIn, setIsSignIn] = useState(true);
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
-    const [emailInput, setEmailInput] = useState('');
 
     const handleClear = () => {
         setUsernameInput('');
         setPasswordInput('');
-        setEmailInput('');
     };
 
-    const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
+    const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (usernameInput && passwordInput) {
-            await signIn('credentials', {
+            const result = await signIn('credentials', {
                 redirect: false,
                 username: usernameInput,
                 password: passwordInput,
             });
-            handleClear();
-            router.push('/');
+
+            if (result?.ok) {
+                handleClear();
+                router.push('/');
+            } else {
+                // Optional: Show user feedback here
+                console.error('Login failed:', result?.error);
+            }
         }
     };
 
     return (
-        <div className="flex flex-col flex-nowrap mx-4 grow items-center justify-center">
-            <h2 className="text-3xl select-none cursor-default text-tinted_gray_300">
-                Log In
+        <div className="flex flex-col mx-4 grow items-center justify-center">
+            <h2 className="text-3xl select-none text-center cursor-default text-tinted_gray_300">
+                Sign In
             </h2>
-            <FormContainer method="post" onSubmit={handleSignIn}>
+            <FormContainer
+                method="post"
+                onSubmit={handleSignIn}
+                minWidth={
+                    Window.windowSize == WindowSizes.SMALL
+                        ? 'min-w-36'
+                        : undefined
+                }
+            >
                 <FormColumn>
                     <Input
+                        type="text"
                         borderColor="border-tinted_gray_300"
                         size="full"
                         value={usernameInput}
                         placeholder="MyUsername"
-                        onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                            setUsernameInput(event.target.value)
-                        }
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => setUsernameInput(event.target.value)}
                         leadingIcon={
                             <UserIcon
                                 className="w-6 h-6 text-tinted_gray_500 fill-current"
@@ -72,14 +77,15 @@ export default function LoginPage() {
                         }
                     />
                     <Input
+                        marginY="lg"
                         borderColor="border-tinted_gray_300"
                         size="full"
                         type={showPassword ? 'text' : 'password'}
                         value={passwordInput}
                         placeholder={showPassword ? 'Password' : '********'}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                            setPasswordInput(event.target.value)
-                        }
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => setPasswordInput(event.target.value)}
                         leadingIcon={
                             <LockIcon
                                 className="w-6 h-6 text-tinted_gray_500 stroke-current"

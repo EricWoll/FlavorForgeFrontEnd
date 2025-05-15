@@ -1,5 +1,6 @@
 'use client';
 
+import { useUserContext } from '@/contexts/User.context';
 import useWindow, {
     MaxMediumWindowWidth,
     MaxSmallWindowWidth,
@@ -38,19 +39,23 @@ export const NavBarContext =
 
 export const NavBarProvider = ({
     children,
-    session,
 }: {
     children: ReactNode;
-    session: Session | null | undefined;
 }): React.JSX.Element => {
     const Window = useWindow();
+    const UserContext = useUserContext();
 
     const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
     const [isMobile, setIsMobile] = useState<boolean>(true);
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-        session?.user.id ? true : false
+        UserContext.user?.id ? true : false
     );
+
+    useEffect(() => {
+        if (UserContext.loading) return;
+        setIsLoggedIn(UserContext.user?.id ? true : false);
+    }, [UserContext.user?.id]);
 
     useEffect(() => {
         const handleResize = () => {

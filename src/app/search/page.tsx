@@ -1,7 +1,7 @@
 'use client';
 
 import RecipeContainer from '@/features/cards/components/recipeContainer.component';
-import { useSearchContext } from '@/features/searchbar/contexts/search.context';
+import { useSearchContext } from '@/contexts/search.context';
 
 export default function RecipeSearchPage() {
     const SearchContext = useSearchContext();

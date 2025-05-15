@@ -175,8 +175,8 @@ export async function apiPut<T>(
     return response.json();
 }
 
-export async function apiRefreshToken(refreshToken: string) {
-    return await apiPost('auth/refresh', '', refreshToken);
+export async function apiRefreshToken<T>(refreshToken: string): Promise<T> {
+    return await apiPost<T>('auth/refresh', '', refreshToken);
 }
 
 export async function apiDelete<T>(

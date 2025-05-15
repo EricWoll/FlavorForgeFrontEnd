@@ -77,8 +77,10 @@ export default function CreatorsPage() {
                             <h2 className="font-bold text-2xl">
                                 {creatorInfo.data?.username}
                             </h2>
-                            <div className="flex flex-nowrap gap-2">
-                                <p className="text-tinted_gray_300">3.6M</p>
+                            <div className="flex flex-nowrap items-center">
+                                <p className="text-tinted_gray_300 select-none">
+                                    3.6M
+                                </p>
                                 <FollowTile
                                     isFollowed={creatorInfo.data?.isFollowed}
                                     isDisabled={
