@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import MenuIcon from '@/components/svg/menuIcon.svg.component';
 import { useEffect, useState } from 'react';
+import { BookUserIcon, HomeIcon } from 'lucide-react';
 
 export function NavBarLarge() {
     const Window = useWindow();
@@ -27,25 +28,30 @@ export function NavBarLarge() {
                 <nav>
                     <NavItem
                         href="/"
-                        isCenter
-                        icon={<UserIcon className="w-6 h-6" />}
+                        icon={
+                            <HomeIcon
+                                className="w-6 h-6 text-tinted_gray_300 stroke-current"
+                                stroke="currentColor"
+                            />
+                        }
                         displayText="Home"
                         isIconOnly={!isNavOpen}
+                        textColor="text-tinted_gray_300"
                     />
                     <NavItem
-                        href="/user/profile"
-                        isCenter
-                        icon={<UserIcon className="w-6 h-6" />}
-                        displayText="Profile"
-                        isIconOnly={!isNavOpen}
-                    />
-                    <NavItem
-                        href={user?.id ? `/user?id=${user.id}` : '/user'}
-                        isCenter
-                        icon={<UserIcon className="w-6 h-6" />}
+                        href={user?.id ? `/user?id=${user.id}` : '/'}
+                        icon={
+                            <BookUserIcon
+                                className="w-6 h-6 text-tinted_gray_300 stroke-current"
+                                stroke="currentColor"
+                            />
+                        }
                         displayText="My Recipes"
                         isShown={isLoggedIn}
                         isIconOnly={!isNavOpen}
+                        textColor="text-tinted_gray_300"
+                        textSize="xs"
+                        textNoWrap
                     />
                 </nav>
             )}

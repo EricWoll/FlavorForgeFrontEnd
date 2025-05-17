@@ -2,9 +2,9 @@
 
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
-import { FormColumn } from '@/lib/my_custom_components/inputs/components/column.Form.component';
-import FormContainer from '@/lib/my_custom_components/inputs/components/container.Form.component';
-import Input from '@/lib/my_custom_components/inputs/components/input.Form.component';
+import { FormColumn } from '@/lib/my_custom_components/inputs/column.Form.component';
+import FormContainer from '@/lib/my_custom_components/inputs/container.Form.component';
+import Input from '@/lib/my_custom_components/inputs/input.Form.component';
 import { apiPost } from '@/utils/handlerHelpers';
 import {
     EyeClosedIcon,

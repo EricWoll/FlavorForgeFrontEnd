@@ -10,6 +10,10 @@ export default function Home() {
     const { isPending, error, data } = useQuery<RecipeWithCreator[]>({
         queryKey: ['home_recipes'],
         queryFn: () => apiGet<RecipeWithCreator[]>('recipes/search'),
+        staleTime: Infinity,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     });
 
     if (isPending)

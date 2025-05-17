@@ -29,6 +29,9 @@ export default function RecipePage() {
             apiGet<RecipeWithCreator>(
                 `recipes/search/${encodeURIComponent(recipeId)}`
             ),
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
         enabled: !!recipeId,
     });
 

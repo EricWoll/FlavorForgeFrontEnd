@@ -1,9 +1,11 @@
-'use client';
+import IsLoggedIn from '@/features/server/isLoggedIn.server.component';
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
     return (
-        <div>
-            <p>Settings Page</p>
-        </div>
+        <IsLoggedIn>
+            <div>
+                <p>Settings Page</p>
+            </div>
+        </IsLoggedIn>
     );
 }

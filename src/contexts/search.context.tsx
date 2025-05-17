@@ -89,6 +89,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
                     search_string: debouncedSearchText,
                 }).toString()
             ),
+        refetchOnWindowFocus: false,
         enabled: shouldSearch && !!debouncedSearchText.trim(),
     });
 

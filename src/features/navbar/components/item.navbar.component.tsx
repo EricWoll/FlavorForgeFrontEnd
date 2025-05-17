@@ -1,6 +1,9 @@
+'use client';
+
+import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { UrlObject } from 'url';
 
 export default function NavItem({
@@ -13,6 +16,9 @@ export default function NavItem({
     className,
     isShown = true,
     isIconOnly = false,
+    textColor,
+    textSize,
+    textNoWrap = false,
 }: {
     icon: React.ReactNode;
     displayText: string;
@@ -23,8 +29,17 @@ export default function NavItem({
     isCenter?: boolean;
     isShown?: boolean;
     isIconOnly?: boolean;
+    textColor?: string;
+    textSize?: string;
+    textNoWrap?: boolean;
 }) {
     const urlPath = usePathname();
+
+    const [pathnameOnly, setPathnameOnly] = useState<string>('');
+
+    useEffect(() => {
+        setPathnameOnly(href.toString().split('?')[0]);
+    }, [urlPath]);
 
     return (
         <>
@@ -35,8 +50,20 @@ export default function NavItem({
                     className={`flex items-center gap-2 ${
                         isCenter && 'justify-center'
                     } hover:outline hover:outline-2 hover:outline-tinted_gray_600 select-none cursor-pointer border-transparent hover:shadow-gray-sm active:shadow-inset-gray-sm py-1 px-2 rounded-5 ${
-                        urlPath === href && 'shadow-inset-gray-sm'
-                    }`}
+                        urlPath === pathnameOnly && 'shadow-inset-gray-sm'
+                    } ${clsx(
+                        textColor,
+                        textNoWrap && 'text-nowrap',
+                        textSize == 'xs'
+                            ? 'text-xs'
+                            : textSize == 'sm'
+                            ? 'text-sm'
+                            : textSize == 'md'
+                            ? 'text-md'
+                            : textSize == 'lg'
+                            ? 'text-lg'
+                            : 'text-sm'
+                    )}`}
                 >
                     {icon}
                     {!isIconOnly && <p>{displayText}</p>}

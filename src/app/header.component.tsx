@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Input from '@/lib/my_custom_components/inputs/components/input.Form.component';
+import Input from '@/lib/my_custom_components/inputs/input.Form.component';
 
 import { useSearchContext } from '@/contexts/search.context';
 import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';

@@ -1,7 +1,11 @@
+import IsLoggedIn from '@/features/server/isLoggedIn.server.component';
+
 export default function ExitProfilePage() {
     return (
-        <div className="mx-4 w-full">
-            <p>Edit Profile Page</p>
-        </div>
+        <IsLoggedIn>
+            <div className="mx-4 w-full">
+                <p>Edit Profile Page</p>
+            </div>
+        </IsLoggedIn>
     );
 }
