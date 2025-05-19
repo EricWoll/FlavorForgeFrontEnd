@@ -1,19 +1,7 @@
 'use client';
 
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
 import { useUserContext } from '@/contexts/User.context';
-import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
-import Input from '@/lib/my_custom_components/inputs/input.Form.component';
 import { apiGet } from '@/utils/handlerHelpers';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -38,20 +26,26 @@ interface IngredientWithId extends Ingredients {
 export default function EditRecipePageContent() {
     const searchParams = useSearchParams();
     const recipeId = searchParams.get('id');
-    const Window = useWindow();
 
     const UserContext = useUserContext();
 
     const [recipe, setRecipe] = useState<Recipe | null>(null);
 
+    // holds all confirmed ingredients/steps user has added
     const [ingredientList, setIngredientList] = useState<IngredientWithId[]>(
         []
     );
     const [directionsList, setDirectionsList] = useState<DirectionItem[]>([]);
 
+    // holds current possible ingredient/step user is adding
     const [editingIngredient, setEditingIngredient] =
         useState<Ingredients | null>(null);
     const [editingStep, setEditingStep] = useState<string | null>(null);
+
+    const [file, setFile] = useState<File | null>(null);
+
+    // UUID for if new recipe
+    const newUUID = crypto.randomUUID();
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -162,11 +156,13 @@ export default function EditRecipePageContent() {
                 recipe={recipe}
                 setRecipe={setRecipe}
                 inputRef={inputRef}
+                file={file}
+                setFile={setFile}
             />
 
             <section className="">
-                <div className="flex gap-4 mb-2 items-center">
-                    <h2 className="text-2xl">Ingredients</h2>
+                <div className="flex gap-4 mb-2 items-center select-none">
+                    <h2 className="text-2xl cursor-default">Ingredients</h2>
                     <IngredientsDialog
                         nameValue={editingIngredient?.ingredientName || ''}
                         nameOnChange={(e) => {
@@ -194,7 +190,7 @@ export default function EditRecipePageContent() {
                         }}
                     />
                 </div>
-                <div className="shadow-popin_tinted_gray p-2 rounded-lg">
+                <div className="shadow-inset-gray-sm p-2 rounded-lg">
                     {ingredientList && ingredientList.length != 0 ? (
                         <DragNDropContext
                             list={ingredientList}
@@ -215,8 +211,9 @@ export default function EditRecipePageContent() {
                                                 stroke="currentColor"
                                             />
                                         }
-                                        borderColor="border-tinted_gray_300"
                                         bg="bg-tinted_gray_700"
+                                        boxShadow="shadow-gray-sm"
+                                        marginX="none"
                                     >
                                         <section className="flex justify-between items-center w-full">
                                             <p>
@@ -244,8 +241,8 @@ export default function EditRecipePageContent() {
                 </div>
             </section>
             <section className="my-4">
-                <div className="flex gap-4 mb-2 items-center">
-                    <h2 className="text-2xl">Directions</h2>
+                <div className="flex gap-4 mb-2 items-center select-none">
+                    <h2 className="text-2xl cursor-default">Directions</h2>
                     <DirectionsDialog
                         directionValue={editingStep ? editingStep : ''}
                         directionOnChange={(e) => {
@@ -259,7 +256,7 @@ export default function EditRecipePageContent() {
                         }}
                     />
                 </div>
-                <div className="shadow-popin_tinted_gray p-2 rounded-lg">
+                <div className="shadow-inset-gray-sm p-2 rounded-lg">
                     {directionsList && directionsList.length != 0 ? (
                         <DragNDropContext
                             list={directionsList}
@@ -280,12 +277,16 @@ export default function EditRecipePageContent() {
                                                 stroke="currentColor"
                                             />
                                         }
-                                        borderColor="border-tinted_gray_300"
                                         bg="bg-tinted_gray_700"
+                                        marginX="none"
+                                        boxShadow="shadow-gray-sm"
                                     >
                                         <section className="flex justify-between items-center w-full">
                                             <p>
-                                                {index + 1}. {step.direction}
+                                                <span className="select-none cursor-default">
+                                                    {index + 1}.
+                                                </span>{' '}
+                                                {step.direction}
                                             </p>
 
                                             <X

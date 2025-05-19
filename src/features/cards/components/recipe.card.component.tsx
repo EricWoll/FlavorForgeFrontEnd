@@ -1,15 +1,6 @@
-import {
-    DropdownMenuContent,
-    DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
-import HeartTile from '@/features/tiles/components/heart.tile.component';
-import { Button } from '@/lib/my_custom_components/buttons/button.component';
+import ImageRequest from '@/features/images/components/requestImage.component';
 import formatNumber from '@/utils/numberFormatter';
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-} from '@radix-ui/react-dropdown-menu';
-import { EllipsisVerticalIcon, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import Link from 'next/link';
 
 interface RecipeCardProps {
@@ -20,25 +11,31 @@ interface RecipeCardProps {
 
 export default function RecipeCard(props: RecipeCardProps) {
     return (
-        <div className="w-72 h-56">
-            <Link href={`/recipes?id=${props.recipe.recipeId}`}>
-                <img
-                    className="h-40 object-cover rounded-md mb-1 select-none"
-                    src={props.recipe.recipeImageId}
-                />
+        <div className="w-72 h-56 flex flex-col gap-2">
+            <Link
+                href={`/recipes?id=${props.recipe.recipeId}`}
+                className="flex w-full h-full rounded-10 overflow-hidden"
+            >
+                <ImageRequest filename={props.recipe.recipeImageId} />
             </Link>
-            <section className="grid">
-                <Button.Link href={`/recipes?id=${props.recipe.recipeId}`}>
+            <section className="grid px-1">
+                <Link href={`/recipes?id=${props.recipe.recipeId}`}>
                     {props.recipe.recipeName}
-                </Button.Link>
+                </Link>
                 <div className="flex items-center justify-between">
-                    <Button.Link
+                    <Link
                         href={`/user?id=${props.recipe.creatorId}`}
-                        className="text-[.75em]"
-                        isCropped
+                        className="text-[.75em] flex gap-2"
                     >
+                        <span className={`rounded-full overflow-hidden`}>
+                            <ImageRequest
+                                filename={props.recipe.creatorImageId}
+                                defaultText="N"
+                                paddingX_NoImage="2"
+                            />
+                        </span>
                         {props.recipe.creatorUsername}
-                    </Button.Link>
+                    </Link>
                     <div className="flex flex-nowrap gap-2 select-none items-center">
                         <div className="flex flex-nowrap gap-2 select-none items-center">
                             <p className="text-tinted_gray_300">
@@ -49,20 +46,6 @@ export default function RecipeCard(props: RecipeCardProps) {
                                 fill="#939EA7"
                             />
                         </div>
-                        {props.isLoggedIn && (
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button.Hover>
-                                        <EllipsisVerticalIcon className="h-4 w-4 text-tinted_gray_400" />
-                                    </Button.Hover>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="!outline outline-1 !outline-tinted_gray_600 !bg-tinted_gray_700 shadow-gray-sm">
-                                    <DropdownMenuItem>
-                                        <p>Replace Me!</p>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        )}
                     </div>
                 </div>
             </section>

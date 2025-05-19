@@ -15,6 +15,7 @@ interface SortableItemDnDProps {
     paddingX?: 'sm' | 'md' | 'lg' | 'none';
     bg?: string;
     borderColor?: string;
+    boxShadow?: string;
 }
 
 /**
@@ -24,12 +25,13 @@ interface SortableItemDnDProps {
  * @param {string} id - Unique identifier for the sortable item, required by dnd-kit
  * @param {'x' | 'y' | 'both'} moveDirection - Allowed drag axis: 'x', 'y', or 'both'
  * @param {React.ReactNode} sortableHandle - Optional handle element to restrict dragging to this area
- * @param paddingY - Padding size on the y-axis (default: py-2)
- * @param paddingX - Padding size on the x-axis (default: px-2)
+ * @param {'sm' | 'md' | 'lg' | 'none'} paddingY - Padding size on the y-axis (default: py-2)
+ * @param {'sm' | 'md' | 'lg' | 'none'} paddingX - Padding size on the x-axis (default: px-2)
  * @param {string} marginY - Margin size on the y-axis (default: py-0)
  * @param {string} marginX - Margin size on the x-axis (default: px-0)
- * @param bg - Tailwind-compatible background color (e.g., "white", "gray-100")
- * @param borderColor - Optional border color (e.g., 'border-gray-300'). If provided, a border will be applied.
+ * @param {string} bg - Tailwind-compatible background color (e.g., "white", "gray-100")
+ * @param {string} borderColor - Optional border color (e.g., 'border-gray-300'). If provided, a border will be applied.
+ * @param {string}boxShadow - Optional Tailwind boxShadow (e.g., 'shadow-sm'). If provided, a boxShadow will be applied.
  * @param {React.ReactNode} children - The content of the sortable item
  *
  * @returns {React.JSX.Element} A draggable sortable item element
@@ -44,6 +46,7 @@ export default function SortableItemDnD({
     paddingX = 'sm',
     bg = 'bg-transparent',
     borderColor = 'border-transparent',
+    boxShadow = 'shadow-none',
     children,
 }: SortableItemDnDProps): React.JSX.Element {
     const {
@@ -118,6 +121,7 @@ export default function SortableItemDnD({
                     : 'mx-0',
                 `${bg}`,
                 clsx('border', borderColor, `focus:${borderColor}`),
+                boxShadow && boxShadow,
                 sortableHandle
                     ? 'cursor-default'
                     : 'cursor-grab active:cursor-grabbing'
@@ -149,7 +153,7 @@ interface SortableItemHandleProps {
 function SortableItemHandle(props: SortableItemHandleProps): React.JSX.Element {
     return (
         <div
-            className="cursor-grab active:cursor-grabbing"
+            className="cursor-grab active:cursor-grabbing flex items-center"
             {...props.listeners}
         >
             {props.children}

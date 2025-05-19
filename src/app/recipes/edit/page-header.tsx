@@ -1,23 +1,57 @@
 'user client';
 
+import ImageRequest from '@/features/images/components/requestImage.component';
 import Input from '@/lib/my_custom_components/inputs/input.Form.component';
 
 export default function EditRecipePageHeader({
     recipe,
     setRecipe,
     inputRef,
+    file,
+    setFile,
 }: {
     recipe: Recipe | null;
     setRecipe: React.Dispatch<React.SetStateAction<Recipe | null>>;
     inputRef: React.RefObject<HTMLInputElement>;
+    file: File | null;
+    setFile: React.Dispatch<React.SetStateAction<File | null>>;
 }) {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setFile(e.target.files[0] || null);
+        } else {
+            alert('There was an error adding file to recipe.');
+        }
+    };
+
     return (
         <div className="flex justify-center w-full px-4">
             <section className="flex flex-nowrap gap-4 w-full max-w-5xl">
-                <img
-                    src={recipe?.recipeImageId}
-                    className="h-[250px] w-[250px] object-cover rounded-lg"
-                />
+                <div className="flex flex-col gap-1">
+                    {recipe != undefined &&
+                    recipe?.recipeImageId != 'none' &&
+                    !file ? (
+                        <div className="w-64 h-64">
+                            <ImageRequest filename={recipe.recipeImageId} />
+                        </div>
+                    ) : (
+                        <>
+                            {file ? (
+                                <img
+                                    className="h-64"
+                                    src={URL.createObjectURL(file)}
+                                />
+                            ) : (
+                                <div className=" w-64 h-64 bg-slate-700 rounded-md"></div>
+                            )}
+                        </>
+                    )}
+                    <input
+                        accept="image/*"
+                        type="file"
+                        onChange={handleFileChange}
+                    />
+                </div>
                 <div className="w-full flex flex-col gap-2">
                     <Input
                         onChange={(e) => {
