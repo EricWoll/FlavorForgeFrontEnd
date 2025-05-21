@@ -62,6 +62,7 @@ export function NavBarLarge() {
                             />
                         }
                         displayText="Followed Creators"
+                        isShown={isLoggedIn}
                         isIconOnly={!isNavOpen}
                         textColor="text-tinted_gray_300"
                         textSize="xs"

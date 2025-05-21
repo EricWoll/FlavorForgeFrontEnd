@@ -27,6 +27,9 @@ export default function FollowedCreatorsContent() {
                 undefined,
                 UserContext.user?.token
             ),
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
         enabled: !!UserContext.user?.id && !UserContext.loading,
     });
 

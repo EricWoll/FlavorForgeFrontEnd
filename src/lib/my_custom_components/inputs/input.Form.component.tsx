@@ -7,7 +7,7 @@ interface FormInputProps {
     type?: React.HTMLInputTypeAttribute | undefined;
     placeholder?: string;
     value: string;
-    onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     onEnter?: () => void;
     disabled?: boolean;
     bg?: string;

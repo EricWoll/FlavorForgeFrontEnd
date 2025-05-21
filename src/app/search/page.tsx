@@ -10,7 +10,7 @@ export default function RecipeSearchPage() {
         <div className="grow w-full">No Search was done!</div>;
     }
 
-    if (SearchContext.searchIsPending)
+    if (SearchContext.searchIsLoading)
         return (
             <div className="grow w-full">
                 <p>Loading recipes...</p>

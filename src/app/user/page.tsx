@@ -10,6 +10,7 @@ import { apiGet } from '@/utils/handlerHelpers';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import formatNumber from '@/utils/numberFormatter';
 
 export default function CreatorsPage() {
     const searchParams = useSearchParams();
@@ -39,6 +40,9 @@ export default function CreatorsPage() {
                         : {}
                 ).toString()
             ),
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
         enabled: !!creatorId,
     });
 
@@ -72,7 +76,7 @@ export default function CreatorsPage() {
                     <p>Loading Creator...</p>
                 ) : (
                     <>
-                        <div className="h-[100px] w-[100px] bg-tinted_gray_600 rounded-5">
+                        <div className="h-[100px] w-[100px] bg-tinted_gray_600 rounded-5 overflow-hidden">
                             <ImageRequest
                                 filename={creatorInfo.data?.imageId}
                             />
@@ -83,7 +87,9 @@ export default function CreatorsPage() {
                             </h2>
                             <div className="flex flex-nowrap items-center">
                                 <p className="text-tinted_gray_300 select-none">
-                                    3.6M
+                                    {formatNumber(
+                                        creatorInfo.data.followerCount
+                                    )}
                                 </p>
                                 <FollowTile
                                     isFollowed={creatorInfo.data?.followed}

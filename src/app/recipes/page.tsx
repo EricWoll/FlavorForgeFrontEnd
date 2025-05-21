@@ -78,7 +78,7 @@ export default function RecipePage() {
             )}
             <div className="w-full">
                 <section className={`flex flex-wrap gap-2 mb-4 justify-center`}>
-                    <div className="h-72 w-72 object-cover rounded-5 bg-tinted_gray_600">
+                    <div className="h-72 w-72 overflow-hidden rounded-5 bg-tinted_gray_600">
                         <ImageRequest filename={data.recipeImageId} />
                     </div>
                     <section className="flex flex-nowrap">

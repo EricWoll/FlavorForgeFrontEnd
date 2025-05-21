@@ -22,6 +22,7 @@ interface ISearchContext {
     searchData: RecipeWithCreator[] | null;
     searchError: Error | null;
     searchIsPending: boolean;
+    searchIsLoading: boolean;
 }
 
 const defaultSearchContext: ISearchContext = {
@@ -31,6 +32,7 @@ const defaultSearchContext: ISearchContext = {
     searchData: null,
     searchError: null,
     searchIsPending: false,
+    searchIsLoading: false,
 };
 
 export const SearchContext =
@@ -80,6 +82,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
         data: searchData,
         error: searchError,
         isPending: searchIsPending,
+        isLoading: searchIsLoading,
     } = useQuery<RecipeWithCreator[]>({
         queryKey: ['search_results', debouncedSearchText],
         queryFn: () =>
@@ -151,6 +154,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
         searchData: searchData || null,
         searchError: searchError || null,
         searchIsPending,
+        searchIsLoading,
     };
 
     return (
