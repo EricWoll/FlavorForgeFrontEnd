@@ -4,5 +4,5 @@ type PublicUser = {
     imageId: string;
     followerCount: number;
     aboutText: string;
-    isFollowed: boolean;
+    followed: boolean;
 };

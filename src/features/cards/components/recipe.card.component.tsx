@@ -1,4 +1,4 @@
-import ImageRequest from '@/features/images/components/requestImage.component';
+import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
 import formatNumber from '@/utils/numberFormatter';
 import { Heart } from 'lucide-react';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ export default function RecipeCard(props: RecipeCardProps) {
         <div className="w-72 h-56 flex flex-col gap-2">
             <Link
                 href={`/recipes?id=${props.recipe.recipeId}`}
-                className="flex w-full h-full rounded-10 overflow-hidden"
+                className="flex w-full h-full rounded-10 overflow-hidden bg-tinted_gray_600"
             >
                 <ImageRequest filename={props.recipe.recipeImageId} />
             </Link>
@@ -27,7 +27,7 @@ export default function RecipeCard(props: RecipeCardProps) {
                         href={`/user?id=${props.recipe.creatorId}`}
                         className="text-[.75em] flex gap-2"
                     >
-                        <span className={`rounded-full overflow-hidden`}>
+                        <span className={`rounded-full bg-tinted_gray_600`}>
                             <ImageRequest
                                 filename={props.recipe.creatorImageId}
                                 defaultText="N"

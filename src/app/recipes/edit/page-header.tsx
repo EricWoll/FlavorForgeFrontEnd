@@ -1,6 +1,6 @@
 'user client';
 
-import ImageRequest from '@/features/images/components/requestImage.component';
+import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
 import Input from '@/lib/my_custom_components/inputs/input.Form.component';
 
 export default function EditRecipePageHeader({
@@ -31,7 +31,7 @@ export default function EditRecipePageHeader({
                     {recipe != undefined &&
                     recipe?.recipeImageId != 'none' &&
                     !file ? (
-                        <div className="w-64 h-64">
+                        <div className="w-64 h-64 bg-tinted_gray_600 rounded-5 overflow-hidden">
                             <ImageRequest filename={recipe.recipeImageId} />
                         </div>
                     ) : (
@@ -42,7 +42,7 @@ export default function EditRecipePageHeader({
                                     src={URL.createObjectURL(file)}
                                 />
                             ) : (
-                                <div className=" w-64 h-64 bg-slate-700 rounded-md"></div>
+                                <div className="w-64 h-64 rounded-5 bg-tinted_gray_600"></div>
                             )}
                         </>
                     )}

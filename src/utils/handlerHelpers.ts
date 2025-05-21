@@ -2,12 +2,18 @@ export async function apiGet<T>(
     url: string,
     requestContent?: string,
     authToken?: string,
-    cache: 'default' | 'no-store' = 'default'
+    cache: 'default' | 'no-store' = 'default',
+    responseType: 'json' | 'blob' | 'arrayBuffer' = 'json'
 ): Promise<T> {
-    const headers = { 'Content-Type': 'application/json' };
+    const headers: Record<string, string> = {};
+
+    // Only add Content-Type if expecting JSON
+    if (responseType === 'json') {
+        headers['Content-Type'] = 'application/json';
+    }
 
     if (authToken) {
-        Object.assign(headers, { Authorization: `Bearer ${authToken}` });
+        headers['Authorization'] = `Bearer ${authToken}`;
     }
 
     const response = await fetch(
@@ -16,8 +22,8 @@ export async function apiGet<T>(
         }`,
         {
             method: 'GET',
-            headers: headers,
-            cache: cache,
+            headers,
+            cache,
         }
     );
 
@@ -26,7 +32,14 @@ export async function apiGet<T>(
         throw new Error(`API Error ${response.status}: ${error}`);
     }
 
-    return response.json();
+    switch (responseType) {
+        case 'blob':
+            return (await response.blob()) as T;
+        case 'arrayBuffer':
+            return (await response.arrayBuffer()) as T;
+        default:
+            return (await response.json()) as T;
+    }
 }
 
 export async function apiPost<T>(
@@ -113,7 +126,7 @@ export async function apiPostForImage<T>(
     newObjectKey: string,
     updateFile: boolean,
     authToken?: string
-): Promise<T> {
+): Promise<T | null> {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('objectKey', objectKey);
@@ -143,7 +156,12 @@ export async function apiPostForImage<T>(
             );
         }
 
-        return response.json();
+        const text = await response.text();
+        if (!text) {
+            return null;
+        }
+
+        return JSON.parse(text);
     } catch (error) {
         console.error('API Post Request Failed:', error);
         throw error;
@@ -183,7 +201,8 @@ export async function apiDelete<T>(
     url: string,
     authToken: string | undefined,
     requestContent?: string
-): Promise<T> {
+): Promise<T | null> {
+    // note: can return null for 204 No Content
     const headers = { 'Content-Type': 'application/json' };
 
     if (authToken) {
@@ -199,6 +218,8 @@ export async function apiDelete<T>(
             headers: headers,
         }
     );
+
+    if (response.status === 204) return null; // no content, no json to parse
 
     if (!response.ok) {
         const error = await response.text();

@@ -169,7 +169,7 @@ function UserDropDown() {
                     />
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="mr-5 bg-tinted_gray_700 rounded-5 p-2 w-56 !outline outline-2 !outline-tinted_gray_600 shadow-gray-sm">
+            <DropdownMenuContent className="mr-5 bg-tinted_gray_700 rounded-5 p-2 w-56 !outline outline-2 !outline-tinted_gray_600 shadow-gray-sm z-10">
                 <UserDropDownLink
                     href="/user/profile"
                     displayText="Profile"

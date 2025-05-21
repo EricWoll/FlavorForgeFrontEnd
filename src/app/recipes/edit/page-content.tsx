@@ -2,9 +2,15 @@
 
 import { useUserContext } from '@/contexts/User.context';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
-import { apiGet } from '@/utils/handlerHelpers';
-import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
+import {
+    apiDelete,
+    apiGet,
+    apiPost,
+    apiPostForImage,
+    apiPut,
+} from '@/utils/handlerHelpers';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import EditRecipePageHeader from './page-header';
 import { DirectionsDialog, IngredientsDialog } from './page-dialogs';
@@ -26,31 +32,24 @@ interface IngredientWithId extends Ingredients {
 export default function EditRecipePageContent() {
     const searchParams = useSearchParams();
     const recipeId = searchParams.get('id');
-
     const UserContext = useUserContext();
+    const Router = useRouter();
 
     const [recipe, setRecipe] = useState<Recipe | null>(null);
-
-    // holds all confirmed ingredients/steps user has added
     const [ingredientList, setIngredientList] = useState<IngredientWithId[]>(
         []
     );
     const [directionsList, setDirectionsList] = useState<DirectionItem[]>([]);
-
-    // holds current possible ingredient/step user is adding
     const [editingIngredient, setEditingIngredient] =
         useState<Ingredients | null>(null);
     const [editingStep, setEditingStep] = useState<string | null>(null);
-
     const [file, setFile] = useState<File | null>(null);
 
-    // UUID for if new recipe
     const newUUID = crypto.randomUUID();
-
     const inputRef = useRef<HTMLInputElement>(null);
 
     const { isPending, error, data } = useQuery<Recipe, Error>({
-        queryKey: ['recipe_search', recipeId],
+        queryKey: ['recipe_item_search', recipeId],
         queryFn: () => apiGet(`recipes/search/${recipeId}`),
         refetchOnMount: false,
         refetchOnWindowFocus: false,
@@ -61,79 +60,138 @@ export default function EditRecipePageContent() {
     useEffect(() => {
         if (data) {
             setRecipe(data);
-
-            setIngredientList((prevList) => {
-                if (!prevList || prevList.length !== data.ingredients.length) {
-                    return data.ingredients.map((item) => ({
-                        ...item,
-                        id: nanoid(),
-                    }));
-                }
-                return prevList;
-            });
-
-            setDirectionsList((prevList) => {
-                if (!prevList || prevList.length !== data.steps.length) {
-                    return data.steps.map((item) => ({
-                        direction: item,
-                        id: nanoid(),
-                    }));
-                }
-                return prevList;
-            });
+            setIngredientList(
+                data.ingredients.map((item) => ({ ...item, id: nanoid() }))
+            );
+            setDirectionsList(
+                data.steps.map((step) => ({ id: nanoid(), direction: step }))
+            );
         }
     }, [data]);
 
-    const addStepUpdate = (step: string) => {
-        if (step.trim() != '') {
-            setDirectionsList((prev) => {
-                return [
-                    ...(prev || []),
+    const recipeMutation = useMutation({
+        mutationFn: async (updatedRecipe: Recipe) => {
+            if (updatedRecipe.recipeId) {
+                return await apiPut(
+                    `recipes/update/${updatedRecipe.recipeId}`,
+                    updatedRecipe,
+                    UserContext.user?.token
+                );
+            } else {
+                return await apiPost(
+                    'recipes/create',
                     {
-                        id: nanoid(),
-                        direction: step.trim(),
-                    },
-                ];
-            });
+                        ...updatedRecipe,
+                        creatorId: UserContext.user?.id,
+                    } as Recipe,
+                    UserContext.user?.token
+                );
+            }
+        },
+        onSuccess: () => Router.push(`/user?id=${UserContext.user?.id}`),
+        onError: () => alert('Failed to update recipe. Please try again.'),
+    });
+
+    const imageMutation = useMutation({
+        mutationFn: async ({
+            file,
+            imageId,
+            newUUID,
+        }: {
+            file: File;
+            imageId: string;
+            newUUID: string;
+        }) => {
+            return await apiPostForImage(
+                'images',
+                file,
+                imageId,
+                newUUID,
+                true,
+                UserContext.user?.token
+            );
+        },
+        onError: () => alert('Failed to upload image. Please try again.'),
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: async () => {
+            if (recipe?.recipeId) {
+                return await apiDelete(
+                    `recipes/delete/${recipe.recipeId}`,
+                    UserContext.user?.token
+                );
+            }
+        },
+        onSuccess: () => Router.push(`/user?id=${UserContext.user?.id}`),
+        onError: () => alert('Failed to delete recipe.'),
+    });
+
+    const handleSubmit = async () => {
+        if (
+            !recipe ||
+            !recipe.recipeName ||
+            ingredientList.length <= 0 ||
+            directionsList.length <= 0
+        ) {
+            return;
+        }
+
+        try {
+            if (file) {
+                const isUpdateImage = Boolean(
+                    recipe.recipeImageId && recipe.recipeImageId !== 'none'
+                );
+                await imageMutation.mutateAsync({
+                    file,
+                    imageId: recipe.recipeImageId || '',
+                    newUUID,
+                });
+            }
+
+            const updatedRecipe = {
+                ...recipe,
+                ingredients: ingredientList,
+                steps: directionsList.map((d) => d.direction),
+                imageId: file ? newUUID : recipe.recipeImageId || 'none',
+            };
+
+            await recipeMutation.mutateAsync(updatedRecipe);
+        } catch (err) {
+            console.error(err);
         }
     };
 
-    const removeStepUpdate = (itemIndex: number) => {
-        if (recipe?.steps.length != 0) {
-            setDirectionsList((prev) => {
-                return [...(prev || [])].filter(
-                    (item, index) => index != itemIndex
-                );
-            });
+    const handleDelete = () => {
+        if (confirm('Are you sure you want to delete this recipe?')) {
+            deleteMutation.mutate();
         }
+    };
+
+    const addStepUpdate = (step: string) => {
+        if (step.trim()) {
+            setDirectionsList((prev) => [
+                ...prev,
+                { id: nanoid(), direction: step.trim() },
+            ]);
+        }
+    };
+
+    const removeStepUpdate = (index: number) => {
+        setDirectionsList((prev) => prev.filter((_, i) => i !== index));
     };
 
     const addIngredientUpdate = (ingredient: Ingredients) => {
-        if (
-            ingredient.amount &&
-            ingredient.ingredientName &&
-            ingredient.ingredientName != ''
-        ) {
-            setIngredientList((prev) => {
-                return [
-                    ...(prev || []),
-                    {
-                        id: crypto.randomUUID(), // or nanoid()
-                        ...ingredient,
-                    },
-                ];
-            });
+        if (ingredient.amount && ingredient.ingredientName) {
+            setIngredientList((prev) => [
+                ...prev,
+                { ...ingredient, id: nanoid() },
+            ]);
         }
     };
 
-    const removeIngredientUpdate = (itemIndex: number) => {
-        if (recipe?.ingredients.length != 0) {
-            setIngredientList((prev) => {
-                return [...(prev || [])].filter(
-                    (item, index) => index != itemIndex
-                );
-            });
-        }
+    const removeIngredientUpdate = (index: number) => {
+        setIngredientList((prev) => prev.filter((_, i) => i !== index));
     };
 
     if (isPending && recipeId)
@@ -160,28 +218,31 @@ export default function EditRecipePageContent() {
                 setFile={setFile}
             />
 
-            <section className="">
-                <div className="flex gap-4 mb-2 items-center select-none">
-                    <h2 className="text-2xl cursor-default">Ingredients</h2>
+            {/* Ingredients Section */}
+            <section>
+                <div className="flex gap-4 mb-2 items-center">
+                    <h2 className="text-2xl">Ingredients</h2>
                     <IngredientsDialog
                         nameValue={editingIngredient?.ingredientName || ''}
-                        nameOnChange={(e) => {
-                            setEditingIngredient((prev) => {
-                                return {
-                                    ...prev,
-                                    ingredientName: e.target.value,
-                                } as Ingredients;
-                            });
-                        }}
+                        nameOnChange={(e) =>
+                            setEditingIngredient(
+                                (prev) =>
+                                    ({
+                                        ...prev,
+                                        ingredientName: e.target.value,
+                                    } as Ingredients)
+                            )
+                        }
                         amountValue={editingIngredient?.amount || ''}
-                        amountOnChange={(e) => {
-                            setEditingIngredient((prev) => {
-                                return {
-                                    ...prev,
-                                    amount: e.target.value,
-                                } as Ingredients;
-                            });
-                        }}
+                        amountOnChange={(e) =>
+                            setEditingIngredient(
+                                (prev) =>
+                                    ({
+                                        ...prev,
+                                        amount: e.target.value,
+                                    } as Ingredients)
+                            )
+                        }
                         dialogCloseOnClick={() => {
                             if (editingIngredient) {
                                 addIngredientUpdate(editingIngredient);
@@ -191,7 +252,7 @@ export default function EditRecipePageContent() {
                     />
                 </div>
                 <div className="shadow-inset-gray-sm p-2 rounded-lg">
-                    {ingredientList && ingredientList.length != 0 ? (
+                    {ingredientList.length ? (
                         <DragNDropContext
                             list={ingredientList}
                             setList={setIngredientList}
@@ -202,20 +263,17 @@ export default function EditRecipePageContent() {
                             >
                                 {ingredientList.map((ingredient, index) => (
                                     <SortableItemDnD
-                                        moveDirection="y"
                                         key={ingredient.id}
                                         id={ingredient.id}
+                                        moveDirection="y"
                                         sortableHandle={
-                                            <GripVerticalIcon
-                                                className="w-6 h-6 text-tinted_gray_300 stroke-current"
-                                                stroke="currentColor"
-                                            />
+                                            <GripVerticalIcon className="w-6 h-6 text-tinted_gray_300" />
                                         }
+                                        marginX="none"
                                         bg="bg-tinted_gray_700"
                                         boxShadow="shadow-gray-sm"
-                                        marginX="none"
                                     >
-                                        <section className="flex justify-between items-center w-full">
+                                        <div className="flex justify-between items-center w-full">
                                             <p>
                                                 {ingredient.amount} |{' '}
                                                 {ingredient.ingredientName}
@@ -228,26 +286,28 @@ export default function EditRecipePageContent() {
                                                     )
                                                 }
                                             />
-                                        </section>
+                                        </div>
                                     </SortableItemDnD>
                                 ))}
                             </SortableDnDContainer>
                         </DragNDropContext>
                     ) : (
-                        <p className="text-tinted_gray_600 cursor-default select-none">
+                        <p className="text-tinted_gray_600">
                             No Ingredients for your recipe!
                         </p>
                     )}
                 </div>
             </section>
+
+            {/* Directions Section */}
             <section className="my-4">
-                <div className="flex gap-4 mb-2 items-center select-none">
-                    <h2 className="text-2xl cursor-default">Directions</h2>
+                <div className="flex gap-4 mb-2 items-center">
+                    <h2 className="text-2xl">Directions</h2>
                     <DirectionsDialog
-                        directionValue={editingStep ? editingStep : ''}
-                        directionOnChange={(e) => {
-                            setEditingStep(e.target.value);
-                        }}
+                        directionValue={editingStep || ''}
+                        directionOnChange={(e) =>
+                            setEditingStep(e.target.value)
+                        }
                         dialogCloseOnClick={() => {
                             if (editingStep) {
                                 addStepUpdate(editingStep);
@@ -257,7 +317,7 @@ export default function EditRecipePageContent() {
                     />
                 </div>
                 <div className="shadow-inset-gray-sm p-2 rounded-lg">
-                    {directionsList && directionsList.length != 0 ? (
+                    {directionsList.length ? (
                         <DragNDropContext
                             list={directionsList}
                             setList={setDirectionsList}
@@ -269,54 +329,66 @@ export default function EditRecipePageContent() {
                                 {directionsList.map((step, index) => (
                                     <SortableItemDnD
                                         key={step.id}
-                                        moveDirection="y"
                                         id={step.id}
+                                        moveDirection="y"
                                         sortableHandle={
-                                            <GripVerticalIcon
-                                                className="w-6 h-6 text-tinted_gray_300 stroke-current"
-                                                stroke="currentColor"
-                                            />
+                                            <GripVerticalIcon className="w-6 h-6 text-tinted_gray_300" />
                                         }
-                                        bg="bg-tinted_gray_700"
                                         marginX="none"
+                                        bg="bg-tinted_gray_700"
                                         boxShadow="shadow-gray-sm"
                                     >
-                                        <section className="flex justify-between items-center w-full">
+                                        <div className="flex justify-between items-center w-full">
                                             <p>
-                                                <span className="select-none cursor-default">
-                                                    {index + 1}.
-                                                </span>{' '}
-                                                {step.direction}
+                                                {index + 1}. {step.direction}
                                             </p>
-
                                             <X
                                                 className="w-4 h-4 text-red-500 cursor-pointer"
                                                 onClick={() =>
                                                     removeStepUpdate(index)
                                                 }
                                             />
-                                        </section>
+                                        </div>
                                     </SortableItemDnD>
                                 ))}
                             </SortableDnDContainer>
                         </DragNDropContext>
                     ) : (
-                        <p className="text-tinted_gray_600 cursor-default select-none">
+                        <p className="text-tinted_gray_600">
                             No Directions for your recipe!
                         </p>
                     )}
                 </div>
             </section>
+
+            {/* Buttons */}
             <section className="flex gap-2">
                 <Button.Hover
                     isOutlined
-                    className="text-red-400 w-full"
-                    onClick={() => {}}
+                    className="w-full"
+                    onClick={() =>
+                        Router.push(`/user?id=${UserContext.user?.id}`)
+                    }
                 >
                     Cancel
                 </Button.Hover>
-                <Button.Hover isOutlined className="w-full" onClick={() => {}}>
-                    Save
+                <Button.Hover
+                    className="w-full bg-green-400 text-green-800 outline outline-2 outline-green-800"
+                    onClick={handleSubmit}
+                    disabled={
+                        recipeMutation.isPending || imageMutation.isPending
+                    }
+                >
+                    {recipeMutation.isPending || imageMutation.isPending
+                        ? 'Saving...'
+                        : 'Save'}
+                </Button.Hover>
+                <Button.Hover
+                    className="bg-red-400 w-full text-red-800 outline outline-2 outline-red-800"
+                    onClick={handleDelete}
+                    disabled={deleteMutation.isPending}
+                >
+                    {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
                 </Button.Hover>
             </section>
         </div>

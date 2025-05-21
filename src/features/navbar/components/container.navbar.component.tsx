@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import MenuIcon from '@/components/svg/menuIcon.svg.component';
 import { useEffect, useState } from 'react';
-import { BookUserIcon, HomeIcon } from 'lucide-react';
+import { ContactIcon, HomeIcon, NotebookIcon } from 'lucide-react';
 
 export function NavBarLarge() {
     const Window = useWindow();
@@ -41,13 +41,27 @@ export function NavBarLarge() {
                     <NavItem
                         href={user?.id ? `/user?id=${user.id}` : '/'}
                         icon={
-                            <BookUserIcon
+                            <NotebookIcon
                                 className="w-6 h-6 text-tinted_gray_300 stroke-current"
                                 stroke="currentColor"
                             />
                         }
                         displayText="My Recipes"
                         isShown={isLoggedIn}
+                        isIconOnly={!isNavOpen}
+                        textColor="text-tinted_gray_300"
+                        textSize="xs"
+                        textNoWrap
+                    />
+                    <NavItem
+                        href="/user/followed"
+                        icon={
+                            <ContactIcon
+                                className="w-6 h-6 text-tinted_gray_300 stroke-current"
+                                stroke="currentColor"
+                            />
+                        }
+                        displayText="Followed Creators"
                         isIconOnly={!isNavOpen}
                         textColor="text-tinted_gray_300"
                         textSize="xs"

@@ -2,6 +2,7 @@
 
 import { useUserContext } from '@/contexts/User.context';
 import RecipeContainer from '@/features/cards/components/recipeContainer.component';
+import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
 import FollowTile from '@/features/tiles/components/subscribe.tile.component';
 import useWindow from '@/hooks/useWindow.hook';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
@@ -48,6 +49,8 @@ export default function CreatorsPage() {
                 'recipes/search',
                 new URLSearchParams({ creator_id: creatorId }).toString()
             ),
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
         enabled: !!creatorId,
     });
 
@@ -69,10 +72,11 @@ export default function CreatorsPage() {
                     <p>Loading Creator...</p>
                 ) : (
                     <>
-                        <img
-                            src={creatorInfo.data?.imageId}
-                            className="h-[100px] w-[100px] object-cover rounded-lg"
-                        />
+                        <div className="h-[100px] w-[100px] bg-tinted_gray_600 rounded-5">
+                            <ImageRequest
+                                filename={creatorInfo.data?.imageId}
+                            />
+                        </div>
                         <section className="flex flex-col justify-center">
                             <h2 className="font-bold text-2xl">
                                 {creatorInfo.data?.username}
@@ -82,7 +86,7 @@ export default function CreatorsPage() {
                                     3.6M
                                 </p>
                                 <FollowTile
-                                    isFollowed={creatorInfo.data?.isFollowed}
+                                    isFollowed={creatorInfo.data?.followed}
                                     isDisabled={
                                         UserContext.user == null ||
                                         UserContext.user.id ==

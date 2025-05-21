@@ -1,7 +1,7 @@
 'use client';
 
 import { useUserContext } from '@/contexts/User.context';
-import ImageRequest from '@/features/images/components/requestImage.component';
+import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
 import HeartTile from '@/features/tiles/components/heart.tile.component';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
@@ -78,7 +78,7 @@ export default function RecipePage() {
             )}
             <div className="w-full">
                 <section className={`flex flex-wrap gap-2 mb-4 justify-center`}>
-                    <div className="h-72 w-72 object-cover rounded-lg overflow-hidden">
+                    <div className="h-72 w-72 object-cover rounded-5 bg-tinted_gray_600">
                         <ImageRequest filename={data.recipeImageId} />
                     </div>
                     <section className="flex flex-nowrap">
