@@ -45,7 +45,7 @@ interface LinkButtonProps extends LinkProps {
  * @param type - Type of the button ('submit', 'reset', 'button', or undefined)
  * @returns A hover-capable <button> element
  */
-function buttonHover({
+function ButtonHover({
     isDisabled = false,
     isOutlined = false,
     isCropped = false,
@@ -99,7 +99,7 @@ function buttonHover({
  * @param type - Type of the button ('submit', 'reset', 'button', or undefined)
  * @returns A toggle-style <button> element
  */
-function buttonSwitch({
+function ButtonSwitch({
     isDisabled = false,
     isOutlined = false,
     isCropped = false,
@@ -163,7 +163,7 @@ function buttonSwitch({
  * @param type - Type of the button ('submit', 'reset', 'button', or undefined)
  * @returns A Next.js <Link> styled as a button
  */
-function buttonLink({
+function ButtonLink({
     isDisabled = false,
     isOutlined = false,
     isCropped = false,
@@ -207,7 +207,7 @@ function buttonLink({
  * - Button.Link: Next.js link styled like a button
  */
 export const Button = {
-    Hover: buttonHover,
-    Switch: buttonSwitch,
-    Link: buttonLink,
+    Hover: ButtonHover,
+    Switch: ButtonSwitch,
+    Link: ButtonLink,
 };

@@ -5,7 +5,7 @@ import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
 import Input from '@/lib/my_custom_components/inputs/input.Form.component';
-import { apiGet } from '@/utils/handlerHelpers';
+import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import { useQuery } from '@tanstack/react-query';
 import {
     EyeClosedIcon,
@@ -53,7 +53,7 @@ export default function ProfilePageContent() {
         );
 
     return (
-        <div className={`mx-4 w-full `}>
+        <div className={`px-4 w-full `}>
             <section
                 className={`w-56 h-56 rounded-5 overflow-hidden bg-tinted_gray_600 ${
                     window.windowSize.match(WindowSizes.SMALL) && 'm-auto'

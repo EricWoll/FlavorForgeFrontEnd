@@ -1,15 +1,21 @@
 'use client';
 
+import { useUserContext } from '@/contexts/User.context';
 import RecipeContainer from '@/features/cards/components/recipeContainer.component';
-import { apiGet } from '@/utils/handlerHelpers';
+import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function Home() {
     const queryClient = useQueryClient();
+    const { user } = useUserContext();
 
     const { isPending, error, data } = useQuery<RecipeWithCreator[]>({
-        queryKey: ['home_recipes'],
-        queryFn: () => apiGet<RecipeWithCreator[]>('recipes/search'),
+        queryKey: ['home_recipes', user?.id],
+        queryFn: () =>
+            apiGet<RecipeWithCreator[]>(
+                'recipes/search',
+                new URLSearchParams({ user_id: user?.id ?? '' }).toString()
+            ),
         staleTime: Infinity,
         refetchOnMount: false,
         refetchOnWindowFocus: false,

@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
-import { apiGet } from '@/utils/handlerHelpers';
+import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import LoadingCircle from '@/features/loading/components/loadingCircle.component';
 import clsx from 'clsx';
 

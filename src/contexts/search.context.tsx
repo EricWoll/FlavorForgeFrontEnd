@@ -1,6 +1,6 @@
 'use client';
 
-import { apiGet } from '@/utils/handlerHelpers';
+import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {

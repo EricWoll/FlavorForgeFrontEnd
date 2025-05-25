@@ -7,7 +7,6 @@ import { useSearchContext } from '@/contexts/search.context';
 import { useNavBarContext } from '@/features/navbar/contexts/navbar.context';
 
 import SearchIcon from '../components/svg/searchIcon.svg.component';
-import { NavBarSmall } from '@/features/navbar/components/container.navbar.component';
 import LeftArrowIcon from '@/components/svg/leftArrowIcon.svg.component';
 import MenuIcon from '@/components/svg/menuIcon.svg.component';
 import UserIcon from '@/components/svg/userIcon.svg.component';
@@ -28,7 +27,7 @@ import { Button } from '@/lib/my_custom_components/buttons/button.component';
 
 export default function Header() {
     const SearchContext = useSearchContext();
-    const NavbarContext = useNavBarContext();
+    const { navMode, setNavMode, isMobile, toggleNav } = useNavBarContext();
     const UserContext = useUserContext();
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -45,19 +44,22 @@ export default function Header() {
         SearchContext.search(localSearchText);
     };
 
-    if (NavbarContext.isMobile) {
+    if (isMobile) {
         return (
             <header
-                className={`flex justify-between items-center shadow-sm sticky top-0 px-4 py-2 bg-tinted_gray_700 ${
-                    isSmallSearchIconClicked && 'gap-2'
+                className={`h-12 flex justify-between items-center shadow-sm sticky top-0 px-4 py-2 bg-tinted_gray_700 z-50 ${
+                    isSmallSearchIconClicked ? 'gap-2' : ''
                 }`}
             >
                 {!isSmallSearchIconClicked ? (
                     <>
-                        <NavBarSmall />
+                        <MenuIcon
+                            className="w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1"
+                            onClick={toggleNav}
+                        />
                         <div className="flex flex-nowrap gap-2 items-center">
                             <SearchIcon
-                                className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
+                                className="w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1"
                                 onClick={() =>
                                     setIsSmallSearchIconClicked(true)
                                 }
@@ -65,14 +67,14 @@ export default function Header() {
                             {UserContext.user?.id ? (
                                 <UserDropDown />
                             ) : (
-                                <Link href="/auth/login">Log In</Link>
+                                <Link href="/auth/login">Log In/Sign Up</Link>
                             )}
                         </div>
                     </>
                 ) : (
                     <>
                         <LeftArrowIcon
-                            className={`w-6 h-6 cursor-pointer hover:shadow-inset-gray-sm rounded-5`}
+                            className="w-6 h-6 cursor-pointer hover:shadow-inset-gray-sm rounded-5"
                             onClick={() => setIsSmallSearchIconClicked(false)}
                         />
                         <div className="flex-grow max-w-xl">
@@ -94,7 +96,7 @@ export default function Header() {
                             />
                         </div>
                         <SearchIcon
-                            className={`w-6 h-6 cursor-pointer hover:shadow-inset-gray-sm rounded-5`}
+                            className="w-6 h-6 cursor-pointer hover:shadow-inset-gray-sm rounded-5"
                             onClick={() => {
                                 setIsSmallSearchIconClicked(false);
                                 triggerSearch();
@@ -107,12 +109,10 @@ export default function Header() {
     }
 
     return (
-        <header className="flex justify-between flex-nowrap p-2 gap-2 items-center bg-tinted_gray_700 shadow-sm">
+        <header className="flex justify-between flex-nowrap p-2 gap-2 items-center bg-tinted_gray_700 shadow-sm sticky top-0 z-50 h-12">
             <MenuIcon
                 className={`w-8 h-8 cursor-pointer hover:shadow-inset-gray-sm rounded-5 p-1`}
-                onClick={() => {
-                    NavbarContext.setIsNavOpen((prev) => !prev);
-                }}
+                onClick={toggleNav}
             />
             <div className="flex-grow max-w-xl">
                 <Input
@@ -151,7 +151,7 @@ export default function Header() {
                 <UserDropDown />
             ) : (
                 <Button.Link size="small" href="/auth/login">
-                    Log In
+                    Log In/Sign Up
                 </Button.Link>
             )}
         </header>
@@ -216,7 +216,7 @@ function UserDropDownLink(props: UserDropDownLinkProps) {
                 {...props.dropDownProps}
                 asChild
                 onClick={props.dropDownProps?.onClick}
-                className="hover:cursor-pointer !bg-tinted_gray_700 hover:shadow-gray-sm active:shadow-inset-gray-sm my-2"
+                className="hover:cursor-pointer !bg-tinted_gray_700 border-2 border-transparent hover:border-tinted_gray_600/50 active:shadow-inset-gray-sm my-2"
             >
                 <div className="flex items-center gap-2">
                     {props.icon}
@@ -239,7 +239,7 @@ function UserDropDownItem(props: UserDropDownItemProps) {
             {...props.dropDownProps}
             asChild
             onClick={props.dropDownProps?.onClick}
-            className="hover:cursor-pointer !bg-tinted_gray_700 hover:shadow-gray-sm active:shadow-inset-gray-sm my-2"
+            className="hover:cursor-pointer !bg-tinted_gray_700 border-2 border-transparent hover:border-tinted_gray_600/50 active:shadow-inset-gray-sm my-2"
         >
             <div className="flex items-center gap-2">
                 {props.icon}

@@ -5,7 +5,7 @@ import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import { FormColumn } from '@/lib/my_custom_components/inputs/column.Form.component';
 import FormContainer from '@/lib/my_custom_components/inputs/container.Form.component';
 import Input from '@/lib/my_custom_components/inputs/input.Form.component';
-import { apiPost } from '@/utils/handlerHelpers';
+import { apiPost } from '@/utils/fetch/apiBase.fetch';
 import {
     EyeClosedIcon,
     EyeIcon,
@@ -62,7 +62,7 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="flex flex-col mx-4 grow items-center justify-center">
+        <div className="flex flex-col gap-4 px-4 grow h-full items-center justify-center">
             <h2 className="text-3xl select-none cursor-default text-tinted_gray_300">
                 Create An Account
             </h2>

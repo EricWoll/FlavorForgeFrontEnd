@@ -1,4 +1,4 @@
-import { apiPost } from '../handlerHelpers';
+import { apiPost } from './apiBase.fetch';
 
 export async function Register(
     email: string,
@@ -10,4 +10,8 @@ export async function Register(
         username: username,
         password: password,
     });
+}
+
+export async function apiRefreshToken<T>(refreshToken: string): Promise<T> {
+    return await apiPost<T>('auth/refresh', '', refreshToken);
 }

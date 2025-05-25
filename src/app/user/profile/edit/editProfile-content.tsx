@@ -11,7 +11,8 @@ import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
 import Input from '@/lib/my_custom_components/inputs/input.Form.component';
-import { apiGet, apiPostForImage, apiPut } from '@/utils/handlerHelpers';
+import { apiGet, apiPut } from '@/utils/fetch/apiBase.fetch';
+import { apiPostForImage } from '@/utils/fetch/image.fetch';
 import { Dialog } from '@radix-ui/react-dialog';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
@@ -159,7 +160,7 @@ export default function EditProfileContent() {
         );
 
     return (
-        <div className="mx-4 w-full">
+        <div className="px-4 mb-4 w-full">
             <div className={`flex flex-col gap-1`}>
                 <section
                     className={`w-56 h-56 rounded-5 overflow-hidden bg-tinted_gray_600 ${

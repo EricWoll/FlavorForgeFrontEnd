@@ -2,13 +2,6 @@
 
 import { useUserContext } from '@/contexts/User.context';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
-import {
-    apiDelete,
-    apiGet,
-    apiPost,
-    apiPostForImage,
-    apiPut,
-} from '@/utils/handlerHelpers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -19,6 +12,13 @@ import SortableDnDContainer from '@/lib/my_custom_components/dragNdrop/sortableC
 import { nanoid } from 'nanoid';
 import SortableItemDnD from '@/lib/my_custom_components/dragNdrop/sortableItem.dragNdrop.component';
 import { GripVerticalIcon, X } from 'lucide-react';
+import {
+    apiDelete,
+    apiGet,
+    apiPost,
+    apiPut,
+} from '@/utils/fetch/apiBase.fetch';
+import { apiPostForImage } from '@/utils/fetch/image.fetch';
 
 interface DirectionItem {
     id: string;
@@ -31,7 +31,9 @@ interface IngredientWithId extends Ingredients {
 
 export default function EditRecipePageContent() {
     const searchParams = useSearchParams();
+
     const recipeId = searchParams.get('id');
+
     const UserContext = useUserContext();
     const Router = useRouter();
 
@@ -209,7 +211,7 @@ export default function EditRecipePageContent() {
         );
 
     return (
-        <div className="mx-4 w-full">
+        <div className="px-4 max-w-5xl w-full ml-auto mr-auto">
             <EditRecipePageHeader
                 recipe={recipe}
                 setRecipe={setRecipe}

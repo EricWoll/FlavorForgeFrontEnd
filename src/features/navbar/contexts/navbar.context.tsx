@@ -1,91 +1,71 @@
 'use client';
 
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useUserContext } from '@/contexts/User.context';
-import useWindow, {
-    MaxMediumWindowWidth,
-    MaxSmallWindowWidth,
-    WindowSizes,
-    WindowSizesType,
-} from '@/hooks/useWindow.hook';
-import { Session } from 'next-auth';
-import {
-    createContext,
-    Dispatch,
-    ReactNode,
-    SetStateAction,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
+import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
+
+export type NavMode = 'expanded' | 'icons' | 'collapsed';
 
 export interface INavBarContext {
-    isNavOpen: boolean;
-    setIsNavOpen: Dispatch<SetStateAction<boolean>>;
+    navMode: NavMode;
+    setNavMode: React.Dispatch<React.SetStateAction<NavMode>>;
     isMobile: boolean;
-    setIsMobile: Dispatch<SetStateAction<boolean>>;
     isLoggedIn: boolean;
+    toggleNav: () => void;
 }
 
-const defaultNavBarContext: INavBarContext = {
-    isNavOpen: false,
-    setIsNavOpen: () => {},
+const defaultContext: INavBarContext = {
+    navMode: 'expanded',
+    setNavMode: () => {},
     isMobile: false,
-    setIsMobile: () => {},
     isLoggedIn: false,
+    toggleNav: () => {},
 };
 
-export const NavBarContext =
-    createContext<INavBarContext>(defaultNavBarContext);
+export const NavBarContext = createContext<INavBarContext>(defaultContext);
 
-export const NavBarProvider = ({
-    children,
-}: {
-    children: ReactNode;
-}): React.JSX.Element => {
+export const NavBarProvider = ({ children }: { children: React.ReactNode }) => {
     const Window = useWindow();
-    const UserContext = useUserContext();
-
-    const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
-    const [isMobile, setIsMobile] = useState<boolean>(true);
-
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
-        UserContext.user?.id ? true : false
-    );
+    const { user, loading } = useUserContext();
+    const [navMode, setNavMode] = useState<NavMode>('collapsed');
+    const [isMobile, setIsMobile] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        if (UserContext.loading) return;
-        setIsLoggedIn(UserContext.user?.id ? true : false);
-    }, [UserContext.user?.id]);
+        if (!loading) {
+            setIsLoggedIn(!!user?.id);
+        }
+    }, [user?.id, loading]);
 
     useEffect(() => {
-        const handleResize = () => {
-            if (Window.windowSize.match(WindowSizes.SMALL)) {
-                setIsMobile(true);
-                setIsNavOpen(false);
-            } else if (Window.windowSize.match(WindowSizes.MEDIUM)) {
-                setIsNavOpen(false);
-                setIsMobile(false);
-            } else {
-                setIsNavOpen(true);
-                setIsMobile(false);
-            }
+        const windowResized = () => {
+            if (!Window.windowSize) return;
+
+            const isSmall = Window.windowSize === WindowSizes.SMALL;
+            const isLarge = Window.windowSize === WindowSizes.LARGE;
+            setIsMobile(isSmall);
+            setNavMode(isLarge ? 'expanded' : isSmall ? 'collapsed' : 'icons');
         };
-        handleResize();
+
+        windowResized();
 
         if (typeof window !== 'undefined') {
-            window.addEventListener('resize', handleResize);
-
-            return () => window.removeEventListener('resize', handleResize);
+            window.addEventListener('resize', windowResized);
+            return () => window.removeEventListener('resize', windowResized);
         }
     }, [Window.windowSize]);
 
-    const value: INavBarContext = {
-        isNavOpen,
-        setIsNavOpen,
-        isMobile,
-        setIsMobile,
-        isLoggedIn,
+    const toggleNav = () => {
+        if (isMobile) {
+            setNavMode((prev) =>
+                prev === 'collapsed' ? 'expanded' : 'collapsed'
+            );
+        } else {
+            setNavMode((prev) => (prev === 'expanded' ? 'icons' : 'expanded'));
+        }
     };
+
+    const value = { navMode, setNavMode, isMobile, isLoggedIn, toggleNav };
 
     return (
         <NavBarContext.Provider value={value}>
@@ -94,4 +74,4 @@ export const NavBarProvider = ({
     );
 };
 
-export const useNavBarContext = (): INavBarContext => useContext(NavBarContext);
+export const useNavBarContext = () => useContext(NavBarContext);

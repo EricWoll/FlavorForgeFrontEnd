@@ -26,7 +26,18 @@ export default function RecipeSearchPage() {
 
     return (
         <div className="grow w-full">
-            <RecipeContainer recipeList={SearchContext.searchData} />
+            {SearchContext.searchData == null ||
+            SearchContext.searchData.length < 1 ? (
+                <p className="text-tinted_gray_500 italic mt-4 text-center select-none cursor-default text-xl">
+                    No Recipes found
+                    {SearchContext.searchData == null
+                        ? '!'
+                        : ` for ${SearchContext.searchText}`}
+                    !
+                </p>
+            ) : (
+                <RecipeContainer recipeList={SearchContext.searchData} />
+            )}
         </div>
     );
 }

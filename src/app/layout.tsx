@@ -11,7 +11,7 @@ import Footer from '@/app/footer.component';
 import { SearchProvider } from '@/contexts/search.context';
 import { NavBarProvider } from '@/features/navbar/contexts/navbar.context';
 import QueryClientWrapper from '@/contexts/queryClient.Provider';
-import { NavBarLarge } from '@/features/navbar/components/container.navbar.component';
+import NavBar from '@/features/navbar/components/container.navbar.component';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -30,6 +30,7 @@ export default async function RootLayout({
     children,
 }: RootLayoutProps): Promise<JSX.Element> {
     const session = await getServerSession(authOptions);
+
     return (
         <ClientSessionProvider session={session}>
             <QueryClientWrapper>
@@ -37,13 +38,12 @@ export default async function RootLayout({
                     <NavBarProvider>
                         <SearchProvider>
                             <html lang="en">
-                                <body className="min-h-screen flex flex-col gap-x-2 bg-body-background font-roboto bg-tinted_gray_700">
+                                <body className="min-h-screen flex flex-col font-roboto bg-tinted_gray_700">
                                     <Header />
-                                    <main className="flex flex-nowrap grow m-2 gap-2">
-                                        <NavBarLarge />
+                                    <main className="flex flex-grow mt-2 gap-2 min-h-0 overflow-visible">
+                                        <NavBar />
                                         {children}
                                     </main>
-                                    <Footer />
                                 </body>
                             </html>
                         </SearchProvider>

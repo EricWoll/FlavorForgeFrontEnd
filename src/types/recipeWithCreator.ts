@@ -10,5 +10,5 @@ type RecipeWithCreator = {
     steps: Array<string>;
     likesCount: number;
     viewsCount: number;
-    isLiked: boolean;
+    liked: boolean;
 };

@@ -10,8 +10,9 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { useUserContext } from '@/contexts/User.context';
+import FollowTile from '@/features/tiles/components/subscribe.tile.component';
 import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
-import { apiGet } from '@/utils/handlerHelpers';
+import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import formatNumber from '@/utils/numberFormatter';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -27,7 +28,6 @@ export default function FollowedCreatorsContent() {
                 undefined,
                 UserContext.user?.token
             ),
-        refetchOnMount: false,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         enabled: !!UserContext.user?.id && !UserContext.loading,
@@ -92,12 +92,12 @@ export default function FollowedCreatorsContent() {
                                         </TableCell>
                                         <TableCell>
                                             {creator.followed && (
-                                                <p
-                                                    className="bg-red-600 w-fit h-fit px-2 py-1 text-xs rounded-5 text-white cursor-pointer select-none hover:shadow-gray-sm active:shadow-inset-gray-sm"
-                                                    onClick={() => {}}
-                                                >
-                                                    Followed
-                                                </p>
+                                                <FollowTile
+                                                    isFollowed={
+                                                        creator.followed
+                                                    }
+                                                    creatorId={creator.userId}
+                                                />
                                             )}
                                         </TableCell>
                                     </TableRow>

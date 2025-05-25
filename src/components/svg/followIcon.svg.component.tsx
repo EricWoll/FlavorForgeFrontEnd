@@ -1,32 +1,37 @@
-import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
+import { FC } from 'react';
 
-export default function FollowIcon({
-    isFollowed,
-    isDisabled = false,
-}: {
+interface FollowIconProps {
     isFollowed: boolean;
     isDisabled?: boolean;
-}) {
+}
+
+const FollowIcon: FC<FollowIconProps> = ({
+    isFollowed,
+    isDisabled = false,
+}) => {
+    const width = isFollowed ? 90 : 66;
+    const viewBox = `0 0 ${width} 23`;
+
     return (
-        <div className={`relative h-fit`}>
+        <div className="relative h-fit w-fit">
             {!isDisabled && (
                 <svg
-                    width={isFollowed ? '90' : '66'}
+                    width={width}
                     height="23"
-                    viewBox={isFollowed ? '0 0 90 23' : '0 0 66 23'}
+                    viewBox={`0 0 ${width} 23`}
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <rect
-                        width={isFollowed ? '90' : '66'}
+                        width={width}
                         height="23"
                         rx="6"
-                        fill="url(#paint0_linear_104_8294)"
+                        fill="url(#followGradient)"
                     />
                     <defs>
                         <linearGradient
-                            id="paint0_linear_104_8294"
-                            x1={isFollowed ? '90' : '66'}
+                            id="followGradient"
+                            x1={width}
                             y1="11.5"
                             x2="0"
                             y2="11.5"
@@ -41,14 +46,16 @@ export default function FollowIcon({
                 </svg>
             )}
             <p
-                className={`flex w-full items-center justify-center  text-white_1_000 font-bold select-none ${
+                className={`${
                     isDisabled
                         ? 'bg-tinted_gray_600 text-tinted_gray_700 rounded-md px-1'
-                        : 'absolute top-0'
-                }`}
+                        : 'absolute inset-0'
+                } flex items-center justify-center font-bold select-none text-white_1_000`}
             >
                 {isFollowed ? 'UnFollow' : 'Follow'}
             </p>
         </div>
     );
-}
+};
+
+export default FollowIcon;

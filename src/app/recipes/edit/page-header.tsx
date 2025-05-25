@@ -25,8 +25,8 @@ export default function EditRecipePageHeader({
     };
 
     return (
-        <div className="flex justify-center w-full px-4">
-            <section className="flex flex-nowrap gap-4 w-full max-w-5xl">
+        <div className="flex w-full">
+            <section className="flex flex-wrap gap-4 w-full">
                 <div className="flex flex-col gap-1">
                     {recipe != undefined &&
                     recipe?.recipeImageId != 'none' &&

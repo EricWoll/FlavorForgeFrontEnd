@@ -46,7 +46,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex flex-col mx-4 grow items-center justify-center">
+        <div className="flex flex-col gap-4 px-4 grow h-full items-center justify-center">
             <h2 className="text-3xl select-none text-center cursor-default text-tinted_gray_300">
                 Sign In
             </h2>
@@ -119,7 +119,7 @@ export default function LoginPage() {
                     </Button.Hover>
                     <section className="flex flex-row gap-1 items-center text-xs my-2 justify-center">
                         <p className="text-tinted_gray_500 select-none">
-                            Don't have an account?
+                            Don&apos;t have an account?
                         </p>
                         <Button.Link
                             className="text-red-400"
