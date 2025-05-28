@@ -41,6 +41,13 @@ export default async function RootLayout({
                             <html lang="en">
                                 <head>
                                     {/* Google AdSense script */}
+                                    <meta
+                                        name="google-adsense-account"
+                                        content={
+                                            process.env
+                                                .NEXT_PUBLIC_ADSENSE_CLIENT
+                                        }
+                                    ></meta>
                                     <Script
                                         id="adsense-script"
                                         strategy="afterInteractive"
