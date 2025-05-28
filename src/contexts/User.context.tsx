@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface IUserContext {
-    user: IUserContextPublic | null;
+    user: UserContextPublic | null;
     loading: boolean;
 }
 
@@ -21,7 +21,7 @@ export const UserProvider = ({
     children: React.ReactNode;
 }): React.JSX.Element => {
     const { data: session, status } = useSession();
-    const [user, setUser] = useState<IUserContextPublic | null>(null);
+    const [user, setUser] = useState<UserContextPublic | null>(null);
 
     useEffect(() => {
         if (status === 'authenticated' && session?.user) {

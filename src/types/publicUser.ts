@@ -1,8 +1,8 @@
-interface PublicUser {
-    userId: string | null;
+type PublicUser = {
+    userId: string;
     username: string;
     imageId: string;
     followerCount: number;
     aboutText: string;
-    role: string;
-}
+    followed: boolean;
+};

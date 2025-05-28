@@ -1,4 +1,4 @@
-interface IIngredients {
-    name: string;
-    amount: string;
-}
+type Ingredients = {
+    ingredientName: string | null;
+    amount: string | null;
+};

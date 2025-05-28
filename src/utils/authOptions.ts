@@ -1,17 +1,17 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtDecode } from 'jwt-decode';
-import { apiPost, apiRefreshToken } from './fetchHelpers';
+
 import { NextAuthOptions, Session } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
+import { apiRefreshToken } from './fetch/auth.fetch';
+import { apiPost } from './fetch/apiBase.fetch';
 
 async function refreshAccessToken(token: any): Promise<any> {
     try {
-        const res = await apiRefreshToken(token.refreshToken);
-        if (!res.ok) {
-            throw new Error('Refresh Token error');
-        }
+        const newTokens = await apiRefreshToken<UserContextPrivate>(
+            token.refreshToken
+        );
 
-        const newTokens = await res.json();
         const decodedToken = jwtDecode(newTokens.accessToken);
         return {
             ...token,
@@ -41,7 +41,8 @@ export const authOptions: NextAuthOptions = {
         },
     },
     pages: {
-        signIn: '/auth',
+        signIn: '/auth/login',
+        error: '/auth/login',
     },
     providers: [
         CredentialsProvider({
@@ -56,13 +57,15 @@ export const authOptions: NextAuthOptions = {
             async authorize(credentials) {
                 if (!credentials) throw new Error('Missing credentials');
 
-                const res = await apiPost('auth/login', credentials);
-                const user = await res.json();
-                // console.log(user);
-                if (res.ok && user) {
+                const user = await apiPost<UserContextPrivate>(
+                    'auth/login',
+                    credentials
+                );
+
+                if (user && user.accessToken) {
                     return {
                         id: user.id,
-                        userId: user.userId, // Added this explicitly for clarity
+                        userId: user.userId,
                         username: user.username,
                         email: user.email,
                         imageId: user.imageId,
@@ -71,6 +74,7 @@ export const authOptions: NextAuthOptions = {
                         refreshToken: user.refreshToken,
                     };
                 }
+
                 return null;
             },
         }),

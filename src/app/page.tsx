@@ -1,71 +1,44 @@
 'use client';
 
-import RecipeCard from '@/components/Cards/recipe.Card.component';
-import SearchBar from '@/components/searchBar.component';
-import { apiGet } from '@/utils/fetchHelpers';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useUserContext } from '@/contexts/User.context';
+import RecipeContainer from '@/features/cards/components/recipeContainer.component';
+import { apiGet } from '@/utils/fetch/apiBase.fetch';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function Home() {
-    const Search = useSearchParams();
+    const { user } = useUserContext();
 
-    const [recipes, setRecipes] = useState<Array<RecipeCard>>([]);
-    const [searchParam, setSearchParam] = useState<string>(
-        Search.get('search') || ''
-    );
-    const [noSearch, setNoSearch] = useState<boolean>(false);
-    const [pageLoading, setPageLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const { isPending, error, data } = useQuery<RecipeWithCreator[]>({
+        queryKey: ['home_recipes', user?.id],
+        queryFn: () =>
+            apiGet<RecipeWithCreator[]>(
+                'recipes/search',
+                new URLSearchParams({ user_id: user?.id ?? '' }).toString(),
+                user?.token ?? null
+            ),
+        staleTime: Infinity,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+    });
 
-    useEffect(() => {
-        const getRecipes = async () => {
-            try {
-                setPageLoading(true);
-                if ((searchParam == null || searchParam == '') && !noSearch) {
-                    setRecipes(
-                        await apiGet('search/recipes', 'pageAmount=10').then(
-                            (res) => res.json()
-                        )
-                    );
-                    setNoSearch(true);
-                } else {
-                    setRecipes(
-                        await apiGet(`search/recipes/${searchParam}`).then(
-                            (res) => res.json()
-                        )
-                    );
-                    setNoSearch(false);
-                }
-            } catch (error) {
-                setError('Error loading Recipes. Please try again later.');
-            } finally {
-                setPageLoading(false);
-            }
-        };
-        getRecipes();
-    }, [searchParam]);
+    if (isPending)
+        return (
+            <div className="grow w-full">
+                <p>Loading recipes...</p>
+            </div>
+        );
 
-    if (pageLoading) {
-        return <div>Loading Recipe...</div>;
-    }
-
-    if (error) {
-        return <div className="error-message">{error}</div>;
-    }
+    if (error)
+        return (
+            <div className="grow w-full">
+                <p>An Error Occurred: {error.message}</p>
+            </div>
+        );
 
     return (
-        <div className="grow">
-            <SearchBar
-                searchParam={searchParam}
-                setSearchParam={setSearchParam}
-            />
-            <div className="grow flex flex-wrap m-5 gap-4 justify-center">
-                {recipes.map((cardInfo: RecipeCard) => {
-                    return (
-                        <RecipeCard key={cardInfo.recipeId} card={cardInfo} />
-                    );
-                })}
-            </div>
+        <div className="grow w-full">
+            <RecipeContainer recipeList={data} />
         </div>
     );
 }
