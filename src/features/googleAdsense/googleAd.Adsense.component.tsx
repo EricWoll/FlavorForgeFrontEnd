@@ -15,7 +15,7 @@ export default function GoogleAdFixed({ adSlot, width, height }: Props) {
     useEffect(() => {
         if (!pushedRef.current && adRef.current) {
             try {
-                // @ts-ignore
+                // @ts-expect-error: Adsense global object is injected externally and not typed
                 (window.adsbygoogle = window.adsbygoogle || []).push({});
                 pushedRef.current = true;
             } catch (e) {
