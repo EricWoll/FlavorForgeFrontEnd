@@ -17,7 +17,7 @@ export async function updateImage(
 ) {
     if (token) {
         await apiPostForImage(
-            'images',
+            'images/upload',
             file,
             objectKey,
             newObjectKey,

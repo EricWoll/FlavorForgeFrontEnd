@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sheet';
 
 import MenuIcon from '@/components/svg/menuIcon.svg.component';
-import { HomeIcon, NotebookIcon, ContactIcon } from 'lucide-react';
+import { HomeIcon, NotebookIcon, ContactIcon, Heart } from 'lucide-react';
 import NavItem from './item.navbar.component';
 import { useMemo } from 'react';
 
@@ -42,6 +42,13 @@ export default function NavBar() {
                 href: '/user/followed',
                 icon: <ContactIcon className="w-6 h-6 shrink-0" />,
                 displayText: 'Followed Creators',
+                isShown: isLoggedIn,
+                userId: user?.id,
+            },
+            {
+                href: '/user/liked',
+                icon: <Heart className="w-6 h-6 shrink-0" />,
+                displayText: 'Liked Recipes',
                 isShown: isLoggedIn,
                 userId: user?.id,
             },

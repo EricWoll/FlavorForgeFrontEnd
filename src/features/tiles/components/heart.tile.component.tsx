@@ -33,13 +33,13 @@ export default function HeartTile({
             if (isDisabled || (!user?.id && !user?.token) || loading) return;
             if (liked) {
                 return await await apiPost(
-                    `recipes/liked/${user.id}?recipe_id=${recipeId}`,
+                    `recipes/liked/add/${user.id}?recipe_id=${recipeId}`,
                     undefined,
                     user.token
                 );
             } else {
                 return await apiDelete(
-                    `recipes/liked/${user.id}?recipe_id=${recipeId}`,
+                    `recipes/liked/delete/${user.id}?recipe_id=${recipeId}`,
                     user.token
                 );
             }

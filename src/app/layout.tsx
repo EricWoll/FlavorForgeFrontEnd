@@ -12,6 +12,7 @@ import { SearchProvider } from '@/contexts/search.context';
 import { NavBarProvider } from '@/features/navbar/contexts/navbar.context';
 import QueryClientWrapper from '@/contexts/queryClient.Provider';
 import NavBar from '@/features/navbar/components/container.navbar.component';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -38,6 +39,20 @@ export default async function RootLayout({
                     <NavBarProvider>
                         <SearchProvider>
                             <html lang="en">
+                                <head>
+                                    {/* Google AdSense script */}
+                                    <Script
+                                        id="adsense-script"
+                                        strategy="afterInteractive"
+                                        async
+                                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+                                        data-ad-client={
+                                            process.env
+                                                .NEXT_PUBLIC_ADSENSE_CLIENT
+                                        }
+                                        crossOrigin="anonymous"
+                                    />
+                                </head>
                                 <body className="min-h-screen flex flex-col font-roboto bg-tinted_gray_700">
                                     <Header />
                                     <main className="flex flex-grow mt-2 gap-2 min-h-0 overflow-visible">

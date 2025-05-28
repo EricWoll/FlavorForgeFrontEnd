@@ -24,7 +24,7 @@ export default function FollowedCreatorsContent() {
         queryKey: ['creator_followed'],
         queryFn: () =>
             apiGet<Array<PublicUser>>(
-                `users/followed/${UserContext.user?.id}`,
+                `users/followed/search/${UserContext.user?.id}`,
                 undefined,
                 UserContext.user?.token
             ),

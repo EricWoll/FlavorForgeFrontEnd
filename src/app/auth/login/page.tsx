@@ -83,6 +83,7 @@ export default function LoginPage() {
                         type={showPassword ? 'text' : 'password'}
                         value={passwordInput}
                         placeholder={showPassword ? 'Password' : '********'}
+                        autoComplete="on"
                         onChange={(
                             event: React.ChangeEvent<HTMLInputElement>
                         ) => setPasswordInput(event.target.value)}

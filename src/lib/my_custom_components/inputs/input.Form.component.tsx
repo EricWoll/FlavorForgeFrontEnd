@@ -32,6 +32,7 @@ interface FormInputProps {
     trailingIcon?: React.ReactNode;
     onLeadingIconClick?: React.MouseEventHandler<HTMLSpanElement>;
     onTrailingIconClick?: React.MouseEventHandler<HTMLSpanElement>;
+    autoComplete?: React.HTMLInputAutoCompleteAttribute | undefined;
 }
 
 /**
@@ -61,6 +62,7 @@ interface FormInputProps {
  * @param trailingIcon - Optional icon after input
  * @param onLeadingIconClick - Click handler for leading icon (if present)
  * @param onTrailingIconClick - Click handler for trailing icon (if present)
+ * @param autoComplete - Sets if the input have auto Complete and what type, Off by default.
  *
  * @returns JSX.Element - A styled input or textarea component
  */
@@ -189,6 +191,7 @@ const Input = forwardRef<
                         value={props.value}
                         ref={ref as React.Ref<HTMLInputElement>}
                         className={baseClass}
+                        autoComplete={props.autoComplete}
                         onKeyDown={handleKeyDown}
                     />
                 )}

@@ -29,13 +29,13 @@ export default function FollowTile({
             if (isDisabled || (!user?.id && !user?.token)) return;
             if (followed) {
                 return await apiPost(
-                    `users/followed/${user.id}?creator_id=${creatorId}`,
+                    `users/followed/add/${user.id}?creator_id=${creatorId}`,
                     undefined,
                     user.token
                 );
             } else {
                 return await apiDelete(
-                    `users/followed/${user.id}?creator_id=${creatorId}`,
+                    `users/followed/delete/${user.id}?creator_id=${creatorId}`,
                     user.token
                 );
             }
