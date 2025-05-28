@@ -30,7 +30,9 @@ export default function RecipePage() {
             apiGet<RecipeWithCreator>(
                 `recipes/search/${encodeURIComponent(recipeId!)}${
                     user?.id ? `?user_id=${user.id}` : ''
-                }`
+                }`,
+                undefined,
+                user?.token ?? null
             ),
         enabled: !!recipeId && !loading,
         refetchOnMount: false,

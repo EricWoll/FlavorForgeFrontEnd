@@ -1,7 +1,7 @@
 export async function apiGet<T>(
     url: string,
     requestContent?: string,
-    authToken?: string,
+    authToken?: string | null,
     cache: 'default' | 'no-store' = 'default',
     responseType: 'json' | 'blob' | 'arrayBuffer' = 'json'
 ): Promise<T> {

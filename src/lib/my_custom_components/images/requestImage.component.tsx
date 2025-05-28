@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import LoadingCircle from '@/features/loading/components/loadingCircle.component';
 import clsx from 'clsx';
+import { useUserContext } from '@/contexts/User.context';
 
 interface ImageRequestProps {
     filename: string;
@@ -26,6 +27,7 @@ export default function ImageRequest({
     paddingY_NoImage,
     loadingDisplay = <LoadingCircle />,
 }: ImageRequestProps): ReactNode {
+    const { user } = useUserContext();
     const [imageUrl, setImageUrl] = useState<string>('');
 
     const {
@@ -39,7 +41,7 @@ export default function ImageRequest({
             return await apiGet<Blob>(
                 'images',
                 `filename=${filename}`,
-                undefined,
+                user?.token ?? null,
                 'default',
                 'blob'
             );

@@ -50,7 +50,8 @@ export default function CreatorsPage() {
                 new URLSearchParams({
                     creator_id: creatorId ?? '',
                     user_id: user?.id ?? '',
-                }).toString()
+                }).toString(),
+                user?.token ?? null
             ),
         enabled: !!creatorId,
         refetchOnMount: true,

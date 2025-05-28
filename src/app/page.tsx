@@ -6,7 +6,6 @@ import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function Home() {
-    const queryClient = useQueryClient();
     const { user } = useUserContext();
 
     const { isPending, error, data } = useQuery<RecipeWithCreator[]>({
@@ -14,7 +13,8 @@ export default function Home() {
         queryFn: () =>
             apiGet<RecipeWithCreator[]>(
                 'recipes/search',
-                new URLSearchParams({ user_id: user?.id ?? '' }).toString()
+                new URLSearchParams({ user_id: user?.id ?? '' }).toString(),
+                user?.token ?? null
             ),
         staleTime: Infinity,
         refetchOnMount: false,
