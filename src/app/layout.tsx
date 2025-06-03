@@ -1,18 +1,15 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-import { getServerSession } from 'next-auth';
-import ClientSessionProvider from '@/contexts/session.Provider';
-import { UserProvider } from '@/contexts/User.context';
-import { authOptions } from '@/utils/authOptions';
-
-import Header from '@/app/header.component';
-import Footer from '@/app/footer.component';
-import { SearchProvider } from '@/contexts/search.context';
-import { NavBarProvider } from '@/features/navbar/contexts/navbar.context';
+import { SearchProvider } from '@/features/searchbar/context/search.context';
 import QueryClientWrapper from '@/contexts/queryClient.Provider';
-import NavBar from '@/features/navbar/components/container.navbar.component';
 import Script from 'next/script';
+
+import { ClerkProvider } from '@clerk/nextjs';
+import { SidebarNav } from '@/features/navbar/component/navbar.sidebar.component';
+import SearchBar from '@/features/searchbar/component/searchbar';
+import { ThemeProvider } from 'next-themes';
+import Header from '@/features/header/components/header.component';
 
 export const metadata: Metadata = {
     title: 'Flavor Forge',
@@ -20,7 +17,9 @@ export const metadata: Metadata = {
     description: 'A place for you to find and store food recipes!',
     generator: 'NextJs',
     keywords: ['recipe', 'food', 'chef'],
-    icons: null,
+    icons: {
+        icon: '/favicon.ico',
+    },
 };
 
 interface RootLayoutProps {
@@ -30,37 +29,37 @@ interface RootLayoutProps {
 export default async function RootLayout({
     children,
 }: RootLayoutProps): Promise<JSX.Element> {
-    const session = await getServerSession(authOptions);
-
     return (
-        <ClientSessionProvider session={session}>
+        <ClerkProvider>
             <QueryClientWrapper>
-                <UserProvider>
-                    <NavBarProvider>
-                        <SearchProvider>
-                            <html lang="en">
-                                <head>
-                                    {/* Google AdSense script */}
-                                    <Script
-                                        id="adsense-script"
-                                        strategy="afterInteractive"
-                                        async
-                                        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
-                                        crossOrigin="anonymous"
-                                    />
-                                </head>
-                                <body className="min-h-screen flex flex-col font-roboto bg-tinted_gray_700">
+                <SearchProvider>
+                    <html lang="en" suppressHydrationWarning>
+                        <head>
+                            <Script
+                                id="adsense-script"
+                                strategy="afterInteractive"
+                                async
+                                src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
+                                crossOrigin="anonymous"
+                            />
+                        </head>
+                        <body className="min-h-screen w-full flex flex-row font-roboto bg-tinted_gray_700 p-0 m-0 ">
+                            <ThemeProvider
+                                attribute="class"
+                                defaultTheme="system"
+                                enableSystem
+                            >
+                                <SidebarNav />
+                                <main className="w-full h-full flex flex-col gap-4 p-0 m-0 mt-4">
+                                    <SearchBar />
                                     <Header />
-                                    <main className="flex flex-grow mt-2 gap-2 min-h-0 overflow-visible">
-                                        <NavBar />
-                                        {children}
-                                    </main>
-                                </body>
-                            </html>
-                        </SearchProvider>
-                    </NavBarProvider>
-                </UserProvider>
+                                    {children}
+                                </main>
+                            </ThemeProvider>
+                        </body>
+                    </html>
+                </SearchProvider>
             </QueryClientWrapper>
-        </ClientSessionProvider>
+        </ClerkProvider>
     );
 }

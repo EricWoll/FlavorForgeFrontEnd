@@ -14,19 +14,6 @@ module.exports = {
         },
         extend: {
             colors: {
-                tinted_gray_100: '#353E47',
-                tinted_gray_300: '#4C5966',
-                tinted_gray_500: '#6F7D8A',
-                tinted_gray_600: '#939EA7',
-                tinted_gray_700: '#DFE6ED',
-                green_400: '#4C7C81',
-                green_500: '#62A388',
-                green_800: '#D3DFEA',
-                red_400: '#733C49',
-                red_500: '#CA2C3F',
-                red_700: '#FE7847',
-                black_1_000: '#000000',
-                white_1_000: '#FFFFFF',
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
                 card: {

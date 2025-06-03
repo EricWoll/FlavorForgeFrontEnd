@@ -1,10 +1,9 @@
 'use client';
 
 import FollowIcon from '@/components/svg/followIcon.svg.component';
-import HeartIcon from '@/components/svg/heartIcon.svg.component';
-import { useUserContext } from '@/contexts/User.context';
 import { Button } from '@/lib/my_custom_components/buttons/button.component';
 import { apiDelete, apiPost } from '@/utils/fetch/apiBase.fetch';
+import { useSession, useUser } from '@clerk/nextjs';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { MouseEventHandler, useCallback, useState } from 'react';
@@ -18,7 +17,9 @@ export default function FollowTile({
     isDisabled?: boolean;
     creatorId: string;
 }) {
-    const { user } = useUserContext();
+    const { user, isLoaded } = useUser();
+    const { session, isSignedIn } = useSession();
+
     const [isCreatorFollowed, setIsCreatorFollowed] = useState<boolean>(
         isFollowed || false
     );
@@ -26,17 +27,22 @@ export default function FollowTile({
 
     const followMutation = useMutation({
         mutationFn: async (followed: boolean) => {
-            if (isDisabled || (!user?.id && !user?.token)) return;
+            if (isDisabled || !isLoaded || !isSignedIn || !user || !session)
+                return;
+
+            const token = await session.getToken();
+            if (!token) return;
+
             if (followed) {
                 return await apiPost(
                     `users/followed/add/${user.id}?creator_id=${creatorId}`,
                     undefined,
-                    user.token
+                    token
                 );
             } else {
                 return await apiDelete(
                     `users/followed/delete/${user.id}?creator_id=${creatorId}`,
-                    user.token
+                    token
                 );
             }
         },
@@ -45,18 +51,31 @@ export default function FollowTile({
         },
         onError: (_err, followed) => {
             setIsCreatorFollowed(!followed); // revert
-            alert('Failed to toggle like.');
+            alert('Failed to toggle like.'); // change to a toast
+        },
+        onSuccess: () => {
+            alert('Recipe Liked'); // change to a toast
         },
         onSettled: () => {
             setCooldown(true);
-            setTimeout(() => setCooldown(false), 1000); // 1 seconds cooldown
+            setTimeout(() => setCooldown(false), 500); // 0.5 seconds cooldown
         },
     });
 
     const handleUserFollow = useCallback(async () => {
         if (isDisabled || cooldown || followMutation.isPending) return;
         followMutation.mutateAsync(!isCreatorFollowed);
-    }, [isDisabled, cooldown, followMutation, isCreatorFollowed]);
+    }, [
+        isDisabled,
+        cooldown,
+        followMutation.isPending,
+        isLoaded,
+        isSignedIn,
+        user,
+        session,
+        followMutation.mutateAsync, // Here because mutation might be a new reference
+        isCreatorFollowed,
+    ]);
 
     return (
         <div

@@ -1,7 +1,7 @@
 'use client';
 
-import { useUserContext } from '@/contexts/User.context';
 import { apiDelete, apiPost } from '@/utils/fetch/apiBase.fetch';
+import { useSession, useUser } from '@clerk/nextjs';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { Heart } from 'lucide-react';
@@ -20,7 +20,9 @@ export default function HeartTile({
     recipeId,
     size = 'sm',
 }: HeartTileProps) {
-    const { user, loading } = useUserContext();
+    const { user, isLoaded } = useUser();
+    const { session, isSignedIn } = useSession();
+
     const [isRecipeLiked, setIsRecipeLiked] = useState(isLiked);
     const [cooldown, setCooldown] = useState(false);
 
@@ -30,17 +32,22 @@ export default function HeartTile({
 
     const likeMutation = useMutation({
         mutationFn: async (liked: boolean) => {
-            if (isDisabled || (!user?.id && !user?.token) || loading) return;
+            if (isDisabled || !isLoaded || !isSignedIn || !user || !session)
+                return;
+
+            const token = await session.getToken();
+            if (!token) return;
+
             if (liked) {
                 return await await apiPost(
                     `recipes/liked/add/${user.id}?recipe_id=${recipeId}`,
                     undefined,
-                    user.token
+                    token
                 );
             } else {
                 return await apiDelete(
                     `recipes/liked/delete/${user.id}?recipe_id=${recipeId}`,
-                    user.token
+                    token
                 );
             }
         },
@@ -49,18 +56,31 @@ export default function HeartTile({
         },
         onError: (_err, liked) => {
             setIsRecipeLiked(!liked); // revert
-            alert('Failed to toggle like.');
+            alert('Failed to toggle like.'); // change to a toast
+        },
+        onSuccess: () => {
+            alert('Recipe Liked'); // change to a toast
         },
         onSettled: () => {
             setCooldown(true);
-            setTimeout(() => setCooldown(false), 1000); // 1 seconds cooldown
+            setTimeout(() => setCooldown(false), 500); // 0.5 seconds cooldown
         },
     });
 
     const handleClick = useCallback(async () => {
         if (isDisabled || cooldown || likeMutation.isPending) return;
         await likeMutation.mutateAsync(!isRecipeLiked);
-    }, [isDisabled, cooldown, likeMutation, isRecipeLiked]);
+    }, [
+        isDisabled,
+        cooldown,
+        likeMutation.isPending,
+        isLoaded,
+        isSignedIn,
+        user,
+        session,
+        likeMutation.mutateAsync, // Here because mutation might be a new reference
+        isRecipeLiked,
+    ]);
 
     return (
         <div

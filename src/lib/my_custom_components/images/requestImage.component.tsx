@@ -4,9 +4,10 @@ import { ReactNode, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { apiGet } from '@/utils/fetch/apiBase.fetch';
-import LoadingCircle from '@/features/loading/components/loadingCircle.component';
+import LoadingCircle from '@/lib/my_custom_components/loading/components/loadingCircle.component';
 import clsx from 'clsx';
-import { useUserContext } from '@/contexts/User.context';
+import { useSession } from '@clerk/nextjs';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ImageRequestProps {
     filename: string;
@@ -25,9 +26,10 @@ export default function ImageRequest({
     defaultText = 'No Image',
     paddingX_NoImage,
     paddingY_NoImage,
-    loadingDisplay = <LoadingCircle />,
+    loadingDisplay = <Skeleton className="w-full h-full" />,
 }: ImageRequestProps): ReactNode {
-    const { user } = useUserContext();
+    const { session } = useSession();
+
     const [imageUrl, setImageUrl] = useState<string>('');
 
     const {
@@ -38,10 +40,13 @@ export default function ImageRequest({
         queryKey: ['image', filename],
         queryFn: async () => {
             if (filename === 'none') return null;
+
+            const token = await session?.getToken();
+
             return await apiGet<Blob>(
                 'images',
                 `filename=${filename}`,
-                user?.token ?? null,
+                token ?? null,
                 'default',
                 'blob'
             );
