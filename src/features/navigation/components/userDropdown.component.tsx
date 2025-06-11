@@ -213,7 +213,7 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
 
                 <DropdownMenuItem asChild>
                     <Link
-                        href="/user/settings"
+                        href="/settings"
                         className="cursor-pointer flex items-center w-full"
                     >
                         <Settings className="mr-2 h-4 w-4" />
@@ -221,7 +221,7 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
                     </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                     <Link
                         href="/user/notifications"
                         className="cursor-pointer flex items-center w-full"
@@ -229,7 +229,7 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
                         <Bell className="mr-2 h-4 w-4" />
                         Notifications
                     </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 <DropdownMenuSeparator />
 

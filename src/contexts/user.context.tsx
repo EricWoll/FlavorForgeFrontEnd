@@ -8,11 +8,13 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 interface IUserContext {
     user: PublicUser | null;
     loading: boolean;
+    userSignedIn: boolean | undefined;
 }
 
 const defaultUserContext: IUserContext = {
     user: null,
     loading: true,
+    userSignedIn: undefined,
 };
 
 export const UserContext = createContext<IUserContext>(defaultUserContext);
@@ -67,6 +69,7 @@ export const UserProvider = ({
     const value: IUserContext = {
         user: currentUser, // Fix: use currentUser instead of user
         loading,
+        userSignedIn: isSignedIn && userSignedIn,
     };
 
     return (

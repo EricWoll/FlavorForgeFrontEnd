@@ -35,7 +35,7 @@ export async function apiPostForImage<T>(
     objectKey: string,
     newObjectKey: string,
     updateFile: boolean,
-    authToken?: string
+    authToken?: string | null | undefined
 ): Promise<T | null> {
     const formData = new FormData();
     formData.append('image', file);

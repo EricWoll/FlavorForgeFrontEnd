@@ -61,13 +61,11 @@ export default function SearchBar({
                     aria-label={
                         searchText.trim() ? 'Search' : 'Focus search input'
                     }
-                    disabled={searchIsPending || searchIsLoading}
+                    disabled={searchIsLoading}
                 >
                     <Search
                         className={`h-4 w-4 ${
-                            searchIsPending || searchIsLoading
-                                ? 'animate-pulse'
-                                : ''
+                            searchIsLoading ? 'animate-pulse' : ''
                         }`}
                     />
                 </Button>

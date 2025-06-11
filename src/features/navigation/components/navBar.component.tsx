@@ -236,7 +236,7 @@ export default function NavBar() {
                                         handleNavItemClick('settings')
                                     }
                                 >
-                                    <Link href="/user/settings">
+                                    <Link href="/settings">
                                         <Settings
                                             className={`h-4 w-4 transition-all duration-200 ${
                                                 isCollapsed ? '' : 'mr-3'

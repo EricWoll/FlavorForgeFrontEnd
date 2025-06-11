@@ -6,13 +6,13 @@ export const NavigationItems = [
         id: 'search',
         label: 'Search Recipes',
         icon: Search,
-        href: '/search',
+        href: '/recipes/search',
     },
     {
         id: 'create',
         label: 'Create Recipe',
         icon: PlusCircle,
-        href: '/create',
+        href: '/recipes/edit',
         signedIn: true,
     },
 ];
@@ -34,14 +34,6 @@ export const RecipeItems = [
         // count: 24,
         signedIn: true,
     },
-    {
-        id: 'saved',
-        label: 'Saved Recipes',
-        icon: BookOpen,
-        href: '/recipes/saved',
-        // count: 8,
-        signedIn: true,
-    },
 ];
 
 export const SocialItems = [
@@ -51,14 +43,6 @@ export const SocialItems = [
         icon: Users,
         href: '/social/following',
         // count: 15,
-        signedIn: true,
-    },
-    {
-        id: 'followers',
-        label: 'Followers',
-        icon: Users,
-        href: '/social/followers',
-        // count: 42,
         signedIn: true,
     },
 ];

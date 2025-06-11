@@ -45,7 +45,7 @@ export async function apiGet<T>(
 export async function apiPost<T>(
     url: string,
     bodyContent: any,
-    authToken?: string
+    authToken?: string | null | undefined
 ): Promise<T> {
     const headers: { [key: string]: string } = {
         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export async function apiPost<T>(
 export async function apiPut<T>(
     url: string,
     bodyContent: any,
-    authToken?: string
+    authToken?: string | null | undefined
 ): Promise<T> {
     const headers = { 'Content-Type': 'application/json' };
 
@@ -107,7 +107,7 @@ export async function apiPut<T>(
 
 export async function apiDelete<T>(
     url: string,
-    authToken: string | undefined,
+    authToken: string | null | undefined,
     requestContent?: string
 ): Promise<T | null> {
     // note: can return null for 204 No Content
