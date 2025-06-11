@@ -1,7 +1,7 @@
 'use client';
 
-import RecipeCard from '@/features/card/component/recipe.card.component';
-import RecipeContainer from '@/features/card/component/recipe.container.component';
+import { RecipeCardContainer } from '@/features/recipes/components/RecipeCardContainer';
+import SearchBar from '@/features/search/components/searchBar.component';
 import { Input } from '@/lib/my_custom_components/inputs/input.shadcn.component';
 import { apiGet } from '@/utils/fetch/apiBase.fetch';
 import { useSession, useUser } from '@clerk/nextjs';
@@ -36,11 +36,10 @@ export default function Home() {
 
     return (
         <div className="grow w-full">
-            <RecipeContainer
-                recipeList={recipeList}
-                recipesPending={isPending}
-                recipesError={error}
-            />
+            <div className="p-2">
+                <SearchBar className="w-full" />
+            </div>
+            <RecipeCardContainer recipes={recipeList} />
         </div>
     );
 }

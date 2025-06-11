@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-export const MaxSmallWindowWidth = 640;
-export const MaxMediumWindowWidth = 1000;
+export const MaxSmallWindowWidth = 790;
+export const MaxMediumWindowWidth = 1400;
 
 export const WindowSizes = {
     SMALL: 'small',
