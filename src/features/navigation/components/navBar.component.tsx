@@ -56,7 +56,7 @@ import MobileSearchBar from '@/features/search/components/smallSearchBar.compone
 export default function NavBar() {
     const pathname = usePathname();
     const Window = useWindow();
-    const { user, loading } = useUserContext();
+    const { user, isLoading } = useUserContext();
 
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [activeItem, setActiveItem] = useState(pathname);
@@ -121,7 +121,7 @@ export default function NavBar() {
     }, [user]);
 
     // Show loading state while authentication is being determined
-    if (loading) {
+    if (isLoading) {
         return (
             <div
                 className={`bg-background border-r transition-all duration-300 ease-in-out flex-shrink-0 ${
@@ -142,7 +142,7 @@ export default function NavBar() {
     // Desktop Version - Return the sidebar only, let parent handle layout
     return (
         <div
-            className={`bg-background border-r transition-all duration-300 ease-in-out flex-shrink-0 ${
+            className={`sticky top-0 h-screen bg-background border-r transition-all duration-300 ease-in-out ${
                 isCollapsed ? 'w-16' : 'w-64'
             }`}
         >

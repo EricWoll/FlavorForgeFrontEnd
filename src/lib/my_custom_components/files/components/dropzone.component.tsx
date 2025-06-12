@@ -1,18 +1,26 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface DropzoneProps {
     className?: string;
-    size?: 'sm' | 'md' | 'lg';
+    file: File | null;
+    onFileChange: (file: File | null) => void;
 }
 
-const Dropzone: React.FC<DropzoneProps> = ({ className, size = 'lg' }) => {
+const Dropzone: React.FC<DropzoneProps> = ({
+    className,
+    file,
+    onFileChange,
+}) => {
     // Callback function to handle file drop
     const onDrop = useCallback((acceptedFiles: File[]) => {
         // Do something with the files
+        onFileChange(acceptedFiles[0]);
     }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -34,7 +42,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ className, size = 'lg' }) => {
                 {isDragActive ? (
                     <p className="text-center">Drop the files here ...</p>
                 ) : (
-                    <div className="flex flex-col items-center gap-y-3">
+                    <div className="flex flex-col items-center gap-y-3 text-center">
                         <p>
                             Drag 'n' drop some files here, or click to select
                             files

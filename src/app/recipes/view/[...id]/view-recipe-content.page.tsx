@@ -14,8 +14,7 @@ export default function ViewRecipeContentPage({
 }: {
     recipeId: string;
 }) {
-    const { getToken } = useAuth();
-    const { user, loading, userSignedIn } = useUserContext();
+    const { user, isAuthenticated, getToken } = useUserContext();
     const Window = useWindow();
 
     const isLargeWindow = Window.windowSize.match(WindowSizes.LARGE);
@@ -24,11 +23,11 @@ export default function ViewRecipeContentPage({
 
     const {
         data: recipe,
-        isLoading,
+        isPending,
         error,
-    } = useQuery({
+    } = useQuery<RecipeWithCreator, Error>({
         queryKey: ['recipe_item_search', recipeId],
-        queryFn: async () => {
+        queryFn: async (): Promise<RecipeWithCreator> => {
             const token = await getToken();
             return await apiGet<RecipeWithCreator>(
                 `recipes/search/${recipeId}`,
@@ -41,9 +40,9 @@ export default function ViewRecipeContentPage({
     });
 
     useEffect(() => {
-        if (loading && recipe) return;
+        if (isPending && recipe) return;
         setCanEdit(user?.userId === recipe?.creatorId);
-    }, [user?.userId, loading, recipe]);
+    }, [user?.userId, isPending, recipe]);
 
     if (!recipeId)
         return (
@@ -52,7 +51,7 @@ export default function ViewRecipeContentPage({
             </div>
         );
 
-    if (isLoading)
+    if (isPending)
         return (
             <div className="grow w-full">
                 <p>Loading recipe...</p>
@@ -76,18 +75,17 @@ export default function ViewRecipeContentPage({
         >
             {!isLargeWindow && (
                 <section className="w-full flex flex-col justify-end py-2">
-                    {canEdit && userSignedIn && (
+                    {canEdit && isAuthenticated && (
                         <EditButton recipeId={recipeId} />
                     )}
-                    {!canEdit && userSignedIn && (
+                    {!canEdit && isAuthenticated && (
                         <div className="mr-0 ml-auto">
                             <HeartTile
                                 isLiked={recipe.liked}
                                 recipeId={recipe.recipeId}
                                 isDisabled={
-                                    loading &&
                                     user?.userId === recipe.creatorId &&
-                                    !userSignedIn
+                                    !isAuthenticated
                                 }
                                 size="xl"
                             />
@@ -117,15 +115,14 @@ export default function ViewRecipeContentPage({
                             >
                                 {recipe.recipeName}
                             </h1>
-                            {isLargeWindow && userSignedIn && (
+                            {isLargeWindow && isAuthenticated && (
                                 <div className="w-fit h-fit mr-0 ml-auto">
                                     <HeartTile
                                         isLiked={recipe.liked}
                                         recipeId={recipe.recipeId}
                                         isDisabled={
-                                            loading &&
                                             user?.userId === recipe.creatorId &&
-                                            !userSignedIn
+                                            !isAuthenticated
                                         }
                                         size="xl"
                                     />
@@ -199,7 +196,7 @@ export default function ViewRecipeContentPage({
                 </div>
                 {/* <CommentsContainer /> */}
             </div>
-            {canEdit && userSignedIn && isLargeWindow && (
+            {canEdit && isAuthenticated && isLargeWindow && (
                 <EditButton recipeId={recipeId} />
             )}
         </div>

@@ -36,7 +36,6 @@ export default function RecipeDropdown({
     handleNavItemClick,
     isCollapsed,
 }: RecipeDropdownProps) {
-    const { user, loading } = useUserContext();
     const [recipesOpen, setRecipesOpen] = useState(false);
 
     const handleClick = (itemId: string) => {

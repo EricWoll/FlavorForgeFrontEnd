@@ -44,11 +44,13 @@ export default async function RootLayout({
                                     crossOrigin="anonymous"
                                 />
                             </head>
-                            <body className="flex h-screen">
+                            <body className="flex flex-row relative">
                                 <NavBar />
-                                <main className="w-full h-full p-0 m-0 relative">
+                                <main className="w-full min-h-screen p-0 m-0 relative">
                                     <SmallNav />
-                                    {children}
+                                    <div className="w-full flex justify-center">
+                                        {children}
+                                    </div>
                                 </main>
                             </body>
                         </html>

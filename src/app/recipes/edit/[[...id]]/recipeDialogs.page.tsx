@@ -69,8 +69,8 @@ export function IngredientsDialog(props: IngredientsDialogProps) {
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button
-                            variant={'outline'}
                             onClick={props.dialogCloseOnClick}
+                            variant={'outline'}
                         >
                             Add Amount
                         </Button>

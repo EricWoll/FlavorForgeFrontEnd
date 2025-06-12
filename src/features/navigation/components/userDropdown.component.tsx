@@ -26,12 +26,12 @@ interface UserDropdownProps {
 }
 
 export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
-    const { user, loading } = useUserContext();
+    const { user, isLoading } = useUserContext();
     const { windowSize } = useWindow();
     const isMobile = windowSize === WindowSizes.SMALL;
 
     // Show loading state
-    if (loading) {
+    if (isLoading) {
         return (
             <Button
                 variant="ghost"
@@ -68,25 +68,28 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
     // User is not signed in - show sign in button
     if (!user) {
         const signInButton = (
-            <SignInButton mode="modal">
-                <Button
-                    variant="ghost"
-                    className={`w-full transition-colors duration-200 hover:bg-accent ${
-                        isCollapsed
-                            ? 'justify-center p-2'
-                            : 'justify-start px-3 h-9'
-                    }`}
-                >
+            <Button
+                asChild
+                variant="ghost"
+                className={`w-full transition-colors duration-200 hover:bg-accent ${
+                    isCollapsed
+                        ? 'justify-center p-2'
+                        : 'justify-start px-3 h-9'
+                }`}
+            >
+                <Link href="/auth">
                     {isCollapsed ? (
                         <LogIn className="h-4 w-4" />
                     ) : (
                         <>
                             <LogIn className="h-4 w-4 mr-3 flex-shrink-0" />
-                            <span className="flex-1 text-left">Sign In</span>
+                            <span className="flex-1 text-left">
+                                Sign In / Sign Up
+                            </span>
                         </>
                     )}
-                </Button>
-            </SignInButton>
+                </Link>
+            </Button>
         );
 
         if (isCollapsed) {
@@ -95,7 +98,7 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
                     <Tooltip>
                         <TooltipTrigger asChild>{signInButton}</TooltipTrigger>
                         <TooltipContent side="right" className="ml-2">
-                            <span>Sign In</span>
+                            <span>Sign In / Sign Up</span>
                         </TooltipContent>
                     </Tooltip>
                 </TooltipProvider>

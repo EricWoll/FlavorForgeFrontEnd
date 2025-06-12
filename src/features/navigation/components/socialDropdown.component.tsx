@@ -23,7 +23,6 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import Link from 'next/link';
-import { useUserContext } from '@/contexts/user.context';
 
 interface SocialDropdownProps {
     activeItem: string;
@@ -36,7 +35,6 @@ export default function SocialDropdown({
     handleNavItemClick,
     isCollapsed,
 }: SocialDropdownProps) {
-    const { user, loading } = useUserContext();
     const [socialOpen, setSocialOpen] = useState(false);
 
     const handleClick = (itemId: string) => {

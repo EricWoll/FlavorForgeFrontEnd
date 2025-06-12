@@ -3,18 +3,26 @@
 import { PublicUser } from '@/types/publicUser';
 import { TokenInfo, UserRole } from '@/types/token';
 import { useAuth, useSession, useUser } from '@clerk/nextjs';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 
 interface IUserContext {
     user: PublicUser | null;
-    loading: boolean;
-    userSignedIn: boolean | undefined;
+    isLoading: boolean;
+    isAuthenticated: boolean | undefined;
+    getToken: () => Promise<string | null>;
 }
 
 const defaultUserContext: IUserContext = {
     user: null,
-    loading: true,
-    userSignedIn: undefined,
+    isLoading: true,
+    isAuthenticated: undefined,
+    getToken: async () => null,
 };
 
 export const UserContext = createContext<IUserContext>(defaultUserContext);
@@ -25,11 +33,13 @@ export const UserProvider = ({
     children: React.ReactNode;
 }): React.JSX.Element => {
     const { session, isSignedIn, isLoaded } = useSession();
-    const { user, isSignedIn: userSignedIn, isLoaded: userLoaded } = useUser();
-    const { sessionClaims } = useAuth();
+    const { user } = useUser();
+    const { sessionClaims, getToken } = useAuth();
 
     const [currentUser, setCurrentUser] = useState<PublicUser | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [error, setError] = useState<string | null>(null);
 
     const getFullUser = async () => {
         // Implementation for getting full user data if needed
@@ -39,38 +49,48 @@ export const UserProvider = ({
         return (sessionClaims?.userRole as UserRole) || 'ANON';
     };
 
+    const getUserToken = async (): Promise<string | null> => {
+        try {
+            const token = await getToken();
+            return token ? token : null;
+        } catch (err) {
+            setError('Failed to get token');
+            return null;
+        }
+    };
+
     useEffect(() => {
-        // Wait for both auth and user to be loaded
-        if (!isLoaded || !userLoaded) {
-            setLoading(true);
+        if (!isLoaded) {
+            setIsLoading(true);
             return;
         }
 
-        // User is signed in
-        if (isSignedIn && userSignedIn && user) {
+        if (isSignedIn && user) {
             const userRole = getUserRole();
 
             setCurrentUser({
                 userId: user.id,
-                username: user.username ?? '',
-                email: user.primaryEmailAddress?.emailAddress ?? '', // Fix: get the actual email string
+                username: user.username ?? user.firstName ?? 'Anonymous',
+                email: user.primaryEmailAddress?.emailAddress ?? '',
                 imageUrl: user.imageUrl,
                 role: userRole,
             });
-            setLoading(false);
-        }
-        // User is not signed in
-        else if (!isSignedIn || !userSignedIn) {
+        } else {
             setCurrentUser(null);
-            setLoading(false);
         }
-    }, [isLoaded, isSignedIn, userSignedIn, userLoaded, user, sessionClaims]);
 
-    const value: IUserContext = {
-        user: currentUser, // Fix: use currentUser instead of user
-        loading,
-        userSignedIn: isSignedIn && userSignedIn,
-    };
+        setIsLoading(false);
+    }, [isLoaded, isSignedIn, user, sessionClaims]);
+
+    const value: IUserContext = useMemo(
+        () => ({
+            user: currentUser,
+            isLoading: isLoading,
+            isAuthenticated: isSignedIn,
+            getToken: getUserToken,
+        }),
+        [currentUser, isLoading, isSignedIn, getUserToken]
+    );
 
     return (
         <UserContext.Provider value={value}>{children}</UserContext.Provider>

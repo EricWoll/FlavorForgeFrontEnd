@@ -26,7 +26,7 @@ import UserDropdown from './userDropdown.component';
 export default function SmallNav() {
     const pathname = usePathname();
     const Window = useWindow();
-    const { user, loading } = useUserContext();
+    const { user, isLoading } = useUserContext();
 
     const [activeItem, setActiveItem] = useState(pathname);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -72,7 +72,7 @@ export default function SmallNav() {
         return NavigationItems;
     }, [user]);
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center p-4">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
