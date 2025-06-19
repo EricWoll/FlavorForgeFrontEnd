@@ -45,14 +45,22 @@ export async function apiGet<T>(
 export async function apiPost<T>(
     url: string,
     bodyContent: any,
-    authToken?: string | null | undefined
+    authToken?: string | null | undefined,
+    extraHeaders?: Record<string, string>
 ): Promise<T> {
-    const headers: { [key: string]: string } = {
+    // Base headers are set here
+    let headers: { [key: string]: string } = {
         'Content-Type': 'application/json',
     };
 
+    // Add the authorization header if the token exists
     if (authToken) {
         headers['Authorization'] = `Bearer ${authToken}`;
+    }
+
+    // Merge extra headers (for instance, svix-id)
+    if (extraHeaders) {
+        headers = { ...headers, ...extraHeaders };
     }
 
     try {
@@ -65,7 +73,7 @@ export async function apiPost<T>(
             }
         );
 
-        // Check if the response is successful (status code in range 200-299)
+        // Check if the response was successful (status code in the 200-299 range)
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(
@@ -73,10 +81,10 @@ export async function apiPost<T>(
             );
         }
 
-        return response.json(); // Return the response if successful
+        return response.json(); // Return the JSON response if successful
     } catch (error) {
         console.error('API Post Request Failed:', error);
-        throw error; // Re-throw or return a custom error response
+        throw error; // Re-throw or handle the error as needed
     }
 }
 

@@ -9,11 +9,9 @@ import {
 } from '@/utils/fetch/apiBase.fetch';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { nanoid } from 'nanoid';
-import { apiPostForImage } from '@/utils/fetch/image.fetch';
-import RecipeHeaderPage from './recipeHeader.page';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DirectionsDialog, IngredientsDialog } from './recipeDialogs.page';
 import SortableItemDnD from '@/lib/my_custom_components/dragNdrop/sortableItem.dragNdrop.component';
@@ -22,6 +20,10 @@ import DragNDropContext from '@/lib/my_custom_components/dragNdrop/context.dragN
 import { GripVerticalIcon, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useImageUploadMutation } from '@/hooks/image-upload.hook';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import RecipeImageUploader from '@/components/custom/imageUpload.custom.component';
 
 interface RecipeEditPageContentProps {
     recipeId?: string | undefined | null;
@@ -39,7 +41,7 @@ interface IngredientWithId extends Ingredients {
 export default function RecipeEditPageContent({
     recipeId,
 }: RecipeEditPageContentProps) {
-    const { user, isLoading, isAuthenticated, getToken } = useUserContext();
+    const { user, getToken } = useUserContext();
     const Router = useRouter();
 
     const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -47,13 +49,14 @@ export default function RecipeEditPageContent({
         []
     );
     const [directionList, setDirectionList] = useState<DirectionItem[]>([]);
-    const [file, setFile] = useState<File | null>(null);
 
     const [editingIngredient, setEditingIngredient] =
         useState<Ingredients | null>(null);
     const [editingStep, setEditingStep] = useState<string | null>(null);
 
-    const newUUID = crypto.randomUUID();
+    const uploaderRef = useRef<{
+        handleUpload: () => Promise<string | null>;
+    }>(null);
 
     const {
         isPending: isRecipePending,
@@ -116,29 +119,6 @@ export default function RecipeEditPageContent({
         onError: () => alert('Failed to update recipe. Please try again.'),
     });
 
-    const imageMutation = useMutation({
-        mutationFn: async ({
-            file,
-            imageId,
-            newUUID,
-        }: {
-            file: File;
-            imageId: string;
-            newUUID: string;
-        }) => {
-            const token = await getToken();
-            return await apiPostForImage(
-                'images',
-                file,
-                imageId,
-                newUUID,
-                true,
-                token
-            );
-        },
-        onError: () => alert('Failed to upload image. Please try again.'),
-    });
-
     const deleteMutation = useMutation({
         mutationFn: async () => {
             if (recipe?.recipeId) {
@@ -164,22 +144,13 @@ export default function RecipeEditPageContent({
         }
 
         try {
-            if (file) {
-                const isUpdateImage = Boolean(
-                    recipe.recipeImageId && recipe.recipeImageId !== 'none'
-                );
-                await imageMutation.mutateAsync({
-                    file,
-                    imageId: recipe.recipeImageId || '',
-                    newUUID,
-                });
-            }
+            const uploadedImageUrl = await uploaderRef.current?.handleUpload();
 
             const updatedRecipe = {
                 ...recipe,
                 ingredients: ingredientList,
                 steps: directionList.map((d) => d.direction),
-                imageId: file ? newUUID : recipe.recipeImageId || 'none',
+                imageId: uploadedImageUrl ?? recipe.imageId, // keep previous if no new upload
             };
 
             await recipeMutation.mutateAsync(updatedRecipe);
@@ -243,12 +214,76 @@ export default function RecipeEditPageContent({
                         : 'Create New Recipe'}
                 </h1>
             </div>
-            <RecipeHeaderPage
-                recipe={recipe}
-                setRecipe={setRecipe}
-                file={file}
-                setFile={setFile}
-            />
+            {/** Make the image upload actually work */}
+            <div className="flex w-full">
+                <section className="flex flex-wrap gap-4 w-full">
+                    <div className="w-full flex flex-col gap-2">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="select-none cursor-default">
+                                    Recipe Name
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-2">
+                                <RecipeImageUploader
+                                    imageContainer={recipe}
+                                    setImageContainer={setRecipe}
+                                    ref={uploaderRef}
+                                />
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="select-non cursor-default">
+                                    Recipe Title
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <Input
+                                    id="recipeTitle"
+                                    className="placeholder:select-none"
+                                    onChange={(e) => {
+                                        setRecipe(
+                                            (prev) =>
+                                                ({
+                                                    ...(prev || {}),
+                                                    recipeName: e.target.value,
+                                                } as Recipe)
+                                        );
+                                    }}
+                                    value={recipe?.recipeName || ''}
+                                    placeholder="Recipe Title"
+                                />
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="select-none cursor-default">
+                                    Recipe Description
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-2">
+                                <Textarea
+                                    id="recipeDescription"
+                                    className="placeholder:select-none"
+                                    onChange={(e) => {
+                                        setRecipe(
+                                            (prev) =>
+                                                ({
+                                                    ...(prev || {}),
+                                                    recipeDescription:
+                                                        e.target.value,
+                                                } as Recipe)
+                                        );
+                                    }}
+                                    value={recipe?.recipeDescription || ''}
+                                    placeholder="Recipe Description"
+                                />
+                            </CardContent>
+                        </Card>
+                    </div>
+                </section>
+            </div>
             {/* Ingredients Section */}
             <Card className="my-2">
                 <CardHeader title="Ingredients">
@@ -413,13 +448,9 @@ export default function RecipeEditPageContent({
                 <Button
                     className="w-full"
                     onClick={handleSubmit}
-                    disabled={
-                        recipeMutation.isPending || imageMutation.isPending
-                    }
+                    disabled={recipeMutation.isPending}
                 >
-                    {recipeMutation.isPending || imageMutation.isPending
-                        ? 'Saving...'
-                        : 'Save'}
+                    {recipeMutation.isPending ? 'Saving...' : 'Save'}
                 </Button>
                 {recipeId && (
                     <Button

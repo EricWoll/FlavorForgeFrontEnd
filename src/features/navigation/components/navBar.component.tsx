@@ -1,45 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-    Bell,
-    BookOpen,
-    ChefHat,
-    ChevronDown,
-    ChevronRight,
-    Heart,
-    Home,
-    LogOut,
-    Menu,
-    PlusCircle,
-    Search,
-    Settings,
-    User,
-    Users,
-    X,
-} from 'lucide-react';
+import { ChefHat, Menu, Settings } from 'lucide-react';
 import NavItem from './navItem.component';
 import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useEffect, useState, useCallback } from 'react';
 import { useUserContext } from '@/contexts/user.context';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
 
-import { NavigationItems, RecipeItems, SocialItems } from '../data/navItems';
+import { NavigationItems } from '../data/navItems';
 import UserDropdown from './userDropdown.component';
 import SocialDropdown from './socialDropdown.component';
 import RecipeDropdown from './recipeDropdown.component';
@@ -77,7 +47,6 @@ export default function NavBar() {
     }, [checkWindowSize]);
 
     useEffect(() => {
-        console.log('Current pathname:', pathname);
         setActiveItem(pathname);
     }, [pathname]);
 
@@ -112,7 +81,6 @@ export default function NavBar() {
         if (!user) {
             // When user is not signed in, only show items that don't require authentication
             const filtered = NavigationItems.filter((item) => !item.signedIn);
-            console.log(filtered);
             return filtered;
         }
 
@@ -250,7 +218,10 @@ export default function NavBar() {
                                     </Link>
                                 </Button>
                             </TooltipTrigger>
-                            <TooltipContent side="right" className="ml-2">
+                            <TooltipContent
+                                side="right"
+                                className="ml-2 z-[1000] relative"
+                            >
                                 <span>Settings</span>
                             </TooltipContent>
                         </Tooltip>

@@ -1,5 +1,6 @@
 'use client';
 
+import { IUserContext, useUserContext } from '@/contexts/user.context';
 import { apiDelete, apiPost } from '@/utils/fetch/apiBase.fetch';
 import { useSession, useUser } from '@clerk/nextjs';
 import { useMutation } from '@tanstack/react-query';
@@ -12,6 +13,7 @@ interface HeartTileProps {
     isDisabled?: boolean;
     recipeId: string;
     size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+    userContext: IUserContext;
 }
 
 export default function HeartTile({
@@ -19,9 +21,9 @@ export default function HeartTile({
     isDisabled = false,
     recipeId,
     size = 'sm',
+    userContext,
 }: HeartTileProps) {
-    const { user, isLoaded } = useUser();
-    const { session, isSignedIn } = useSession();
+    const { user, isLoading, isAuthenticated, getToken } = userContext;
 
     const [isRecipeLiked, setIsRecipeLiked] = useState(isLiked);
     const [cooldown, setCooldown] = useState(false);
@@ -32,21 +34,20 @@ export default function HeartTile({
 
     const likeMutation = useMutation({
         mutationFn: async (liked: boolean) => {
-            if (isDisabled || !isLoaded || !isSignedIn || !user || !session)
-                return;
+            if (isDisabled || isLoading || !isAuthenticated || !user) return;
 
-            const token = await session.getToken();
+            const token = await getToken();
             if (!token) return;
 
             if (liked) {
                 return await await apiPost(
-                    `recipes/liked/add/${user.id}?recipe_id=${recipeId}`,
+                    `recipes/liked/add/${user.userId}?recipe_id=${recipeId}`,
                     undefined,
                     token
                 );
             } else {
                 return await apiDelete(
-                    `recipes/liked/delete/${user.id}?recipe_id=${recipeId}`,
+                    `recipes/liked/delete/${user.userId}?recipe_id=${recipeId}`,
                     token
                 );
             }
@@ -74,10 +75,9 @@ export default function HeartTile({
         isDisabled,
         cooldown,
         likeMutation.isPending,
-        isLoaded,
-        isSignedIn,
+        isLoading,
+        isAuthenticated,
         user,
-        session,
         likeMutation.mutateAsync, // Here because mutation might be a new reference
         isRecipeLiked,
     ]);

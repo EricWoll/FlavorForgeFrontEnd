@@ -1,24 +1,27 @@
 'use client';
 
 import FollowIcon from '@/components/svg/followIcon.svg.component';
-import { Button } from '@/lib/my_custom_components/buttons/button.component';
+import { IUserContext } from '@/contexts/user.context';
 import { apiDelete, apiPost } from '@/utils/fetch/apiBase.fetch';
 import { useSession, useUser } from '@clerk/nextjs';
 import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { MouseEventHandler, useCallback, useState } from 'react';
 
+interface FollowTileProps {
+    isFollowed?: boolean;
+    isDisabled?: boolean;
+    creatorId: string;
+    userContext: IUserContext;
+}
+
 export default function FollowTile({
     isFollowed,
     isDisabled,
     creatorId,
-}: {
-    isFollowed?: boolean;
-    isDisabled?: boolean;
-    creatorId: string;
-}) {
-    const { user, isLoaded } = useUser();
-    const { session, isSignedIn } = useSession();
+    userContext,
+}: FollowTileProps) {
+    const { user, isLoading, isAuthenticated, getToken } = userContext;
 
     const [isCreatorFollowed, setIsCreatorFollowed] = useState<boolean>(
         isFollowed || false
@@ -27,21 +30,20 @@ export default function FollowTile({
 
     const followMutation = useMutation({
         mutationFn: async (followed: boolean) => {
-            if (isDisabled || !isLoaded || !isSignedIn || !user || !session)
-                return;
+            if (isDisabled || isLoading || !isAuthenticated || !user) return;
 
-            const token = await session.getToken();
+            const token = await getToken();
             if (!token) return;
 
             if (followed) {
                 return await apiPost(
-                    `users/followed/add/${user.id}?creator_id=${creatorId}`,
+                    `users/followed/add/${user.userId}?creator_id=${creatorId}`,
                     undefined,
                     token
                 );
             } else {
                 return await apiDelete(
-                    `users/followed/delete/${user.id}?creator_id=${creatorId}`,
+                    `users/followed/delete/${user.userId}?creator_id=${creatorId}`,
                     token
                 );
             }
@@ -69,10 +71,9 @@ export default function FollowTile({
         isDisabled,
         cooldown,
         followMutation.isPending,
-        isLoaded,
-        isSignedIn,
+        isLoading,
+        isAuthenticated,
         user,
-        session,
         followMutation.mutateAsync, // Here because mutation might be a new reference
         isCreatorFollowed,
     ]);

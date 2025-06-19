@@ -26,6 +26,20 @@ const nextConfig = {
             },
         ];
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'img.clerk.com',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'flavorforge-bucket.s3.amazonaws.com',
+                pathname: '/**',
+            },
+        ],
+    },
 };
 
 export default nextConfig;

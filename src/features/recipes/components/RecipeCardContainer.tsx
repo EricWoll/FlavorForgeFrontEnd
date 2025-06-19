@@ -1,3 +1,6 @@
+'use client';
+
+import { useUserContext } from '@/contexts/user.context';
 import { RecipeCard } from './RecipeCard';
 
 interface RecipeCardContainerProps {
@@ -5,6 +8,8 @@ interface RecipeCardContainerProps {
 }
 
 export function RecipeCardContainer({ recipes }: RecipeCardContainerProps) {
+    const userContext = useUserContext();
+
     if (!recipes || recipes.length === 0) {
         return (
             <p className="text-center text-gray-500 select-none cursor-default text-3xl">
@@ -15,7 +20,11 @@ export function RecipeCardContainer({ recipes }: RecipeCardContainerProps) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {recipes.map((recipe) => (
-                <RecipeCard key={recipe.recipeId} recipe={recipe} />
+                <RecipeCard
+                    key={recipe.recipeId}
+                    recipe={recipe}
+                    userContext={userContext}
+                />
             ))}
         </div>
     );

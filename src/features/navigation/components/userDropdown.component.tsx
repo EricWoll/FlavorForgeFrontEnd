@@ -144,9 +144,6 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
                 <p className="text-sm font-medium truncate">
                     {user.username || 'User'}
                 </p>
-                <p className="text-xs text-muted-foreground truncate">
-                    {user.role || 'No role assigned'}
-                </p>
             </div>
             <ChevronDown className="h-4 w-4 flex-shrink-0 transition-transform duration-200" />
         </Button>

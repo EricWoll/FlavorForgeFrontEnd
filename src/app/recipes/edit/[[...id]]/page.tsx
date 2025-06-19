@@ -8,9 +8,5 @@ interface Props {
 }
 
 export default async function RecipeEditPage({ params }: Props) {
-    return (
-        <Protect>
-            <RecipeEditPageContent recipeId={params.id?.[0]} />
-        </Protect>
-    );
+    return <RecipeEditPageContent recipeId={params.id?.[0]} />;
 }

@@ -33,7 +33,6 @@
         "@tanstack/react-query": "^5.74.4",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "jwt-decode": "^4.0.0",
         "lucide-react": "^0.508.0",
         "nanoid": "^5.1.5",
         "next": "^15.0.3",
@@ -42,6 +41,7 @@
         "react-dom": "^18",
         "react-dropzone": "^14.3.8",
         "sonner": "^2.0.3",
+        "svix": "^1.67.0",
         "tailwind-merge": "^3.2.0",
         "tailwindcss-animate": "^1.0.7"
     },
