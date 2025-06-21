@@ -53,10 +53,6 @@ export default function FollowTile({
         },
         onError: (_err, followed) => {
             setIsCreatorFollowed(!followed); // revert
-            alert('Failed to toggle like.'); // change to a toast
-        },
-        onSuccess: () => {
-            alert('Recipe Liked'); // change to a toast
         },
         onSettled: () => {
             setCooldown(true);

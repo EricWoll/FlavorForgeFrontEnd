@@ -57,10 +57,6 @@ export default function HeartTile({
         },
         onError: (_err, liked) => {
             setIsRecipeLiked(!liked); // revert
-            alert('Failed to toggle like.'); // change to a toast
-        },
-        onSuccess: () => {
-            alert('Recipe Liked'); // change to a toast
         },
         onSettled: () => {
             setCooldown(true);

@@ -134,7 +134,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
             }
 
             router.push(
-                `/search?${new URLSearchParams({
+                `/recipes/search?${new URLSearchParams({
                     search_string: query,
                 }).toString()}`
             );

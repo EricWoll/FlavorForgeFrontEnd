@@ -16,14 +16,3 @@ export const NavigationItems = [
         signedIn: true,
     },
 ];
-
-export const SocialItems = [
-    {
-        id: 'following',
-        label: 'Following',
-        icon: Users,
-        href: '/social/following',
-        // count: 15,
-        signedIn: true,
-    },
-];

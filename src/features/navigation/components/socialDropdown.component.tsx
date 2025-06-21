@@ -5,7 +5,6 @@ import {
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronRight, Users } from 'lucide-react';
-import { SocialItems } from '../data/navItems';
 import NavItem from './navItem.component';
 import { useState } from 'react';
 import {
@@ -23,6 +22,16 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import Link from 'next/link';
+import { useUserContext } from '@/contexts/user.context';
+
+export interface SocialItem {
+    id: string;
+    label: string;
+    icon: React.ElementType;
+    href: string;
+    // count?: number;
+    signedIn: boolean;
+}
 
 interface SocialDropdownProps {
     activeItem: string;
@@ -35,11 +44,27 @@ export default function SocialDropdown({
     handleNavItemClick,
     isCollapsed,
 }: SocialDropdownProps) {
+    const { user, isLoading } = useUserContext();
     const [socialOpen, setSocialOpen] = useState(false);
 
     const handleClick = (itemId: string) => {
         handleNavItemClick(itemId);
     };
+
+    let SocialItems: SocialItem[] = [];
+
+    if (!isLoading && user) {
+        SocialItems = [
+            {
+                id: 'following',
+                label: 'Following',
+                icon: Users,
+                href: `/users/${user.userId}/following`,
+                // count: 15,
+                signedIn: true,
+            },
+        ];
+    }
 
     if (isCollapsed) {
         return (

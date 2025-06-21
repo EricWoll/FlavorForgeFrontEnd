@@ -46,7 +46,11 @@ export default function LikedRecipesPageContent({
     }
 
     return (
-        <div className="mt-4">
+        <div className="mt-4 w-full px-2">
+            <section>
+                <h2 className="text-3xl">Liked Recipes</h2>
+            </section>
+            <hr className="bg-slate-500/50 h-1 rounded-full my-2" />
             {recipesIsPending ? (
                 <p>Loading Recipes...</p>
             ) : recipesList.length < 1 ? (

@@ -12,7 +12,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const recipeId = params.id;
+    const { id: recipeId } = await params;
 
     try {
         // This will be cached and shared with the page component
@@ -38,21 +38,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         };
     }
 }
-
 export default async function RecipePage({ params }: Props) {
     const queryClient = new QueryClient();
-    const recipeId = params.id;
-
-    try {
-        // This uses the same cached data from generateMetadata - NO duplicate request!
-        const recipe = await fetchRecipeServer(recipeId);
-
-        // Inject the server data directly into React Query cache
-        queryClient.setQueryData(['recipe_item_search', recipeId], recipe);
-    } catch (error) {
-        console.error('Error prefetching recipe:', error);
-        // Continue rendering even if there's an error
-    }
+    const { id: recipeId } = await params; // 👈 await the params object
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>

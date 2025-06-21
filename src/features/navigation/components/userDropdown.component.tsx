@@ -211,7 +211,7 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
                     </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                     <Link
                         href="/settings"
                         className="cursor-pointer flex items-center w-full"
@@ -219,7 +219,7 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
                         <Settings className="mr-2 h-4 w-4" />
                         Settings
                     </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 {/* <DropdownMenuItem asChild>
                     <Link

@@ -23,7 +23,6 @@ export default function UserProfileContent({
 }) {
     const userContext = useUserContext();
     const { user, isLoading, getToken } = userContext;
-    const [isShowRecipes, setIsShowRecipes] = useState(true);
     const [canEdit, setCanEdit] = useState<boolean>(false);
 
     const creatorInfo = useQuery<PublicUser, Error>({
@@ -59,7 +58,7 @@ export default function UserProfileContent({
                 token ?? null
             );
         },
-        enabled: !!creatorId,
+        enabled: !!creatorId && !!user?.userId,
         refetchOnMount: true,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
@@ -95,12 +94,14 @@ export default function UserProfileContent({
     return (
         <>
             <div className="px-4 w-full relative">
-                <Link
-                    href={'/recipes/edit'}
-                    className="fixed z-50 bottom-5 right-5 bg-slate-500/50 rounded-5 hover:outline hover:outline-2 hover:outline-tinted_gray_300/50"
-                >
-                    <Plus className="min-w-16 w-16 min-h-16 h-16 text-tinted_gray_300" />
-                </Link>
+                {creatorInfo.data?.userId == user?.userId && (
+                    <Link
+                        href={'/recipes/edit'}
+                        className="fixed z-50 bottom-5 right-5 bg-slate-500/50 rounded-5 hover:outline hover:outline-2 hover:outline-tinted_gray_300/50"
+                    >
+                        <Plus className="min-w-16 w-16 min-h-16 h-16 text-tinted_gray_300" />
+                    </Link>
+                )}
                 <section className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mt-4">
                     {creatorInfo.isPending ? (
                         <Skeleton className="h-[100px] w-[100px] rounded-5" />
@@ -143,53 +144,18 @@ export default function UserProfileContent({
                     )}
                 </section>
 
+                <hr className="bg-slate-500/50 h-1 rounded-full my-2" />
+
                 <div className="mt-4">
-                    <section className="flex gap-2 mb-2">
-                        <Button
-                            variant="ghost"
-                            className={`p-0 px-2 ${
-                                isShowRecipes
-                                    ? 'border-b-2 border-b-tinted_gray_600'
-                                    : ''
-                            }`}
-                            onClick={() => setIsShowRecipes(true)}
-                        >
-                            Recipes
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            className={clsx('p-0 px-2', {
-                                'border-b-2 border-b-tinted_gray_600':
-                                    !isShowRecipes,
-                            })}
-                            onClick={() => setIsShowRecipes(false)}
-                        >
-                            About
-                        </Button>
-                    </section>
-
-                    <hr className="bg-tinted_gray_600/50 h-1 rounded-full" />
-
-                    <div className="mt-4">
-                        {isShowRecipes ? (
-                            recipesIsPending ? (
-                                <p>Loading Recipes...</p>
-                            ) : recipesList.length < 1 ? (
-                                <p className="text-tinted_gray_600 italic mt-4 text-center select-none cursor-default text-xl">
-                                    This Creator has no recipes!
-                                </p>
-                            ) : (
-                                <RecipeCardContainer recipes={recipesList} />
-                            )
-                        ) : creatorInfo.isPending ? (
-                            <Skeleton className="h-20 w-full" />
-                        ) : (
-                            <p className="text-tinted_gray_300 whitespace-pre-wrap text-center w-full">
-                                {creatorInfo.data?.aboutText ||
-                                    'No about text provided.'}
-                            </p>
-                        )}
-                    </div>
+                    {recipesIsPending ? (
+                        <p>Loading Recipes...</p>
+                    ) : recipesList.length < 1 ? (
+                        <p className="text-tinted_gray_600 italic mt-4 text-center select-none cursor-default text-xl">
+                            This Creator has no recipes!
+                        </p>
+                    ) : (
+                        <RecipeCardContainer recipes={recipesList} />
+                    )}
                 </div>
             </div>
         </>
