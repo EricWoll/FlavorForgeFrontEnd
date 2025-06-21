@@ -439,9 +439,7 @@ export default function RecipeEditPageContent({
                 <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() =>
-                        Router.push(`/users/${user?.userId}/recipes`)
-                    }
+                    onClick={() => Router.push(`/users/${user?.userId}`)}
                 >
                     Cancel
                 </Button>

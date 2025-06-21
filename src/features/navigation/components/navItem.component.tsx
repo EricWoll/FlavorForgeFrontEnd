@@ -9,18 +9,10 @@ import {
 import { LucideProps } from 'lucide-react';
 import Link from 'next/link';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { RecipeItem } from './recipeDropdown.component';
 
 interface NavItemProps {
-    item: {
-        id: string;
-        label: string;
-        icon: ForwardRefExoticComponent<
-            Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
-        >;
-        href: string;
-        count?: number;
-        signedIn?: boolean;
-    };
+    item: RecipeItem;
     isActive: boolean;
     onClick: (itemId: string) => void;
     isCollapsed: boolean;

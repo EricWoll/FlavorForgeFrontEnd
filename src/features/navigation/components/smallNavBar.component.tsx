@@ -166,7 +166,7 @@ export default function SmallNav() {
                                 </div>
                             </ScrollArea>
 
-                            <div className="p-3 border-t bg-background/95">
+                            {/* <div className="p-3 border-t bg-background/95">
                                 <Button
                                     asChild
                                     variant="ghost"
@@ -180,7 +180,7 @@ export default function SmallNav() {
                                         <span>Settings</span>
                                     </Link>
                                 </Button>
-                            </div>
+                            </div> */}
                         </SheetContent>
                     </Sheet>
 

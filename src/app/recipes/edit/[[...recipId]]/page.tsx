@@ -4,9 +4,9 @@ import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 
 interface Props {
-    params: { id: string[] | undefined };
+    params: { recipeId: string[] | undefined };
 }
 
 export default async function RecipeEditPage({ params }: Props) {
-    return <RecipeEditPageContent recipeId={params.id?.[0]} />;
+    return <RecipeEditPageContent recipeId={params.recipeId?.[0]} />;
 }

@@ -91,9 +91,15 @@ export async function apiPost<T>(
 export async function apiPut<T>(
     url: string,
     bodyContent: any,
-    authToken?: string | null | undefined
+    authToken?: string | null | undefined,
+    extraHeaders?: Record<string, string>
 ): Promise<T> {
-    const headers = { 'Content-Type': 'application/json' };
+    let headers = { 'Content-Type': 'application/json' };
+
+    // Merge extra headers (for instance, svix-id)
+    if (extraHeaders) {
+        headers = { ...headers, ...extraHeaders };
+    }
 
     if (authToken) {
         Object.assign(headers, { Authorization: `Bearer ${authToken}` });
@@ -116,10 +122,16 @@ export async function apiPut<T>(
 export async function apiDelete<T>(
     url: string,
     authToken: string | null | undefined,
-    requestContent?: string
+    requestContent?: string,
+    extraHeaders?: Record<string, string>
 ): Promise<T | null> {
     // note: can return null for 204 No Content
-    const headers = { 'Content-Type': 'application/json' };
+    let headers = { 'Content-Type': 'application/json' };
+
+    // Merge extra headers (for instance, svix-id)
+    if (extraHeaders) {
+        headers = { ...headers, ...extraHeaders };
+    }
 
     if (authToken) {
         Object.assign(headers, { Authorization: `Bearer ${authToken}` });

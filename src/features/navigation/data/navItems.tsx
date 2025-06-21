@@ -17,25 +17,6 @@ export const NavigationItems = [
     },
 ];
 
-export const RecipeItems = [
-    {
-        id: 'my-recipes',
-        label: 'My Recipes',
-        icon: BookOpen,
-        href: '/recipes/mine',
-        // count: 12,
-        signedIn: true,
-    },
-    {
-        id: 'liked',
-        label: 'Liked Recipes',
-        icon: Heart,
-        href: '/recipes/liked',
-        // count: 24,
-        signedIn: true,
-    },
-];
-
 export const SocialItems = [
     {
         id: 'following',

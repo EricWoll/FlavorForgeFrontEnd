@@ -18,9 +18,14 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ChefHat, ChevronDown, ChevronRight } from 'lucide-react';
+import {
+    BookOpen,
+    ChefHat,
+    ChevronDown,
+    ChevronRight,
+    Heart,
+} from 'lucide-react';
 import NavItem from './navItem.component';
-import { RecipeItems } from '../data/navItems';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useUserContext } from '@/contexts/user.context';
@@ -31,16 +36,49 @@ interface RecipeDropdownProps {
     isCollapsed: boolean;
 }
 
+export interface RecipeItem {
+    id: string;
+    label: string;
+    icon: React.ElementType;
+    href: string;
+    // count?: number;
+    signedIn: boolean;
+}
+
 export default function RecipeDropdown({
     activeItem,
     handleNavItemClick,
     isCollapsed,
 }: RecipeDropdownProps) {
     const [recipesOpen, setRecipesOpen] = useState(false);
+    const { user, isLoading } = useUserContext();
 
     const handleClick = (itemId: string) => {
         handleNavItemClick(itemId);
     };
+
+    let RecipeItems: RecipeItem[] = [];
+
+    if (!isLoading && user) {
+        RecipeItems = [
+            {
+                id: 'my-recipes',
+                label: 'My Recipes',
+                icon: BookOpen,
+                href: `/users/${user?.userId}`,
+                // count: 12,
+                signedIn: true,
+            },
+            {
+                id: 'liked',
+                label: 'Liked Recipes',
+                icon: Heart,
+                href: `/users/${user?.userId}/liked`,
+                // count: 24,
+                signedIn: true,
+            },
+        ];
+    }
 
     // When collapsed, use DropdownMenu for side popup
     if (isCollapsed) {

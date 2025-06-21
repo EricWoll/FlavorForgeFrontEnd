@@ -203,7 +203,7 @@ export default function UserDropdown({ isCollapsed }: UserDropdownProps) {
 
                 <DropdownMenuItem asChild>
                     <Link
-                        href="/user/profile"
+                        href={`/users/${user.userId}/profile`}
                         className="cursor-pointer flex items-center w-full"
                     >
                         <User className="mr-2 h-4 w-4" />

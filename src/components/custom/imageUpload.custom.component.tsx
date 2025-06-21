@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { Upload, X, Camera, RefreshCw } from 'lucide-react';
 import clsx from 'clsx';
+import Image from 'next/image';
 
 interface RecipeImageUploaderProps<T> {
     imageContainer?: T | null;
@@ -130,10 +131,11 @@ const RecipeImageUploader = forwardRef(
                     {/* Existing Image */}
                     {currentImageUrl && !showPreview && (
                         <div className="w-48 h-48 mx-auto rounded-lg overflow-hidden border-2 border-gray-200">
-                            <img
+                            <Image
                                 src={currentImageUrl}
                                 alt="Current"
                                 className="w-full h-full object-cover"
+                                fill
                             />
                         </div>
                     )}

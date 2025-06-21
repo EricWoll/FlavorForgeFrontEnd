@@ -2,10 +2,9 @@ import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/contexts/user.context';
 import HeartTile from '@/features/tiles/components/heart.tile.component';
 import useWindow, { WindowSizes } from '@/hooks/useWindow.hook';
-import ImageRequest from '@/lib/my_custom_components/images/requestImage.component';
 import { apiGet } from '@/utils/fetch/apiBase.fetch';
-import { useAuth } from '@clerk/nextjs';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +13,8 @@ export default function ViewRecipeContentPage({
 }: {
     recipeId: string;
 }) {
-    const { user, isAuthenticated, getToken } = useUserContext();
+    const userContext = useUserContext();
+    const { user, isAuthenticated, getToken } = userContext;
     const Window = useWindow();
 
     const isLargeWindow = Window.windowSize.match(WindowSizes.LARGE);
@@ -83,10 +83,7 @@ export default function ViewRecipeContentPage({
                             <HeartTile
                                 isLiked={recipe.liked}
                                 recipeId={recipe.recipeId}
-                                isDisabled={
-                                    user?.userId === recipe.creatorId &&
-                                    !isAuthenticated
-                                }
+                                userContext={userContext}
                                 size="xl"
                             />
                         </div>
@@ -104,7 +101,11 @@ export default function ViewRecipeContentPage({
                             !isLargeWindow && 'mr-auto ml-auto'
                         }`}
                     >
-                        <ImageRequest filename={recipe.recipeImageId} />
+                        <Image
+                            alt={`${recipe.recipeName} image`}
+                            src={recipe.recipeImageId}
+                            fill
+                        />
                     </div>
                     <div className="w-full">
                         <div className="flex flex-nowrap items-center gap-2">
@@ -120,10 +121,7 @@ export default function ViewRecipeContentPage({
                                     <HeartTile
                                         isLiked={recipe.liked}
                                         recipeId={recipe.recipeId}
-                                        isDisabled={
-                                            user?.userId === recipe.creatorId &&
-                                            !isAuthenticated
-                                        }
+                                        userContext={userContext}
                                         size="xl"
                                     />
                                 </div>

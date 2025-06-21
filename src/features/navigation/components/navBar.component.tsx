@@ -190,7 +190,7 @@ export default function NavBar() {
                 </ScrollArea>
 
                 {/* Footer */}
-                <div className="p-3 border-t">
+                {/* <div className="p-3 border-t">
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -226,7 +226,7 @@ export default function NavBar() {
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
-                </div>
+                </div> */}
             </div>
         </div>
     );
